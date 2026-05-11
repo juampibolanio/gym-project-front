@@ -2,17 +2,32 @@
 import { Mail, Lock, EyeOff, Eye, Dumbbell, User } from 'lucide-react'
 import Link from 'next/link'
 import { useState } from 'react'
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+
+const registerSchema = z.object({
+    nombreCompleto: z.string().min(1, 'El nombre es requerido'),
+    email: z.string().min(1, 'El email es requerido').email('Por favor ingresa un email válido'),
+    nombreGimnasio: z.string().min(1, 'El nombre del gimnasio es requerido'),
+    password: z.string().min(6, 'La contraseña debe tener al menos 6 caracteres'),
+});
+
+type RegisterFormValues = z.infer<typeof registerSchema>;
 
 export default function RegisterPage() {
-    const [nombreCompleto, setNombreCompleto] = useState<string>('')
-    const [email, setEmail] = useState<string>('')
-    const [nombreGimnasio, setNombreGimnasio] = useState<string>('')
-    const [password, setPassword] = useState<string>('')
     const [showPassword, setShowPassword] = useState<boolean>(false)
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault()
-        console.log('Registro:', { nombreCompleto, email, nombreGimnasio, password })
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+      } = useForm<RegisterFormValues>({
+        resolver: zodResolver(registerSchema), 
+      });
+
+    const onSubmit = (data: RegisterFormValues) => {
+        console.log('Registro validado:', data)
     }
 
     return (
@@ -27,7 +42,7 @@ export default function RegisterPage() {
             </div>
 
             <div className="w-full bg-[#18181b] border-t-2 border-t-emerald-600 border border-zinc-800 rounded-lg p-6 shadow-2xl">
-                <form onSubmit={handleSubmit} className="space-y-5">
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
                     
                     <div className="space-y-2">
                         <label className="text-[10px] font-bold text-zinc-400 tracking-wider uppercase">
@@ -37,13 +52,12 @@ export default function RegisterPage() {
                             <User className="absolute left-3 text-zinc-500" size={16} />
                             <input 
                                 type="text"
-                                value={nombreCompleto}
-                                onChange={(e) => setNombreCompleto(e.target.value)}
                                 placeholder="Jane Doe"
-                                className="w-full bg-[#131313] border border-zinc-800 rounded-md py-2.5 pl-10 pr-4 text-sm text-zinc-300 placeholder-zinc-600 focus:outline-none focus:border-zinc-600 transition-colors"
-                                required
+                                {...register('nombreCompleto')}
+                                className={`w-full bg-[#131313] border ${errors.nombreCompleto ? 'border-red-500' : 'border-zinc-800'} rounded-md py-2.5 pl-10 pr-4 text-sm text-zinc-300 placeholder-zinc-600 focus:outline-none focus:border-zinc-500 transition-colors`}
                             />
                         </div>
+                        {errors.nombreCompleto && <p className="text-red-500 text-xs mt-1 font-medium">{errors.nombreCompleto.message}</p>}
                     </div>
 
                     <div className="space-y-2">
@@ -54,13 +68,12 @@ export default function RegisterPage() {
                             <Mail className="absolute left-3 text-zinc-500" size={16} />
                             <input 
                                 type="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
                                 placeholder="admin@gymname.com"
-                                className="w-full bg-[#131313] border border-zinc-800 rounded-md py-2.5 pl-10 pr-4 text-sm text-zinc-300 placeholder-zinc-600 focus:outline-none focus:border-zinc-600 transition-colors"
-                                required
+                                {...register('email')}
+                                className={`w-full bg-[#131313] border ${errors.email ? 'border-red-500' : 'border-zinc-800'} rounded-md py-2.5 pl-10 pr-4 text-sm text-zinc-300 placeholder-zinc-600 focus:outline-none focus:border-zinc-500 transition-colors`}
                             />
                         </div>
+                        {errors.email && <p className="text-red-500 text-xs mt-1 font-medium">{errors.email.message}</p>}
                     </div>
 
                     <div className="space-y-2">
@@ -71,13 +84,12 @@ export default function RegisterPage() {
                             <Dumbbell className="absolute left-3 text-zinc-500" size={16} />
                             <input 
                                 type="text"
-                                value={nombreGimnasio}
-                                onChange={(e) => setNombreGimnasio(e.target.value)}
                                 placeholder="Iron Works Arena"
-                                className="w-full bg-[#131313] border border-zinc-800 rounded-md py-2.5 pl-10 pr-4 text-sm text-zinc-300 placeholder-zinc-600 focus:outline-none focus:border-zinc-600 transition-colors"
-                                required
+                                {...register('nombreGimnasio')}
+                                className={`w-full bg-[#131313] border ${errors.nombreGimnasio ? 'border-red-500' : 'border-zinc-800'} rounded-md py-2.5 pl-10 pr-4 text-sm text-zinc-300 placeholder-zinc-600 focus:outline-none focus:border-zinc-500 transition-colors`}
                             />
                         </div>
+                        {errors.nombreGimnasio && <p className="text-red-500 text-xs mt-1 font-medium">{errors.nombreGimnasio.message}</p>}
                     </div>
 
                     <div className="space-y-2">
@@ -88,11 +100,9 @@ export default function RegisterPage() {
                             <Lock className="absolute left-3 text-zinc-500" size={16} />
                             <input 
                                 type={showPassword ? "text" : "password"}
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
                                 placeholder="••••••••"
-                                className="w-full bg-[#131313] border border-zinc-800 rounded-md py-2.5 pl-10 pr-10 text-sm text-zinc-300 placeholder-zinc-600 focus:outline-none focus:border-zinc-600 transition-colors"
-                                required
+                                {...register('password')}
+                                className={`w-full bg-[#131313] border ${errors.password ? 'border-red-500' : 'border-zinc-800'} rounded-md py-2.5 pl-10 pr-10 text-sm text-zinc-300 placeholder-zinc-600 focus:outline-none focus:border-zinc-500 transition-colors`}
                             />
                             <button 
                                 type="button"
@@ -102,6 +112,7 @@ export default function RegisterPage() {
                                 {showPassword ? <Eye size={16} /> : <EyeOff size={16} />}
                             </button>
                         </div>
+                        {errors.password && <p className="text-red-500 text-xs mt-1 font-medium">{errors.password.message}</p>}
                     </div>
 
                     <button 
