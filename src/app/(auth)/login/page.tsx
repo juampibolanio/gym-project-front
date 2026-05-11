@@ -1,11 +1,12 @@
 'use client';
-import { Mail, Lock, EyeOff, Dumbbell, ShieldAlert } from 'lucide-react';
+import { Mail, Lock, EyeOff, Eye, Dumbbell, ShieldAlert } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,14 +56,20 @@ export default function LoginPage() {
             <div className="relative flex items-center">
               <Lock className="absolute left-3 text-zinc-500" size={16} />
               <input 
-                type="password"
+                type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 className="w-full bg-[#131313] border border-zinc-800 rounded-md py-2.5 pl-10 pr-10 text-sm text-zinc-300 placeholder-zinc-600 focus:outline-none focus:border-zinc-600 transition-colors"
                 required
               />
-              <EyeOff className="absolute right-3 text-zinc-500 cursor-pointer hover:text-zinc-300" size={16} />
+              <button 
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 text-zinc-500 hover:text-zinc-300 transition-colors focus:outline-none"
+              >
+                {showPassword ? <Eye size={16} /> : <EyeOff size={16} />}
+              </button>
             </div>
           </div>
 
@@ -74,9 +81,17 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <div className="mt-6 pt-4 border-t border-zinc-800 flex items-center justify-center gap-2 text-zinc-500">
-          <ShieldAlert size={14} />
-          <span className="text-[10px] font-bold tracking-wider uppercase">Terminal de Acceso Seguro</span>
+        <div className="mt-6 pt-4 border-t border-zinc-800 flex flex-col items-center gap-4">
+          <div className="flex items-center justify-center gap-2 text-zinc-500">
+            <ShieldAlert size={14} />
+            <span className="text-[10px] font-bold tracking-wider uppercase">Terminal de Acceso Seguro</span>
+          </div>
+          <div className="text-zinc-400 text-xs">
+            ¿No tienes una cuenta?{' '}
+            <Link href="/register" className="ml-1 text-zinc-300 hover:text-white transition-colors">
+              Crea una aquí
+            </Link>
+          </div>
         </div>
       </div>
 
