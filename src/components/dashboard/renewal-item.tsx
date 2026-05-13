@@ -18,21 +18,21 @@ export function RenewalItem({
   hasBorder = true
 }: RenewalItemProps) {
   
-  const borderClass = hasBorder ? "border-b border-zinc-100 dark:border-zinc-800/50" : "";
-  const daysColorClass = isUrgent ? "text-red-500 dark:text-red-400" : "text-zinc-500 dark:text-zinc-400";
+  const borderClass = hasBorder ? "border-b border-border-primary" : "";
+  const daysColorClass = isUrgent ? "text-red-500" : "text-text-muted";
 
   return (
-    <div className={`flex items-center justify-between px-5 py-4 hover:bg-zinc-50 dark:hover:bg-[#2a2a2a] transition-colors cursor-pointer ${borderClass}`}>
+    <div className={`flex items-center justify-between px-5 py-4 hover:bg-surface-hover transition-colors cursor-pointer ${borderClass}`}>
       <div className="flex items-center gap-3">
-        <div className="w-7 h-7 rounded-full bg-zinc-200 dark:bg-zinc-700 flex items-center justify-center text-xs font-medium text-zinc-600 dark:text-zinc-300 transition-colors">
+        <div className="w-7 h-7 rounded-full bg-background border border-border-primary flex items-center justify-center text-xs font-medium text-text-muted transition-colors">
           {initials}
         </div>
-        <span className="text-sm text-zinc-700 dark:text-zinc-300 transition-colors">
+        <span className="text-sm text-text-main transition-colors">
           {name}
         </span>
       </div>
       <div className="flex gap-2 text-sm">
-        <span className="text-zinc-500 dark:text-zinc-400 transition-colors">{plan}</span>
+        <span className="text-text-muted transition-colors">{plan}</span>
         <span className={`${daysColorClass} font-medium transition-colors`}>{daysText}</span>
       </div>
     </div>

@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import * as React from 'react';
 import { Moon, Sun } from 'lucide-react';
@@ -20,7 +20,7 @@ export function ThemeToggle({ className = '' }: { className?: string }) {
   return (
     <button
       onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-      className={`text-zinc-400 hover:text-zinc-600 dark:hover:text-white transition-colors focus:outline-none flex items-center justify-center ${className}`}
+      className={`text-text-muted hover:text-text-main transition-colors focus:outline-none flex items-center justify-center ${className}`}
       title="Cambiar tema"
     >
       {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
