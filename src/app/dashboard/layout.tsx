@@ -1,8 +1,21 @@
-import { Bell, HelpCircle, LayoutDashboard, Users, CreditCard, ClipboardList, Settings } from 'lucide-react';
+'use client';
+
+import { Bell, HelpCircle, LayoutDashboard, Users, CreditCard, ClipboardList, Settings, Plus, Search } from 'lucide-react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { ThemeToggle } from '@/components/theme-toggle';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+
+  const navItems = [
+    { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard, exact: true },
+    { name: 'Miembros', href: '/dashboard/miembros', icon: Users },
+    { name: 'Pagos', href: '/dashboard/pagos', icon: CreditCard },
+    { name: 'Planes', href: '/dashboard/planes', icon: ClipboardList },
+    { name: 'Configuración', href: '/dashboard/configuracion', icon: Settings },
+  ];
+
   return (
     <div className="min-h-screen bg-background text-text-main flex flex-col md:flex-row transition-colors">
       
@@ -15,34 +28,33 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </div>
 
           <nav className="flex flex-col mt-6 space-y-1">
-            <Link href="/dashboard" className="flex items-center gap-4 px-8 py-3 bg-brand-surface border-l-2 border-brand-main text-text-main transition-colors">
-              <LayoutDashboard size={18} className="text-brand-main" />
-              <span className="font-medium text-sm">Dashboard</span>
-            </Link>
-
-            <Link href="/dashboard/miembros" className="flex items-center gap-4 px-8 py-3 text-text-muted hover:bg-surface-hover hover:text-text-main transition-colors border-l-2 border-transparent">
-              <Users size={18} />
-              <span className="font-medium text-sm">Miembros</span>
-            </Link>
-
-            <Link href="/dashboard/pagos" className="flex items-center gap-4 px-8 py-3 text-text-muted hover:bg-surface-hover hover:text-text-main transition-colors border-l-2 border-transparent">
-              <CreditCard size={18} />
-              <span className="font-medium text-sm">Pagos</span>
-            </Link>
-
-            <Link href="/dashboard/planes" className="flex items-center gap-4 px-8 py-3 text-text-muted hover:bg-surface-hover hover:text-text-main transition-colors border-l-2 border-transparent">
-              <ClipboardList size={18} />
-              <span className="font-medium text-sm">Planes</span>
-            </Link>
-            
-            <Link href="/dashboard/configuracion" className="flex items-center gap-4 px-8 py-3 text-text-muted hover:bg-surface-hover hover:text-text-main transition-colors border-l-2 border-transparent">
-              <Settings size={18} />
-              <span className="font-medium text-sm">Configuración</span>
-            </Link>
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = item.exact ? pathname === item.href : pathname.startsWith(item.href);
+              return (
+                <Link 
+                  key={item.href}
+                  href={item.href} 
+                  className={`flex items-center gap-4 px-8 py-3 transition-colors border-l-2 ${
+                    isActive 
+                      ? 'bg-brand-surface border-brand-main text-text-main' 
+                      : 'border-transparent text-text-muted hover:bg-surface-hover hover:text-text-main'
+                  }`}
+                >
+                  <Icon size={18} className={isActive ? 'text-brand-main' : ''} />
+                  <span className="font-medium text-sm">{item.name}</span>
+                </Link>
+              );
+            })}
           </nav>
         </div>
 
-        <div className="px-6 pb-6">
+        <div className="px-6 pb-6 flex flex-col gap-4">
+          {pathname === '/dashboard/miembros' && (
+            <button className="w-full py-2.5 bg-brand-main hover:bg-brand-hover text-white font-medium text-sm transition-colors rounded-sm shadow-sm flex items-center justify-center gap-2">
+              <Plus size={16} /> Agregar nuevo miembro
+            </button> 
+          )}
           <button className="w-full py-2.5 bg-brand-main hover:bg-brand-hover text-white font-medium text-sm transition-colors rounded-sm shadow-sm dark:shadow-none">
             Cerrar sesión
           </button>
@@ -51,8 +63,20 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
       <main className="flex-1 flex flex-col min-w-0">
         
-        <header className="h-20 border-b border-border-primary bg-background flex items-center justify-end px-8 transition-colors">
-          <div className="flex items-center gap-6">
+        <header className="h-20 border-b border-border-primary bg-background flex items-center px-8 transition-colors">
+
+          {pathname === '/dashboard/miembros' && (
+            <div className="flex items-center gap-3 bg-surface border border-border-primary rounded-md px-4 py-2 w-96 focus-within:border-brand-main transition-colors">
+              <Search size={16} className="text-text-muted" />
+              <input 
+                  type="text" 
+                  placeholder="Buscar miembros, IDs o planes..." 
+                  className="bg-transparent border-none outline-none text-sm text-text-main w-full placeholder:text-text-muted"
+              />
+            </div>
+          )}
+
+          <div className="flex items-center gap-6 ml-auto">
             <ThemeToggle />
             <button className="text-text-muted hover:text-text-main transition-colors">
               <Bell size={18} />
