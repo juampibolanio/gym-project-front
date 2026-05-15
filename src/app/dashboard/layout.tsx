@@ -81,12 +81,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <button className="text-text-muted hover:text-text-main transition-colors">
               <Bell size={18} />
             </button>
-            <button className="text-text-muted hover:text-text-main transition-colors">
-              <HelpCircle size={18} />
-            </button>
-            <div className="w-8 h-8 rounded-full bg-surface border border-border-primary flex items-center justify-center overflow-hidden">
-              <Users size={16} className="text-text-muted" />
-            </div>
           </div>
         </header>
 

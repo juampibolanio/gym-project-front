@@ -1,5 +1,7 @@
+'use client';
 import * as React from 'react';
-import { MoreHorizontal } from 'lucide-react';
+import { MoreHorizontal, Edit, Trash2, Eye } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
 
 interface MemberListProps {
   name: string;
@@ -18,6 +20,8 @@ export function MemberList({
   lastPayment, 
   nextExpiration,
 }: MemberListProps) {
+  const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   
   const statusStyles = {
     'Activo': 'bg-brand-main text-brand-main-dark border-brand-main/20',
@@ -30,6 +34,16 @@ export function MemberList({
     'Vencido': 'bg-orange-500',
     'Inactivo': 'bg-gray-400'
   };
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setShowDropdown(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const initials = name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
   
@@ -67,8 +81,27 @@ export function MemberList({
         <p className="text-sm font-light text-text-main">{nextExpiration}</p>
       </div>
       
-      <div>
-        <MoreHorizontal className="text-text-muted hover:text-text-main cursor-pointer transition-colors" />
+      <div className="relative" ref={dropdownRef}>
+        <button 
+          onClick={() => setShowDropdown(!showDropdown)}
+          className="p-1 rounded hover:bg-surface transition-colors"
+        >
+          <MoreHorizontal className="text-text-muted hover:text-text-main transition-colors" />
+        </button>
+
+        {showDropdown && (
+          <div className="absolute right-0 top-full mt-1 w-36 bg-surface border border-border-primary rounded-md shadow-lg z-10 py-1 overflow-hidden">
+            <button className="w-full flex items-center gap-2 px-3 py-2 text-xs text-text-main hover:bg-surface-hover transition-colors">
+              <Eye size={14} className="text-text-muted" /> Ver Detalles
+            </button>
+            <button className="w-full flex items-center gap-2 px-3 py-2 text-xs text-text-main hover:bg-surface-hover transition-colors">
+              <Edit size={14} className="text-text-muted" /> Editar
+            </button>
+            <button className="w-full flex items-center gap-2 px-3 py-2 text-xs text-red-500 hover:bg-red-500/10 transition-colors">
+              <Trash2 size={14} /> Eliminar
+            </button>
+          </div>
+        )}
       </div>
 
     </div>

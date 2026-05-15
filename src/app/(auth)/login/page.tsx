@@ -67,9 +67,9 @@ export default function LoginPage() {
               <label className="text-[10px] font-bold text-text-muted tracking-wider transition-colors">
                 CONTRASEÑA
               </label>
-              <a href="#" className="text-[10px] font-bold text-text-muted hover:text-text-main transition-colors">
+              <Link href="/forgot-password" className="text-[10px] font-bold text-text-muted hover:text-text-main transition-colors">
                 Has olvidado la contraseña?
-              </a>
+              </Link>
             </div>
             <div className="relative flex items-center">
               <Lock className="absolute left-3 text-text-muted transition-colors" size={16} />
