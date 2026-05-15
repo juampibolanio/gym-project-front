@@ -1,4 +1,4 @@
-import { Users, Wallet, AlertTriangle, TrendingUp, Clock, MoreHorizontal } from 'lucide-react';
+import { Users, Wallet, AlertTriangle, TrendingUp, Clock, MoreHorizontal, Calendar } from 'lucide-react';
 import { MetricCard } from '@/components/dashboard/metric-card';
 import { RenewalItem } from '@/components/dashboard/renewal-item';
 
@@ -51,10 +51,10 @@ export default function DashboardPage() {
         />
 
         <MetricCard 
-          title="Asistencia de Hoy"
-          value="142"
-          icon={<Users size={16} className="text-brand-main transition-colors" />}
-          trendText="12 personas entrenando ahora"
+          title="Fecha de Hoy"
+          value="15/05/2026"
+          icon={<Calendar size={16} className="text-brand-main transition-colors" />}
+          trendText="Hola Julio Caceres"
           trendIcon={<Clock size={12} />}
           trendColor="text-text-muted"
         />
