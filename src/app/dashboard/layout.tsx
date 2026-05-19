@@ -1,6 +1,6 @@
 'use client';
 
-import { Bell, HelpCircle, LayoutDashboard, Users, CreditCard, ClipboardList, Settings, Plus, Search } from 'lucide-react';
+import { Bell, LayoutDashboard, Users, CreditCard, ClipboardList, Settings, Plus, Search } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ThemeToggle } from '@/components/theme-toggle';
@@ -51,9 +51,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
         <div className="px-6 pb-6 flex flex-col gap-4">
           {pathname === '/dashboard/miembros' && (
-            <button className="w-full py-2.5 bg-brand-main hover:bg-brand-hover text-white font-medium text-sm transition-colors rounded-sm shadow-sm flex items-center justify-center gap-2">
+            <Link 
+              href='/dashboard/miembros/nuevo'
+              className="w-full py-2.5 bg-brand-main hover:bg-brand-hover text-white font-medium text-sm transition-colors rounded-sm shadow-sm flex items-center justify-center gap-2"
+            >
               <Plus size={16} /> Agregar nuevo miembro
-            </button> 
+            </Link>
           )}
           <button className="w-full py-2.5 bg-brand-main hover:bg-brand-hover text-white font-medium text-sm transition-colors rounded-sm shadow-sm dark:shadow-none">
             Cerrar sesión
