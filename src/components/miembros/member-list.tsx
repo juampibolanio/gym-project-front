@@ -2,6 +2,7 @@
 import * as React from 'react';
 import { MoreHorizontal, Edit, Trash2, Eye } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
+import Link from 'next/link';
 
 interface MemberListProps {
   name: string;
@@ -91,9 +92,9 @@ export function MemberList({
 
         {showDropdown && (
           <div className="absolute right-0 top-full mt-1 w-36 bg-surface border border-border-primary rounded-md shadow-lg z-10 py-1 overflow-hidden">
-            <button className="w-full flex items-center gap-2 px-3 py-2 text-xs text-text-main hover:bg-surface-hover transition-colors">
+            <Link href={`/dashboard/miembros/${memberID}`}className="w-full flex items-center gap-2 px-3 py-2 text-xs text-text-main hover:bg-surface-hover transition-colors">
               <Eye size={14} className="text-text-muted" /> Ver Detalles
-            </button>
+            </Link>
             <button className="w-full flex items-center gap-2 px-3 py-2 text-xs text-text-main hover:bg-surface-hover transition-colors">
               <Edit size={14} className="text-text-muted" /> Editar
             </button>
