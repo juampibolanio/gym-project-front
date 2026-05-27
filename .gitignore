@@ -43,3 +43,7 @@ next-env.d.ts
 # AI
 AGENTS.md
 CLAUDE.md
+
+# other
+.vscode
+/vscode
