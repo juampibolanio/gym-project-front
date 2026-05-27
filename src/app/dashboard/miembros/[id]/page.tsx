@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowLeft, Award, CreditCard, Filter, Pencil, User } from "lucide-react";
+import RegisterPaymentButton from "../components/RegisterPaymentButton";
 
 export default async function MemberDetailPage({
     params,
@@ -60,10 +61,7 @@ export default async function MemberDetailPage({
                         <span className="text-text-main text-sm font-medium">Editar datos</span>
                     </button>
 
-                    <button type="button" className="flex items-center gap-2 bg-[#2A5D44] py-2 px-4 cursor-pointer hover:bg-[#1e4431] transition-colors">
-                        <CreditCard size={20} />
-                        <span className="text-white text-sm font-medium">Registrar nuevo pago</span>
-                    </button>
+                    <RegisterPaymentButton memberName={member.name} memberSurname={member.surname} uuid={member.id} />
                 </div>
             </div>
 
@@ -176,6 +174,6 @@ export default async function MemberDetailPage({
                     </div>
                 </div>
             </div>
-        </section>
+        </section >
     )
 }
