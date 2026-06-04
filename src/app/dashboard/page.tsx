@@ -72,7 +72,7 @@ export default function DashboardPage() {
             </div>
           </div>
           
-          <div className="flex-1 p-5 min-h-[300px] flex items-center justify-center">
+          <div className="flex-1 p-5 min-h-75 flex items-center justify-center">
             <p className="text-text-muted text-sm italic">Espacio reservado para ECharts...</p>
           </div>
         </div>

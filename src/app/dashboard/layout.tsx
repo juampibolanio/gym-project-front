@@ -1,6 +1,6 @@
 'use client';
 
-import { Bell, LayoutDashboard, Users, CreditCard, ClipboardList, Settings, Plus, Search } from 'lucide-react';
+import { Bell, LayoutDashboard, Users, ClipboardList, Settings, Plus, Search } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ThemeToggle } from '@/components/theme-toggle';
@@ -11,7 +11,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const navItems = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard, exact: true },
     { name: 'Miembros', href: '/dashboard/miembros', icon: Users },
-    { name: 'Pagos', href: '/dashboard/pagos', icon: CreditCard },
     { name: 'Planes', href: '/dashboard/planes', icon: ClipboardList },
     { name: 'Configuración', href: '/dashboard/configuracion', icon: Settings },
   ];
@@ -19,7 +18,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   return (
     <div className="min-h-screen bg-background text-text-main flex flex-col md:flex-row transition-colors">
       
-      <aside className="w-[260px] bg-sidebar border-r border-border-primary flex flex-col justify-between shrink-0 transition-colors">
+      <aside className="w-65 bg-sidebar border-r border-border-primary flex flex-col justify-between shrink-0 transition-colors">
         
         <div className="flex flex-col">
           <div className="h-20 flex flex-col justify-center px-8 border-b border-border-primary">
