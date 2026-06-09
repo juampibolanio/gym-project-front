@@ -25,15 +25,15 @@ export function MemberList({
   const dropdownRef = useRef<HTMLDivElement>(null);
   
   const statusStyles = {
-    'Activo': 'bg-brand-main text-brand-main-dark border-brand-main/20',
-    'Vencido': 'bg-orange-500/10 text-orange-500 border-orange-500/20',
-    'Inactivo': 'bg-gray-500/10 text-gray-400 border-gray-500/20'
+    'Activo': 'bg-brand-surface text-brand-main border-brand-main/30 dark:bg-[#112a1c] dark:text-[#4ade80] dark:border-[#1b3d28]',
+    'Vencido': 'bg-orange-50 text-orange-600 border-orange-300 dark:bg-orange-500/10 dark:text-orange-500 dark:border-orange-500/20',
+    'Inactivo': 'bg-gray-100 text-gray-600 border-gray-300 dark:bg-gray-500/10 dark:text-gray-400 dark:border-gray-500/20'
   };
 
   const dotStyles = {
-    'Activo': 'bg-text-main',
-    'Vencido': 'bg-orange-500',
-    'Inactivo': 'bg-gray-400'
+    'Activo': 'bg-brand-main dark:bg-[#4ade80]',
+    'Vencido': 'bg-orange-600 dark:bg-orange-500',
+    'Inactivo': 'bg-gray-500 dark:bg-gray-400'
   };
 
   useEffect(() => {
@@ -95,9 +95,9 @@ export function MemberList({
             <Link href={`/dashboard/miembros/${memberID}`}className="w-full flex items-center gap-2 px-3 py-2 text-xs text-text-main hover:bg-surface-hover transition-colors">
               <Eye size={14} className="text-text-muted" /> Ver Detalles
             </Link>
-            <button className="w-full flex items-center gap-2 px-3 py-2 text-xs text-text-main hover:bg-surface-hover transition-colors">
+            <Link href={`/dashboard/miembros/${memberID}/editar`} className="w-full flex items-center gap-2 px-3 py-2 text-xs text-text-main hover:bg-surface-hover transition-colors">
               <Edit size={14} className="text-text-muted" /> Editar
-            </button>
+            </Link>
             <button className="w-full flex items-center gap-2 px-3 py-2 text-xs text-red-500 hover:bg-red-500/10 transition-colors">
               <Trash2 size={14} /> Eliminar
             </button>

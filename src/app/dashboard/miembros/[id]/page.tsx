@@ -56,10 +56,10 @@ export default async function MemberDetailPage({
                 </div>
 
                 <div className="flex gap-4">
-                    <button type="button" className="flex items-center gap-2 bg-transparent border border-[#404943] py-2 px-4 cursor-pointer hover:bg-zinc-800 transition-colors">
+                    <Link href={`/dashboard/miembros/${member.id}/editar`} className="flex items-center gap-2 bg-transparent border border-[#404943] rounded py-2 px-4 cursor-pointer hover:bg-zinc-800 transition-colors">
                         <Pencil size={20} />
                         <span className="text-text-main text-sm font-medium">Editar datos</span>
-                    </button>
+                    </Link>
 
                     <RegisterPaymentButton memberName={member.name} memberSurname={member.surname} uuid={member.id} />
                 </div>
