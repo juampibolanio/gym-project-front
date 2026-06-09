@@ -1,27 +1,46 @@
-import { Phone, Mail, Calendar, ChevronDown } from 'lucide-react';
+'use client';
+
+import { Phone, Mail, ChevronDown } from 'lucide-react';
 import Link from 'next/link';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { createMemberSchema } from '../_schemas/createMember.schema';
+import { createMemberAction } from './actions';
+
+type MemberFormValues = z.infer<typeof createMemberSchema>;
 
 export default function NewMemberPage() {
-  
-  async function createMember(formData: FormData) {
-    'use server';
-    
-    try {
-      const firstName = formData.get('primerNombre');
-      const lastName = formData.get('apellido');
-      const email = formData.get('email');
-      const phone = formData.get('telefono');
-      const plan = formData.get('plan');
-      
-      console.log('Datos a guardar:', { firstName, lastName, email, phone, plan });
-    } catch (error) {
-      console.error('Error al guardar:', error);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<MemberFormValues>({
+    resolver: zodResolver(createMemberSchema),
+    defaultValues: {
+      primerNombre: '',
+      apellido: '',
+      inicial: '',
+      telefono: '',
+      email: '',
+      fechaActivacion: '',
+      plan: '',
+      notas: '',
     }
-  }
+  });
+
+  const onSubmit = async (data: MemberFormValues) => {
+    const result = await createMemberAction(data);
+    if (result.success) {
+      alert("Miembro creado exitosamente");
+    } else {
+      alert("Error al crear miembro");
+    }
+  };
 
   return (
     <div className="flex flex-col gap-6">
-      <form action={createMember} className="flex flex-col gap-6">
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
           <div className="flex flex-col">
             <h1 className="text-2xl font-bold text-text-main">Registrar Nuevo Miembro</h1>
@@ -39,9 +58,10 @@ export default function NewMemberPage() {
             </Link>
             <button 
               type="submit" 
-              className="px-4 py-2 bg-brand-main hover:bg-brand-hover text-white rounded text-xs font-bold transition-colors shadow-sm"
+              disabled={isSubmitting}
+              className="px-4 py-2 bg-brand-main hover:bg-brand-hover text-white rounded text-xs font-bold transition-colors shadow-sm disabled:opacity-50"
             >
-              Guardar Registro
+              {isSubmitting ? "Guardando..." : "Guardar Registro"}
             </button>
           </div>
         </div>
@@ -56,25 +76,28 @@ export default function NewMemberPage() {
                 <label className="text-xs font-semibold text-text-muted tracking-wide">Primer Nombre</label>
                 <input 
                   type="text" 
-                  name="primerNombre" 
-                  className="w-full bg-background border border-border-primary rounded px-3 py-2.5 text-sm text-text-main focus:outline-none focus:border-brand-main transition-colors"
+                  {...register('primerNombre')}
+                  className={`w-full bg-background border ${errors.primerNombre ? 'border-red-500' : 'border-border-primary'} rounded px-3 py-2.5 text-sm text-text-main focus:outline-none focus:border-brand-main transition-colors`}
                 />
+                {errors.primerNombre && <p className="text-xs text-red-500">{errors.primerNombre.message}</p>}
               </div>
               <div className="flex flex-col gap-1.5">
                 <label className="text-xs font-semibold text-text-muted tracking-wide">Apellido</label>
                 <input 
                   type="text" 
-                  name="apellido" 
-                  className="w-full bg-background border border-border-primary rounded px-3 py-2.5 text-sm text-text-main focus:outline-none focus:border-brand-main transition-colors"
+                  {...register('apellido')}
+                  className={`w-full bg-background border ${errors.apellido ? 'border-red-500' : 'border-border-primary'} rounded px-3 py-2.5 text-sm text-text-main focus:outline-none focus:border-brand-main transition-colors`}
                 />
+                {errors.apellido && <p className="text-xs text-red-500">{errors.apellido.message}</p>}
               </div>
               <div className="flex flex-col gap-1.5">
                 <label className="text-xs font-semibold text-text-muted tracking-wide">Inicial</label>
                 <input 
                   type="text" 
-                  name="inicial" 
-                  className="w-full bg-background border border-border-primary rounded px-3 py-2.5 text-sm text-text-main focus:outline-none focus:border-brand-main transition-colors"
+                  {...register('inicial')}
+                  className={`w-full bg-background border ${errors.inicial ? 'border-red-500' : 'border-border-primary'} rounded px-3 py-2.5 text-sm text-text-main focus:outline-none focus:border-brand-main transition-colors`}
                 />
+                {errors.inicial && <p className="text-xs text-red-500">{errors.inicial.message}</p>}
               </div>
             </div>
 
@@ -87,11 +110,12 @@ export default function NewMemberPage() {
                   </div>
                   <input 
                     type="tel" 
-                    name="telefono" 
                     placeholder="(555) 000-0000"
-                    className="w-full bg-background border border-border-primary rounded pl-9 pr-3 py-2.5 text-sm text-text-main placeholder:text-text-muted focus:outline-none focus:border-brand-main transition-colors"
+                    {...register('telefono')}
+                    className={`w-full bg-background border ${errors.telefono ? 'border-red-500' : 'border-border-primary'} rounded pl-9 pr-3 py-2.5 text-sm text-text-main placeholder:text-text-muted focus:outline-none focus:border-brand-main transition-colors`}
                   />
                 </div>
+                {errors.telefono && <p className="text-xs text-red-500">{errors.telefono.message}</p>}
               </div>
               
               <div className="flex flex-col gap-1.5">
@@ -102,10 +126,11 @@ export default function NewMemberPage() {
                   </div>
                   <input 
                     type="email" 
-                    name="email" 
-                    className="w-full bg-background border border-border-primary rounded pl-9 pr-3 py-2 text-sm text-text-main focus:outline-none focus:border-brand-main transition-colors"
+                    {...register('email')}
+                    className={`w-full bg-background border ${errors.email ? 'border-red-500' : 'border-border-primary'} rounded pl-9 pr-3 py-2 text-sm text-text-main focus:outline-none focus:border-brand-main transition-colors`}
                   />
                 </div>
+                {errors.email && <p className="text-xs text-red-500">{errors.email.message}</p>}
               </div>
             </div>
           </div>
@@ -120,24 +145,20 @@ export default function NewMemberPage() {
                 <label className="text-xs font-semibold text-text-muted tracking-wide">Fecha de activación</label>
                 <div className="relative">
                   <input 
-                    type="text" 
-                    name="fechaActivacion" 
-                    placeholder="mm/dd/yyyy"
-                    className="w-full bg-background border border-border-primary rounded px-3 py-2.5 text-sm text-text-main placeholder:text-text-muted focus:outline-none focus:border-brand-main transition-colors"
+                    type="date" 
+                    {...register('fechaActivacion')}
+                    className={`w-full bg-background border ${errors.fechaActivacion ? 'border-red-500' : 'border-border-primary'} rounded px-3 py-2.5 text-sm text-text-main placeholder:text-text-muted focus:outline-none focus:border-brand-main transition-colors`}
                   />
-                  <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                    <Calendar size={14} className="text-text-muted" />
-                  </div>
                 </div>
+                {errors.fechaActivacion && <p className="text-xs text-red-500">{errors.fechaActivacion.message}</p>}
               </div>
 
               <div className="flex flex-col gap-1.5">
                 <label className="text-xs font-semibold text-text-muted tracking-wide">Asignación del plan</label>
                 <div className="relative">
                   <select 
-                    name="plan" 
-                    defaultValue=""
-                    className="w-full bg-background border border-border-primary rounded px-3 py-2.5 text-sm text-text-muted appearance-none focus:outline-none focus:border-brand-main transition-colors"
+                    {...register('plan')}
+                    className={`w-full bg-background border ${errors.plan ? 'border-red-500' : 'border-border-primary'} rounded px-3 py-2.5 text-sm text-text-muted appearance-none focus:outline-none focus:border-brand-main transition-colors`}
                   >
                     <option value="" disabled>Seleccionar plan</option>
                     <option value="premium">Premium</option>
@@ -148,6 +169,7 @@ export default function NewMemberPage() {
                     <ChevronDown size={14} className="text-text-muted" />
                   </div>
                 </div>
+                {errors.plan && <p className="text-xs text-red-500">{errors.plan.message}</p>}
               </div>
             </div>
 
@@ -157,11 +179,12 @@ export default function NewMemberPage() {
                 <span className="text-[9px] font-bold tracking-widest text-text-muted uppercase">Opcional</span>
               </div>
               <textarea 
-                name="notas" 
                 rows={4}
+                {...register('notas')}
                 placeholder="Excepciones físicas, condición. Datos relevantes"
-                className="w-full bg-background border border-border-primary rounded px-3 py-2.5 text-sm text-text-main placeholder:text-text-muted focus:outline-none focus:border-brand-main transition-colors resize-none"
+                className={`w-full bg-background border ${errors.notas ? 'border-red-500' : 'border-border-primary'} rounded px-3 py-2.5 text-sm text-text-main placeholder:text-text-muted focus:outline-none focus:border-brand-main transition-colors resize-none`}
               ></textarea>
+              {errors.notas && <p className="text-xs text-red-500">{errors.notas.message}</p>}
             </div>
             
           </div>

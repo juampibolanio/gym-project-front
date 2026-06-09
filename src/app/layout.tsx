@@ -9,8 +9,19 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "GymSystem",
-  description: "Terminal de Administradores",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://gymsystem-pro.vercel.app"),
+  title: {
+    template: "%s | GymSystem",
+    default: "GymSystem - Terminal de Administradores",
+  },
+  description: "Terminal de gestión y administración para centros de entrenamiento.",
+  openGraph: {
+    title: "GymSystem - Terminal de Administradores",
+    description: "Plataforma integral de gestión para tu gimnasio.",
+    siteName: "GymSystem",
+    locale: "es_AR",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
