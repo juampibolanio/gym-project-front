@@ -39,8 +39,7 @@ export default function ConfiguracionPage() {
     }
   });
 
-  const onSubmitGeneral = async (data: GeneralFormValues) => {
-    console.log("Saving general settings:", data);
+  const onSubmitGeneral = async () => {
   };
 
   const {
@@ -57,8 +56,7 @@ export default function ConfiguracionPage() {
     }
   });
 
-  const onSubmitSecurity = async (data: SecurityFormValues) => {
-    console.log("Saving security settings:", data);
+  const onSubmitSecurity = async () => {
     resetSecurity();
   };
 
@@ -137,7 +135,7 @@ export default function ConfiguracionPage() {
                   <button 
                     type="submit" 
                     disabled={isSubmittingGeneral}
-                    className="flex items-center gap-2 px-4 py-2 bg-brand-main hover:bg-brand-hover text-white rounded-md font-medium text-sm transition-colors shadow-sm disabled:opacity-50"
+                    className="flex items-center justify-center gap-2 px-6 py-2.5 bg-brand-main hover:bg-brand-hover text-white rounded-sm font-medium text-sm transition-colors shadow-sm dark:shadow-none disabled:opacity-50"
                   >
                     <Save size={16} />
                     <span>{isSubmittingGeneral ? 'Guardando...' : 'Guardar Cambios'}</span>
@@ -208,9 +206,10 @@ export default function ConfiguracionPage() {
                   <button 
                     type="submit"
                     disabled={isSubmittingSecurity}
-                    className="w-fit px-4 py-2 mt-2 bg-surface border border-border-primary hover:bg-background text-text-main rounded-md font-medium text-sm transition-colors disabled:opacity-50"
+                    className="w-fit flex items-center justify-center gap-2 px-6 py-2.5 mt-2 bg-brand-main hover:bg-brand-hover text-white rounded-sm font-medium text-sm transition-colors shadow-sm dark:shadow-none disabled:opacity-50"
                   >
-                    {isSubmittingSecurity ? "Actualizando..." : "Actualizar Contraseña"}
+                    <Save size={16} />
+                    <span>{isSubmittingSecurity ? "Actualizando..." : "Actualizar Contraseña"}</span>
                   </button>
                 </div>
                </form>
@@ -223,7 +222,7 @@ export default function ConfiguracionPage() {
                      <h3 className="text-sm font-bold text-text-main">Autenticación de Dos Factores (2FA)</h3>
                      <p className="text-xs text-text-muted mt-1">Añade una capa extra de seguridad a tu cuenta.</p>
                    </div>
-                   <button className="px-4 py-2 bg-brand-surface text-brand-main rounded-md text-sm font-medium hover:bg-brand-main hover:text-white transition-colors">
+                   <button className="px-6 py-2.5 bg-brand-main hover:bg-brand-hover text-white rounded-sm text-sm font-medium transition-colors shadow-sm dark:shadow-none">
                      Habilitar 2FA
                    </button>
                  </div>
