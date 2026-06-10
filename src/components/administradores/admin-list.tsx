@@ -4,35 +4,31 @@ import { MoreHorizontal, Edit, Trash2, Eye } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 
-interface MemberListProps {
+interface AdminListProps {
   name: string;
-  memberID: string;
-  status: 'Activo' | 'Vencido' | 'Inactivo';
-  plan: string;
-  lastPayment: string;
-  nextExpiration?: string;
+  adminID: string;
+  status: 'Activo' | 'Inactivo';
+  rol: string;
+  email: string;
 }
 
-export function MemberList({ 
+export function AdminList({ 
   name, 
-  memberID, 
+  adminID, 
   status, 
-  plan, 
-  lastPayment, 
-  nextExpiration,
-}: MemberListProps) {
+  rol, 
+  email
+}: AdminListProps) {
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   
   const statusStyles = {
     'Activo': 'bg-success-surface text-success-main border-success-main/30',
-    'Vencido': 'bg-warning-surface text-warning-main border-warning-main/30',
     'Inactivo': 'bg-surface-hover text-text-muted border-border-primary'
   };
 
   const dotStyles = {
     'Activo': 'bg-success-main',
-    'Vencido': 'bg-warning-main',
     'Inactivo': 'bg-text-muted'
   };
 
@@ -49,7 +45,7 @@ export function MemberList({
   const initials = name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
   
   return (
-    <div className="grid grid-cols-[2fr_1fr_1fr_1fr_1fr_100px] items-center px-5 py-4 border-b border-border-primary hover:bg-surface-hover transition-colors">
+    <div className="grid grid-cols-[2fr_1fr_1fr_2fr_100px] items-center px-5 py-4 border-b border-border-primary hover:bg-surface-hover transition-colors last:border-b-0 last:rounded-b-lg">
       
       <div>
         <div className="flex items-center gap-3">
@@ -58,7 +54,7 @@ export function MemberList({
           </div>
           <div>
             <p className="text-sm font-light text-text-main">{name}</p>
-            <p className="text-xs text-text-muted mt-0.5">{memberID}</p>
+            <p className="text-xs text-text-muted mt-0.5">{adminID}</p>
           </div>
         </div>
       </div>
@@ -71,15 +67,13 @@ export function MemberList({
       </div>
       
       <div>
-        <p className="text-sm font-light text-text-main">{plan}</p>
+        <span className="inline-flex items-center gap-1.5 px-2 py-1 text-[10px] font-bold bg-blue-50 text-blue-600 border border-blue-200 dark:bg-blue-500/10 dark:text-blue-400 dark:border-blue-500/20 rounded-full uppercase transition-colors">
+          {rol}
+        </span>
       </div>
       
       <div>
-        <p className="text-sm font-light text-text-main">{lastPayment}</p>
-      </div>
-      
-      <div>
-        <p className="text-sm font-light text-text-main">{nextExpiration}</p>
+        <p className="text-sm font-light text-text-main">{email}</p>
       </div>
       
       <div className="relative" ref={dropdownRef}>
@@ -92,10 +86,10 @@ export function MemberList({
 
         {showDropdown && (
           <div className="absolute right-0 top-full mt-1 w-36 bg-surface border border-border-primary rounded-md shadow-lg z-10 py-1 overflow-hidden">
-            <Link href={`/dashboard/miembros/${memberID}`}className="w-full flex items-center gap-2 px-3 py-2 text-xs text-text-main hover:bg-surface-hover transition-colors">
+            <Link href={`/dashboard/administradores/${adminID}`}className="w-full flex items-center gap-2 px-3 py-2 text-xs text-text-main hover:bg-surface-hover transition-colors">
               <Eye size={14} className="text-text-muted" /> Ver Detalles
             </Link>
-            <Link href={`/dashboard/miembros/${memberID}/editar`} className="w-full flex items-center gap-2 px-3 py-2 text-xs text-text-main hover:bg-surface-hover transition-colors">
+            <Link href={`/dashboard/administradores/${adminID}/editar`} className="w-full flex items-center gap-2 px-3 py-2 text-xs text-text-main hover:bg-surface-hover transition-colors">
               <Edit size={14} className="text-text-muted" /> Editar
             </Link>
             <button className="w-full flex items-center gap-2 px-3 py-2 text-xs text-red-500 hover:bg-red-500/10 transition-colors">

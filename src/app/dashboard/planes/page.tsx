@@ -50,27 +50,27 @@ export default function PlansPage() {
                     <p className="text-md text-text-muted transition-colors">Gestione los planes y la estructura de precios</p>
                 </div>
 
-                <Link href="/dashboard/planes/nuevo" className="bg-[#2A5D44] hover:bg-[#1e4431] transition-colors flex items-center gap-1 px-3 py-1.5 md:px-4 md:py-2 cursor-pointer">
+                <Link href="/dashboard/planes/nuevo" className="bg-brand-main hover:bg-brand-hover text-white transition-colors flex items-center gap-1 px-3 py-1.5 md:px-4 md:py-2 rounded-md shadow-sm">
                     <Plus size={16} />
-                    <span className="text-xs md:text-sm font-medium">Crear nuevo</span>
+                    <span className="text-xs md:text-sm font-bold">Crear nuevo</span>
                 </Link>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {
                     plansMock.map(plan => (
-                        <div key={plan.id} className="flex flex-col border border-[#404943] rounded-xs">
-                            <div className="flex flex-col gap-2 border-b border-[#404943] p-6">
-                                <h2 className="text-xl font-medium">{plan.name}</h2>
-                                <p className="text-sm"><span className="text-[#9CD2B3] text-3xl font-semibold">${plan.price}</span> / {plan.frequency}</p>
+                        <div key={plan.id} className="flex flex-col border border-border-primary bg-surface rounded-lg shadow-sm dark:shadow-none">
+                            <div className="flex flex-col gap-2 border-b border-border-primary p-6">
+                                <h2 className="text-xl font-bold text-text-main">{plan.name}</h2>
+                                <p className="text-sm text-text-muted"><span className="text-brand-main text-3xl font-semibold">${plan.price}</span> / {plan.frequency}</p>
                             </div>
 
                             <div className="flex-1 p-6">
                                 <ul className="list-none flex flex-col gap-3">
                                     {plan.description.map((item, index) => (
                                         <li key={index} className="flex items-start gap-3">
-                                            <Check size={20} className="text-[#9CD2B3] shrink-0 mt-0.5" />
-                                            <span className="text-md text-zinc-300">
+                                            <Check size={20} className="text-brand-main shrink-0 mt-0.5" />
+                                            <span className="text-md text-text-muted">
                                                 {item}
                                             </span>
                                         </li>
@@ -78,8 +78,8 @@ export default function PlansPage() {
                                 </ul>
                             </div>
 
-                            <div className="flex justify-end border-t border-[#404943] p-2">
-                                <Link href={`/dashboard/planes/${plan.id}/editar`} className="text-sm tracking-wider text-[#E1E3DF] font-semibold cursor-pointer uppercase px-4 py-3 rounded-xs hover:bg-[#2a2d2b] transition-colors">
+                            <div className="flex justify-end border-t border-border-primary p-2 bg-background/50 rounded-b-lg">
+                                <Link href={`/dashboard/planes/${plan.id}/editar`} className="text-xs tracking-widest text-text-muted font-bold cursor-pointer uppercase px-4 py-3 rounded hover:bg-surface-hover hover:text-text-main transition-colors">
                                     Editar
                                 </Link>
                             </div>

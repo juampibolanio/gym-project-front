@@ -18,6 +18,18 @@
   --color-brand-main: var(--brand-main);
   --color-brand-hover: var(--brand-hover);
   --color-brand-surface: var(--brand-surface);
+
+  --color-success-main: var(--success-main);
+  --color-success-surface: var(--success-surface);
+
+  --color-warning-main: var(--warning-main);
+  --color-warning-surface: var(--warning-surface);
+
+  --color-danger-main: var(--danger-main);
+  --color-danger-surface: var(--danger-surface);
+
+  --color-info-main: var(--info-main);
+  --color-info-surface: var(--info-surface);
 }
 
 @layer base {
@@ -35,6 +47,18 @@
     --brand-main: #047857;    
     --brand-hover: #065f46;    
     --brand-surface: #ecfdf5;  
+
+    --success-main: #10b981;
+    --success-surface: #d1fae5;
+
+    --warning-main: #f59e0b;
+    --warning-surface: #fef3c7;
+
+    --danger-main: #ef4444;
+    --danger-surface: #fee2e2;
+
+    --info-main: #3b82f6;
+    --info-surface: #dbeafe;
   }
 
   .dark {
@@ -51,6 +75,18 @@
     --brand-main: #2d5f43;
     --brand-hover: #244f36;
     --brand-surface: #1a2e22;
+
+    --success-main: #4ade80;
+    --success-surface: #112a1c;
+
+    --warning-main: #fbbf24;
+    --warning-surface: #451a03;
+
+    --danger-main: #f87171;
+    --danger-surface: #450a0a;
+
+    --info-main: #60a5fa;
+    --info-surface: #172554;
   }
 }
 

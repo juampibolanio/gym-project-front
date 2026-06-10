@@ -1,6 +1,6 @@
 'use client';
 import { MemberList } from "@/components/miembros/member-list";
-import { ChevronRight, ChevronLeft, ListFilter } from "lucide-react";
+import { ChevronRight, ChevronLeft } from "lucide-react";
 import { useState } from "react";
 
 const ALL_MEMBERS = [
@@ -55,27 +55,23 @@ export default function MembersPage() {
           <div className="flex bg-surface border border-border-primary rounded-lg p-1">
             <button 
               onClick={() => { setFilter('Todos'); setCurrentPage(1); }}
-              className={`px-4 py-1.5 text-[10px] font-bold rounded transition-colors tracking-wider uppercase ${filter === 'Todos' ? 'bg-background text-text-main shadow-sm dark:shadow-none' : 'text-text-muted hover:text-text-main'}`}
+              className={`px-4 py-1.5 text-[10px] font-bold rounded transition-colors tracking-wider uppercase ${filter === 'Todos' ? 'bg-brand-main text-white shadow-sm dark:shadow-none' : 'text-text-muted hover:text-text-main'}`}
             >
               Todos
             </button>
             <button 
               onClick={() => { setFilter('Activo'); setCurrentPage(1); }}
-              className={`px-4 py-1.5 text-[10px] font-bold rounded transition-colors tracking-wider uppercase ${filter === 'Activo' ? 'bg-background text-text-main shadow-sm dark:shadow-none' : 'text-text-muted hover:text-text-main'}`}
+              className={`px-4 py-1.5 text-[10px] font-bold rounded transition-colors tracking-wider uppercase ${filter === 'Activo' ? 'bg-brand-main text-white shadow-sm dark:shadow-none' : 'text-text-muted hover:text-text-main'}`}
             >
               Activo
             </button>
             <button 
               onClick={() => { setFilter('Vencido'); setCurrentPage(1); }}
-              className={`px-4 py-1.5 text-[10px] font-bold rounded transition-colors tracking-wider uppercase ${filter === 'Vencido' ? 'bg-background text-text-main shadow-sm dark:shadow-none' : 'text-text-muted hover:text-text-main'}`}
+              className={`px-4 py-1.5 text-[10px] font-bold rounded transition-colors tracking-wider uppercase ${filter === 'Vencido' ? 'bg-brand-main text-white shadow-sm dark:shadow-none' : 'text-text-muted hover:text-text-main'}`}
             >
               Vencido
             </button>
           </div>
-          <button className="flex items-center gap-2 px-4 py-2 text-[10px] font-bold text-text-main border border-border-primary bg-surface hover:bg-surface-hover rounded-lg transition-colors tracking-wider uppercase">
-            <ListFilter size={14} />
-            Más Filtros
-          </button>
         </div>
       </div>
 

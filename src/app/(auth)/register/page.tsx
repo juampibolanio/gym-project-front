@@ -7,10 +7,18 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
 const registerSchema = z.object({
-    nombreCompleto: z.string().min(1, 'El nombre es requerido'),
-    email: z.string().min(1, 'El email es requerido').email('Por favor ingresa un email válido'),
-    nombreGimnasio: z.string().min(1, 'El nombre del gimnasio es requerido'),
-    password: z.string().min(6, 'La contraseña debe tener al menos 6 caracteres'),
+    nombreCompleto: z.string().trim().min(2, 'El nombre debe tener al menos 2 caracteres').max(100, 'Nombre demasiado largo'),
+    email: z.string().min(1, 'El email es requerido').email('Por favor ingresa un email válido').max(150),
+    nombreGimnasio: z.string().trim().min(2, 'El nombre del gimnasio es requerido').max(100),
+    password: z.string()
+        .min(8, 'La contraseña debe tener al menos 8 caracteres')
+        .regex(/[A-Z]/, 'Debe contener al menos una letra mayúscula')
+        .regex(/[0-9]/, 'Debe contener al menos un número')
+        .regex(/[^a-zA-Z0-9]/, 'Debe contener al menos un carácter especial'),
+    confirmPassword: z.string().min(1, 'Por favor confirma tu contraseña'),
+}).refine((data) => data.password === data.confirmPassword, {
+    message: "Las contraseñas no coinciden",
+    path: ["confirmPassword"],
 });
 
 type RegisterFormValues = z.infer<typeof registerSchema>;
@@ -29,6 +37,7 @@ export default function RegisterPage() {
             email: '',
             nombreGimnasio: '',
             password: '',
+            confirmPassword: '',
         }
       });
 
@@ -119,6 +128,22 @@ export default function RegisterPage() {
                             </button>
                         </div>
                         {errors.password && <p className="text-red-500 text-xs mt-1 font-medium">{errors.password.message}</p>}
+                    </div>
+
+                    <div className="space-y-2">
+                        <label className="text-[10px] font-bold text-text-muted tracking-wider uppercase transition-colors">
+                            Confirmar Contraseña
+                        </label>
+                        <div className="relative flex items-center">
+                            <Lock className="absolute left-3 text-text-muted transition-colors" size={16} />
+                            <input 
+                                type={showPassword ? "text" : "password"}
+                                placeholder="••••••••"
+                                {...register('confirmPassword')}
+                                className={`w-full bg-sidebar border ${errors.confirmPassword ? 'border-red-500' : 'border-border-primary'} rounded-lg py-2.5 pl-10 pr-10 text-sm text-text-main placeholder-text-muted focus:outline-none focus:border-brand-main transition-colors`}
+                            />
+                        </div>
+                        {errors.confirmPassword && <p className="text-red-500 text-xs mt-1 font-medium">{errors.confirmPassword.message}</p>}
                     </div>
 
                     <button 

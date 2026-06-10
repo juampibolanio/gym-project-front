@@ -1,4 +1,4 @@
-import { Users, Wallet, AlertTriangle, TrendingUp, Clock, MoreHorizontal, Calendar } from 'lucide-react';
+import { Users, Wallet, AlertTriangle, TrendingUp, Clock, Calendar } from 'lucide-react';
 import { MetricCard } from '@/components/dashboard/metric-card';
 import { RenewalItem } from '@/components/dashboard/renewal-item';
 
@@ -62,7 +62,7 @@ export default function DashboardPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
-        <div className="lg:col-span-2 bg-surface border border-border-primary shadow-sm dark:shadow-none rounded-lg flex flex-col transition-colors">
+        <div className="lg:col-span-2 bg-surface border border-border-primary shadow-sm dark:shadow-none rounded-lg flex flex-col transition-colors overflow-hidden">
           <div className="flex items-center justify-between p-5 border-b border-border-primary">
             <h2 className="text-sm font-bold text-text-main transition-colors">Trayectoria de ingresos Semanales</h2>
             <div className="flex bg-background rounded text-xs font-medium transition-colors p-1">
@@ -77,12 +77,9 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <div className="bg-surface border border-border-primary shadow-sm dark:shadow-none rounded-lg flex flex-col transition-colors">
+        <div className="bg-surface border border-border-primary shadow-sm dark:shadow-none rounded-lg flex flex-col transition-colors overflow-hidden">
           <div className="flex items-center justify-between p-5 border-b border-border-primary">
             <h2 className="text-sm font-bold text-text-main transition-colors">Próximos Vencimientos</h2>
-            <button className="text-text-muted hover:text-text-main transition-colors">
-              <MoreHorizontal size={18} />
-            </button>
           </div>
           
           <div className="flex-1 p-0">
@@ -104,12 +101,6 @@ export default function DashboardPage() {
                 />
               ))}
             </div>
-          </div>
-
-          <div className="p-4 border-t border-border-primary mt-auto">
-            <button className="w-full text-center text-[10px] font-bold text-text-muted tracking-widest hover:text-text-main transition-colors uppercase">
-              Ver todas las renovaciones
-            </button>
           </div>
         </div>
 
