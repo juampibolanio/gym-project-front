@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CreditCard, X } from "lucide-react";
 import * as z from "zod";
-import { paymentSchema } from "../_schemas/payment.schema";
+import { paymentSchema } from "@/schemas/miembros/payment.schema";
 
 type PaymentFormValues = z.infer<typeof paymentSchema>;
 
@@ -34,7 +34,7 @@ export default function RegisterPaymentButton({ memberName, memberSurname, uuid 
     });
 
     const onSubmit = (data: PaymentFormValues) => {
-        console.log("Pago registrado para:", memberName, data);
+        console.log("Pago registrado para:", memberName, uuid, data);
         reset();
         setIsOpen(false);
     };

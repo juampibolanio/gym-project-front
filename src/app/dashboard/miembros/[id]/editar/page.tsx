@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { editMemberSchema } from '../../_schemas/editMember.schema';
+import { editMemberSchema } from '@/schemas/miembros/editMember.schema';
 import { use } from 'react';
 
 type EditMemberFormValues = z.infer<typeof editMemberSchema>;

@@ -2,7 +2,7 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { editPlanSchema } from "../../_schemas/editPlan.schema";
+import { editPlanSchema } from "@/schemas/planes/editPlan.schema";
 import * as z from "zod";
 import Link from "next/link";
 

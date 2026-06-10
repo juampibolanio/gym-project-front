@@ -1,6 +1,6 @@
 'use server';
 
-import { createMemberSchema } from "../_schemas/createMember.schema";
+import { createMemberSchema } from "@/schemas/miembros/createMember.schema";
 
 import * as z from "zod";
 
