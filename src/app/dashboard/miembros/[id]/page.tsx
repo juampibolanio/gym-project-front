@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowLeft, Award, CreditCard, Filter, Pencil, User } from "lucide-react";
-import RegisterPaymentButton from "../components/RegisterPaymentButton";
+import RegisterPaymentButton from "@/components/miembros/RegisterPaymentButton";
 
 export default async function MemberDetailPage({
     params,

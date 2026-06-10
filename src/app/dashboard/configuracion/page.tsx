@@ -11,7 +11,7 @@ import {
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { configGeneralSchema, configSecuritySchema } from './_schemas/config.schema';
+import { configGeneralSchema, configSecuritySchema } from '@/schemas/configuracion/config.schema';
 
 type GeneralFormValues = z.infer<typeof configGeneralSchema>;
 type SecurityFormValues = z.infer<typeof configSecuritySchema>;
