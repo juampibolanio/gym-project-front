@@ -12,8 +12,40 @@ export class AxiosAdapter implements HttpAdapter {
             },
         });
 
-        // todo: aca hay q añadir interceptores (para el token jwt por ej )
-    }
+        // request interceptor
+        this.axiosInstance.interceptors.request.use(
+            (config) => {
+                if (typeof window !== 'undefined') {
+                    const token = localStorage.getItem('jwt_token');
+
+                    if (token) {
+                        config.headers.Authorization = `Bearer ${token}`;
+                    }
+                }
+                return config;
+            },
+            (error) => {
+                return Promise.reject(error);
+            }
+        );
+
+        // response interceptor
+        this.axiosInstance.interceptors.response.use(
+            (response) => {
+                return response;
+            },
+            (error) => {
+                if (error.response?.status === 401) {
+                    if (typeof window !== 'undefined') {
+                        localStorage.removeItem('jwt_token'); 
+                        window.location.href = '/login';     
+                    }
+                }
+                // todo: aca se puede agregar mas logica para manejar distintos errores
+                return Promise.reject(error);
+            }
+        )
+    };
 
     async get<T>(url: string, config?: any): Promise<T> {
         const response = await this.axiosInstance.get<T>(url, config);
@@ -39,7 +71,6 @@ export class AxiosAdapter implements HttpAdapter {
         const response = await this.axiosInstance.delete<T>(url, config);
         return response.data;
     }
-
 }
 
 export const httpClient = new AxiosAdapter();
