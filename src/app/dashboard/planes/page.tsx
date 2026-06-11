@@ -1,5 +1,5 @@
-import { Check, Plus } from "lucide-react";
 import Link from "next/link";
+import { Check, Plus } from "lucide-react";
 
 const plansMock = [
     {

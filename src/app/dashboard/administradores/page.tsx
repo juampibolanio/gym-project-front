@@ -1,6 +1,5 @@
-import { AdminList } from '@/features/administrators/components/admin-list';
-
 import Link from 'next/link';
+import { AdminList } from '@/features/administrators/components/admin-list';
 
 const mockAdmins: { name: string; adminID: string; status: 'Activo' | 'Inactivo'; rol: string; email: string }[] = [
   { name: 'Juan Perez', adminID: 'ADM-001', status: 'Activo', rol: 'Administrador designado', email: 'juan.perez@gymsystem.com' },

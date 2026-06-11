@@ -1,8 +1,6 @@
 'use server';
-
-import { createMemberSchema } from "@/features/members/schemas/createMember.schema";
-
 import * as z from "zod";
+import { createMemberSchema } from "@/features/members/schemas/createMember.schema";
 
 export async function createMemberAction(data: z.infer<typeof createMemberSchema>) {
   try {
