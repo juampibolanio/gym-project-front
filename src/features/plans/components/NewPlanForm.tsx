@@ -8,7 +8,7 @@ import Link from "next/link";
 
 type PlanFormValues = z.infer<typeof createPlanSchema>;
 
-export function NuevoPlanForm() {
+export function NewPlanForm() {
     const {
         register,
         handleSubmit,

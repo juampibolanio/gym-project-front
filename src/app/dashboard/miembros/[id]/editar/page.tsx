@@ -1,4 +1,4 @@
-import { EditarMiembroForm } from '@/features/members/components/editar-miembro-form';
+import { EditMemberForm } from '@/features/members/components/EditMemberForm';
 
 export default async function EditMemberPage({
   params,
@@ -6,5 +6,5 @@ export default async function EditMemberPage({
   params: Promise<{ id: string }>
 }) {
   const { id } = await params;
-  return <EditarMiembroForm id={id} />;
+  return <EditMemberForm id={id} />;
 }

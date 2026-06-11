@@ -1,5 +1,5 @@
 'use client';
-import { MemberList } from "@/features/members/components/member-list";
+import { MemberList } from "@/features/members/components/MemberList";
 import { ChevronRight, ChevronLeft } from "lucide-react";
 import { useState } from "react";
 
@@ -18,7 +18,7 @@ const ALL_MEMBERS = [
   { id: "MEM-123467", name: "Valentina Ruiz", status: "Activo" as const, plan: "Plan Mensual", lastPayment: "2023-10-18", nextExpiration: "2023-11-18" },
 ];
 
-export function MiembrosDirectory() {
+export function MembersDirectory() {
   const [filter, setFilter] = useState<'Todos' | 'Activo' | 'Vencido'>('Todos');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
@@ -86,7 +86,7 @@ export function MiembrosDirectory() {
           <h5>ACCIONES</h5>
         </div>
 
-        <div className="flex flex-col min-h-[300px]">
+        <div className="flex flex-col min-h-75">
           {currentMembers.length > 0 ? (
             currentMembers.map((member) => (
               <MemberList 

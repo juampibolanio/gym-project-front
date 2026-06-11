@@ -1,4 +1,4 @@
-import { EditarPlanForm } from '@/features/plans/components/editar-plan-form';
+import { EditPlanForm } from '@/features/plans/components/EditPlanForm';
 
 export default async function EditPlanPage({
   params,
@@ -6,5 +6,5 @@ export default async function EditPlanPage({
   params: Promise<{ id: string }>
 }) {
   const { id } = await params;
-  return <EditarPlanForm id={id} />;
+  return <EditPlanForm id={id} />;
 }

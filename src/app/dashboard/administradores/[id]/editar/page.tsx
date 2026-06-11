@@ -1,4 +1,4 @@
-import { EditarAdminForm } from '@/features/administrators/components/editar-admin-form';
+import { EditAdminForm } from '@/features/administrators/components/EditAdminForm';
 
 export default async function EditAdminPage({
   params,
@@ -6,5 +6,5 @@ export default async function EditAdminPage({
   params: Promise<{ id: string }>
 }) {
   const { id } = await params;
-  return <EditarAdminForm id={id} />;
+  return <EditAdminForm id={id} />;
 }

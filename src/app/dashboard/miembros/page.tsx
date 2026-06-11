@@ -1,5 +1,5 @@
-import { MiembrosDirectory } from '@/features/members/components/miembros-directory';
+import { MembersDirectory } from '@/features/members/components/MembersDirectory';
 
 export default function MembersPage() {
-  return <MiembrosDirectory />;
+  return <MembersDirectory />;
 }

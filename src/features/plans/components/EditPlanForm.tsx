@@ -8,7 +8,7 @@ import Link from "next/link";
 
 type PlanFormValues = z.infer<typeof editPlanSchema>;
 
-export function EditarPlanForm({ id }: { id: string }) {
+export function EditPlanForm({ id }: { id: string }) {
     const {
         register,
         handleSubmit,

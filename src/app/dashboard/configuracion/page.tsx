@@ -1,5 +1,5 @@
-import { ConfiguracionTabs } from '@/features/configuration/components/configuracion-tabs';
+import { ConfigurationTabs } from '@/features/configuration/components/ConfigurationTabs';
 
 export default function ConfiguracionPage() {
-  return <ConfiguracionTabs />;
+  return <ConfigurationTabs />;
 }

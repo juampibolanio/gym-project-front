@@ -1,5 +1,5 @@
-import { NuevoPlanForm } from '@/features/plans/components/nuevo-plan-form';
+import { NewPlanForm } from '@/features/plans/components/NewPlanForm';
 
 export default function CreatePlanPage() {
-    return <NuevoPlanForm />;
+    return <NewPlanForm />;
 }

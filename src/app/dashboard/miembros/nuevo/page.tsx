@@ -1,5 +1,5 @@
-import { NuevoMiembroForm } from '@/features/members/components/nuevo-miembro-form';
+import { NewMemberForm } from '@/features/members/components/NewMemberForm';
 
 export default function NewMemberPage() {
-  return <NuevoMiembroForm />;
+  return <NewMemberForm />;
 }

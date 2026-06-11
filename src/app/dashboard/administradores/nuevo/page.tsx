@@ -1,5 +1,5 @@
-import { NuevoAdminForm } from '@/features/administrators/components/nuevo-admin-form';
+import { NewAdminForm } from '@/features/administrators/components/NewAdminForm';
 
 export default function NuevoAdminPage() {
-  return <NuevoAdminForm />;
+  return <NewAdminForm />;
 }

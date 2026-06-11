@@ -16,7 +16,7 @@ import { configGeneralSchema, configSecuritySchema } from '@/features/configurat
 type GeneralFormValues = z.infer<typeof configGeneralSchema>;
 type SecurityFormValues = z.infer<typeof configSecuritySchema>;
 
-export function ConfiguracionTabs() {
+export function ConfigurationTabs() {
   const [activeTab, setActiveTab] = useState('general');
   const [showCurrentPass, setShowCurrentPass] = useState(false);
   const [showNewPass, setShowNewPass] = useState(false);
