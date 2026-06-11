@@ -2,9 +2,10 @@
 
 import { Bell, LayoutDashboard, Users, ClipboardList, Settings, Plus, Search, Shield } from 'lucide-react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { ThemeToggle } from '@/common/components/layout/ThemeToggle';
 import { AuthGuard } from '@/features/auth/components/AuthGuard';
+import { useAuthStore } from '@/features/auth/store/auth.store';
 
 const SEARCH_CONFIG: Record<string, { placeholder: string }> = {
   '/dashboard/miembros': {
@@ -17,6 +18,13 @@ const SEARCH_CONFIG: Record<string, { placeholder: string }> = {
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
+  const setLogout = useAuthStore((state) => state.setLogout);
+
+  const handleLogout = () => {
+    setLogout();
+    router.replace('/login');
+  };
 
   const navItems = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard, exact: true },
@@ -76,7 +84,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 <Plus size={16} /> Agregar nuevo admin
               </Link>
             )}
-            <button className="w-full py-2.5 bg-brand-main hover:bg-brand-hover text-white font-medium text-sm transition-colors rounded-sm shadow-sm dark:shadow-none">
+            <button onClick={handleLogout} className="w-full py-2.5 bg-brand-main hover:bg-brand-hover text-white font-medium text-sm transition-colors rounded-sm shadow-sm dark:shadow-none">
               Cerrar sesión
             </button>
           </div>
