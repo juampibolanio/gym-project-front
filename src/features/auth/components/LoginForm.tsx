@@ -1,17 +1,10 @@
 'use client';
-import { Mail, Lock, EyeOff, Eye, Dumbbell, ShieldAlert } from 'lucide-react';
+import { Mail, Lock, EyeOff, Eye } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-
-const loginSchema = z.object({
-  email: z.string().trim().min(1, 'El email es requerido').email('Por favor ingresa un email válido').max(150),
-  password: z.string().min(6, 'La contraseña debe tener al menos 6 caracteres').max(100),
-});
-
-type LoginFormValues = z.infer<typeof loginSchema>;
+import { LoginFormValues, loginSchema } from '../schemas/login.schema';
 
 export function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -33,17 +26,6 @@ export function LoginForm() {
   };
 
   return (
-    <div className="w-full max-w-100 flex flex-col items-center">
-      
-      <div className="flex flex-col items-center mb-8">
-        <div className="w-12 h-12 rounded-full border border-border-primary bg-surface flex items-center justify-center mb-4 shadow-sm dark:shadow-none transition-colors">
-          <Dumbbell className="text-brand-main" size={24} />
-        </div>
-        <h1 className="text-xl font-bold text-text-main transition-colors">GymSystem</h1>
-        <p className="text-sm text-text-muted mt-1 transition-colors">Terminal de Inicio Administradores</p>
-      </div>
-
-      <div className="w-full bg-surface border-t-4 border-t-brand-main border border-border-primary rounded-xl p-6 shadow-xl dark:shadow-2xl transition-colors">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           
           <div className="space-y-2">
@@ -97,21 +79,5 @@ export function LoginForm() {
             Iniciar Sesión <span className="text-lg leading-none">→</span>
           </button>
         </form>
-
-        <div className="mt-6 pt-4 border-t border-border-primary flex flex-col items-center gap-4 transition-colors">
-          <div className="flex items-center justify-center gap-2 text-text-muted transition-colors">
-            <ShieldAlert size={14} />
-            <span className="text-[10px] font-bold tracking-wider uppercase">Terminal de Acceso Seguro</span>
-          </div>
-          <div className="text-text-muted text-xs transition-colors">
-            ¿No tienes una cuenta?{' '}
-            <Link href="/register" className="ml-1 font-medium text-brand-main hover:text-brand-hover transition-colors">
-              Crea una aquí
-            </Link>
-          </div>
-        </div>
-      </div>
-
-    </div>
   );
 }
