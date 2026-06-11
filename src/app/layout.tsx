@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/common/components/layout/ThemeProvider";
 import TanStackQueryProvider from "@/core/providers/TanStackQueryProvider";
+import { Toaster } from "react-hot-toast";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -35,6 +36,7 @@ export default function RootLayout({
       <body className={`${inter.variable} min-h-screen`}>
         <TanStackQueryProvider>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <Toaster position="top-right" reverseOrder={false}/>
             {children}
           </ThemeProvider>
         </TanStackQueryProvider>
