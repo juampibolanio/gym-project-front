@@ -1,4 +1,4 @@
-import { ThemeToggle } from "@/components/theme-toggle";
+import { ThemeToggle } from "@/common/components/layout/theme-toggle";
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (

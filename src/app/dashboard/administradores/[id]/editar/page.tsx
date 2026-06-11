@@ -1,4 +1,4 @@
-import { EditarAdminForm } from '@/components/administradores/editar-admin-form';
+import { EditarAdminForm } from '@/features/administrators/components/editar-admin-form';
 
 export default async function EditAdminPage({
   params,

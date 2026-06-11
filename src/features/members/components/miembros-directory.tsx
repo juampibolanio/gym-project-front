@@ -1,5 +1,5 @@
 'use client';
-import { MemberList } from "@/components/miembros/member-list";
+import { MemberList } from "@/features/members/components/member-list";
 import { ChevronRight, ChevronLeft } from "lucide-react";
 import { useState } from "react";
 

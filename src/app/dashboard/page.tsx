@@ -1,6 +1,6 @@
 import { Users, Wallet, AlertTriangle, TrendingUp, Clock, Calendar } from 'lucide-react';
-import { MetricCard } from '@/components/dashboard/metric-card';
-import { RenewalItem } from '@/components/dashboard/renewal-item';
+import { MetricCard } from '@/features/dashboard/components/metric-card';
+import { RenewalItem } from '@/features/dashboard/components/renewal-item';
 
 export default function DashboardPage() {
   

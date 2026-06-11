@@ -1,4 +1,4 @@
-import { EditarMiembroForm } from '@/components/miembros/editar-miembro-form';
+import { EditarMiembroForm } from '@/features/members/components/editar-miembro-form';
 
 export default async function EditMemberPage({
   params,

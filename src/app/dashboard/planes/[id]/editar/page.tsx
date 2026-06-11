@@ -1,4 +1,4 @@
-import { EditarPlanForm } from '@/components/planes/editar-plan-form';
+import { EditarPlanForm } from '@/features/plans/components/editar-plan-form';
 
 export default async function EditPlanPage({
   params,

@@ -3,7 +3,7 @@
 import { Bell, LayoutDashboard, Users, ClipboardList, Settings, Plus, Search, Shield } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ThemeToggle } from '@/components/theme-toggle';
+import { ThemeToggle } from '@/common/components/layout/theme-toggle';
 
 const SEARCH_CONFIG: Record<string, { placeholder: string }> = {
   '/dashboard/miembros': {

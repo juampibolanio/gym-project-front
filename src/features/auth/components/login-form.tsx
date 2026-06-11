@@ -33,7 +33,7 @@ export function LoginForm() {
   };
 
   return (
-    <div className="w-full max-w-[400px] flex flex-col items-center">
+    <div className="w-full max-w-100 flex flex-col items-center">
       
       <div className="flex flex-col items-center mb-8">
         <div className="w-12 h-12 rounded-full border border-border-primary bg-surface flex items-center justify-center mb-4 shadow-sm dark:shadow-none transition-colors">

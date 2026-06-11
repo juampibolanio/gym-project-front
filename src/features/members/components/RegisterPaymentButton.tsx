@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CreditCard, X } from "lucide-react";
 import * as z from "zod";
-import { paymentSchema } from "@/schemas/miembros/payment.schema";
+import { paymentSchema } from "@/features/members/schemas/payment.schema";
 
 type PaymentFormValues = z.infer<typeof paymentSchema>;
 

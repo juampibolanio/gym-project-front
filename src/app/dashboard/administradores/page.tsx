@@ -1,4 +1,4 @@
-import { AdminList } from '@/components/administradores/admin-list';
+import { AdminList } from '@/features/administrators/components/admin-list';
 
 import Link from 'next/link';
 

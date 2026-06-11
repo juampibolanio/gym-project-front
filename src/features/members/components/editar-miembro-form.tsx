@@ -5,37 +5,30 @@ import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { createMemberSchema } from '@/schemas/miembros/createMember.schema';
-import { createMemberAction } from '@/app/dashboard/miembros/nuevo/actions';
+import { editMemberSchema } from '@/features/members/schemas/editMember.schema';
 
-type MemberFormValues = z.infer<typeof createMemberSchema>;
+type EditMemberFormValues = z.infer<typeof editMemberSchema>;
 
-export function NuevoMiembroForm() {
+export function EditarMiembroForm({ id }: { id: string }) {
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<MemberFormValues>({
-    resolver: zodResolver(createMemberSchema),
+  } = useForm<EditMemberFormValues>({
+    resolver: zodResolver(editMemberSchema),
     defaultValues: {
       primerNombre: '',
       apellido: '',
-
       telefono: '',
       email: '',
-      fechaActivacion: '',
       plan: '',
+      estado: 'activo',
       notas: '',
     }
   });
 
-  const onSubmit = async (data: MemberFormValues) => {
-    const result = await createMemberAction(data);
-    if (result.success) {
-      console.log("Miembro creado:", data);
-    } else {
-      console.error("Error al crear miembro");
-    }
+  const onSubmit = async (data: EditMemberFormValues) => {
+    console.log("Datos editados para ID", id, ":", data);
   };
 
   return (
@@ -43,25 +36,25 @@ export function NuevoMiembroForm() {
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
           <div className="flex flex-col">
-            <h1 className="text-2xl font-bold text-text-main">Registrar Nuevo Miembro</h1>
+            <h1 className="text-2xl font-bold text-text-main">Editar Miembro</h1>
             <p className="text-sm text-text-muted mt-1">
-              Ingrese los datos del alumno y el plan a continuación.
+              Modificá los datos del alumno y el estado a continuación.
             </p>
           </div>
           
           <div className="flex items-center gap-3">
             <Link 
-              href="/dashboard/miembros"
+              href={`/dashboard/miembros/${id}`}
               className="px-4 py-2 border border-border-primary bg-transparent text-text-muted hover:text-text-main hover:bg-surface-hover rounded text-xs font-bold transition-colors"
             >
-              Descartar
+              Cancelar
             </Link>
             <button 
               type="submit" 
               disabled={isSubmitting}
               className="px-4 py-2 bg-brand-main hover:bg-brand-hover text-white rounded text-xs font-bold transition-colors shadow-sm disabled:opacity-50"
             >
-              {isSubmitting ? "Guardando..." : "Guardar Registro"}
+              {isSubmitting ? "Guardando..." : "Guardar Cambios"}
             </button>
           </div>
         </div>
@@ -130,27 +123,35 @@ export function NuevoMiembroForm() {
           <hr className="border-border-primary" />
 
           <div className="flex flex-col gap-6">
-            <h2 className="text-[15px] font-bold text-text-main">Especificaciones del plan</h2>
+            <h2 className="text-[15px] font-bold text-text-main">Membresía y Estado</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-text-muted tracking-wide">Fecha de activación</label>
+                <label className="text-xs font-semibold text-text-muted tracking-wide">Estado Manual</label>
                 <div className="relative">
-                  <input 
-                    type="date" 
-                    {...register('fechaActivacion')}
-                    className={`w-full bg-background border ${errors.fechaActivacion ? 'border-red-500' : 'border-border-primary'} rounded px-3 py-2.5 text-sm text-text-main placeholder:text-text-muted focus:outline-none focus:border-brand-main transition-colors`}
-                  />
+                  <select 
+                    {...register('estado')}
+                    className={`w-full bg-background border ${errors.estado ? 'border-red-500' : 'border-border-primary'} rounded px-3 py-2.5 text-sm text-text-main appearance-none focus:outline-none focus:border-brand-main transition-colors`}
+                  >
+                    <option value="activo">Activo</option>
+                    <option value="inactivo">Inactivo</option>
+                    <option value="vencido">Vencido</option>
+                  </select>
+                  <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                    <ChevronDown size={14} className="text-text-muted" />
+                  </div>
                 </div>
-                {errors.fechaActivacion && <p className="text-xs text-red-500">{errors.fechaActivacion.message}</p>}
+                {errors.estado && <p className="text-xs text-red-500">{errors.estado.message}</p>}
+                <p className="text-[10px] text-text-muted mt-0.5">Sobrescribe el estado automático de pagos.</p>
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-text-muted tracking-wide">Asignación del plan</label>
+                <label className="text-xs font-semibold text-text-muted tracking-wide">Plan Asignado</label>
                 <div className="relative">
                   <select 
                     {...register('plan')}
-                    className={`w-full bg-background border ${errors.plan ? 'border-red-500' : 'border-border-primary'} rounded px-3 py-2.5 text-sm text-text-muted appearance-none focus:outline-none focus:border-brand-main transition-colors`}
+                    className={`w-full bg-background border ${errors.plan ? 'border-red-500' : 'border-border-primary'} rounded px-3 py-2.5 text-sm text-text-main appearance-none focus:outline-none focus:border-brand-main transition-colors`}
                   >
                     <option value="" disabled>Seleccionar plan</option>
                     <option value="premium">Premium</option>

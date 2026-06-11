@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { createAdminSchema } from '@/schemas/administradores/createAdmin.schema';
+import { createAdminSchema } from '@/features/administrators/schemas/createAdmin.schema';
 
 type CreateAdminFormValues = z.infer<typeof createAdminSchema>;
 
