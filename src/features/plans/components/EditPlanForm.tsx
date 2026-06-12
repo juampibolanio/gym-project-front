@@ -1,28 +1,70 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { editPlanSchema } from "@/features/plans/schemas/editPlan.schema";
-import * as z from "zod";
+import { planSchema, PlanFormValues } from "@/features/plans/schemas/plan.schema";
 import Link from "next/link";
-
-type PlanFormValues = z.infer<typeof editPlanSchema>;
+import { useRouter } from "next/navigation";
+import { Loader2, Trash2, AlertTriangle } from "lucide-react";
+import { usePlan, useUpdatePlan, useDeletePlan } from "../hooks/usePlans";
+import { FormSkeleton } from "@/common/components/ui/FormSkeleton";
+import { Modal } from "@/common/components/ui/Modal"; 
 
 export function EditPlanForm({ id }: { id: string }) {
+    const router = useRouter();
+    
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+    const { data: currentPlan, isLoading: isFetchingPlan } = usePlan(id);
+    const { mutate: updatePlan, isPending: isUpdating } = useUpdatePlan();
+    const { mutate: deletePlan, isPending: isDeleting } = useDeletePlan();
+
     const {
         register,
         handleSubmit,
+        reset,
         formState: { errors },
     } = useForm<PlanFormValues>({
-        resolver: zodResolver(editPlanSchema),
+        resolver: zodResolver(planSchema),
     });
 
+    useEffect(() => {
+        if (currentPlan) {
+            reset({
+                name: currentPlan.name,
+                price: currentPlan.price,
+                durationDays: currentPlan.durationDays,
+                description: currentPlan.description || '',
+            });
+        }
+    }, [currentPlan, reset]);
+
     const onSubmit = (data: PlanFormValues) => {
-        console.log("Formulario enviado:", data, "ID:", id);
+        updatePlan({ id, payload: data }, {
+            onSuccess: () => {
+                router.push('/dashboard/planes');
+            }
+        });
     };
 
+    const confirmDelete = () => {
+        deletePlan(id, {
+            onSuccess: () => {
+                setIsDeleteModalOpen(false);
+                router.push('/dashboard/planes');
+            }
+        });
+    };
+
+    if (isFetchingPlan) return <FormSkeleton />;
+    if (!currentPlan) return <div className="text-red-500">No se pudo cargar la información del plan.</div>;
+
+    const isProcessing = isUpdating || isDeleting;
+
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8 w-full max-w-3xl border-l-4 border-zinc-700 p-6 border bg-background">
+        <>
+            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8 w-full max-w-3xl border-l-4 border-zinc-700 p-6 border bg-background relative">
                 
                 <div className="flex flex-col gap-6">
                     <h2 className="text-lg font-semibold text-text-main border-b border-zinc-700 pb-2">Información general</h2>
@@ -32,8 +74,9 @@ export function EditPlanForm({ id }: { id: string }) {
                             <label className="text-sm text-zinc-400 font-medium">Nombre del Plan</label>
                             <input 
                                 {...register("name")} 
+                                disabled={isProcessing}
                                 placeholder="Ej: Pase Libre"
-                                className="w-full bg-[#121214] border border-zinc-700 p-3 text-white text-sm focus:outline-none focus:border-[#2A5D44] transition-colors placeholder:text-zinc-600" 
+                                className={`w-full bg-[#121214] border ${errors.name ? 'border-red-500' : 'border-zinc-700'} p-3 text-white text-sm focus:outline-none focus:border-[#2A5D44] transition-colors placeholder:text-zinc-600`} 
                             />
                             {errors.name && <span className="text-red-500 text-xs mt-1">{errors.name.message}</span>}
                         </div>
@@ -44,12 +87,14 @@ export function EditPlanForm({ id }: { id: string }) {
                                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500">$</span>
                                 <input 
                                     type="number" 
+                                    step="0.01"
+                                    disabled={isProcessing}
                                     {...register("price")} 
                                     placeholder="0.00"
-                                    className="w-full bg-[#121214] border border-zinc-700 p-3 pl-8 text-white text-sm focus:outline-none focus:border-[#2A5D44] transition-colors placeholder:text-zinc-600" 
+                                    className={`w-full bg-[#121214] border ${errors.price ? 'border-red-500' : 'border-zinc-700'} p-3 pl-8 text-white text-sm focus:outline-none focus:border-[#2A5D44] transition-colors placeholder:text-zinc-600`} 
                                 />
                             </div>
-                            {errors.price && <span className="text-red-500 text-xs mt-1">Precio inválido</span>}
+                            {errors.price && <span className="text-red-500 text-xs mt-1">{errors.price.message}</span>}
                         </div>
                     </div>
                 </div>
@@ -59,44 +104,90 @@ export function EditPlanForm({ id }: { id: string }) {
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="flex flex-col gap-2">
-                            <label className="text-sm text-zinc-400 font-medium">Frecuencia de cobro</label>
-                            <select 
-                                {...register("frequency")} 
-                                className="w-full bg-[#121214] border border-zinc-700 p-3 text-white text-sm focus:outline-none focus:border-[#2A5D44] transition-colors cursor-pointer appearance-none"
-                            >
-                                <option value="day">Diaria</option>
-                                <option value="weekly">Semanal</option>
-                                <option value="month">Mensual</option>
-                                <option value="year">Anual</option>
-                            </select>
-                            {errors.frequency && <span className="text-red-500 text-xs mt-1">{errors.frequency.message}</span>}
-                        </div>
-
-                        <div className="flex flex-col gap-2">
                             <label className="text-sm text-zinc-400 font-medium">Duración (Días)</label>
                             <input 
                                 type="number" 
-                                {...register("durationDays", { valueAsNumber: true })} 
+                                disabled={isProcessing}
+                                {...register("durationDays")} 
                                 placeholder="Ej: 30"
-                                className="w-full bg-[#121214] border border-zinc-700 p-3 text-white text-sm focus:outline-none focus:border-[#2A5D44] transition-colors placeholder:text-zinc-600" 
+                                className={`w-full bg-[#121214] border ${errors.durationDays ? 'border-red-500' : 'border-zinc-700'} p-3 text-white text-sm focus:outline-none focus:border-[#2A5D44] transition-colors placeholder:text-zinc-600`} 
                             />
-                            {errors.durationDays && <span className="text-red-500 text-xs mt-1">Duración inválida</span>}
+                            {errors.durationDays && <span className="text-red-500 text-xs mt-1">{errors.durationDays.message}</span>}
                         </div>
+                    </div>
+
+                    <div className="flex flex-col gap-2">
+                        <label className="text-sm text-zinc-400 font-medium">Beneficios del plan (Opcional)</label>
+                        <p className="text-xs text-zinc-500 mb-1">Escribe un beneficio por línea para mostrarlos en la lista.</p>
+                        <textarea 
+                            disabled={isProcessing}
+                            {...register("description")} 
+                            placeholder="Acceso a sala de musculación&#10;Clases grupales incluidas"
+                            rows={4}
+                            className={`w-full bg-[#121214] border ${errors.description ? 'border-red-500' : 'border-zinc-700'} p-3 text-white text-sm focus:outline-none focus:border-[#2A5D44] transition-colors placeholder:text-zinc-600 resize-none`} 
+                        />
+                        {errors.description && <span className="text-red-500 text-xs mt-1">{errors.description.message}</span>}
                     </div>
                 </div>
 
-                <div className="flex gap-3 justify-end pt-4 border-t border-zinc-700">
-                    <Link href="/dashboard/planes" className="bg-transparent border border-zinc-700 text-text-main text-sm font-medium py-2 px-4 cursor-pointer hover:bg-zinc-800 transition-colors">
-                        Descartar
-                    </Link>
-                    <button type="submit" className="bg-[#2A5D44] text-white text-sm font-medium py-2 px-4 cursor-pointer hover:bg-[#1e4431] transition-colors">
-                        Guardar cambios
-                    </button>
-                    <button type="button" className="bg-red-500 text-white text-sm font-medium py-2 px-4 cursor-pointer hover:bg-red-700 transition-colors">
+                <div className="flex flex-col md:flex-row gap-3 justify-between pt-4 border-t border-zinc-700">
+                    
+                    <button 
+                        type="button" 
+                        onClick={() => setIsDeleteModalOpen(true)}
+                        disabled={isProcessing}
+                        className="bg-transparent border border-red-500/50 text-red-500 text-sm font-medium py-2 px-4 flex items-center justify-center gap-2 hover:bg-red-500/10 transition-colors disabled:opacity-50 cursor-pointer"
+                    >
+                        <Trash2 size={16} />
                         Eliminar plan
                     </button>
-                </div>
 
+                    <div className="flex gap-3">
+                        <Link href="/dashboard/planes" className="bg-transparent border border-zinc-700 text-text-main text-sm font-medium py-2 px-4 cursor-pointer hover:bg-zinc-800 transition-colors flex items-center justify-center">
+                            Descartar
+                        </Link>
+                        <button 
+                            type="submit" 
+                            disabled={isProcessing}
+                            className="bg-[#2A5D44] text-white text-sm font-medium py-2 px-4 flex items-center justify-center gap-2 cursor-pointer hover:bg-[#1e4431] transition-colors disabled:opacity-50"
+                        >
+                            {isUpdating ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Guardar cambios'}
+                        </button>
+                    </div>
+                </div>
             </form>
+
+            <Modal 
+                isOpen={isDeleteModalOpen} 
+                onClose={() => setIsDeleteModalOpen(false)}
+                title="Eliminar Plan"
+            >
+                <div className="flex flex-col gap-4">
+                    <div className="flex items-center gap-3 text-red-500 bg-red-500/10 p-3 rounded border border-red-500/20">
+                        <AlertTriangle size={24} className="shrink-0" />
+                        <p className="text-sm">Esta acción no se puede deshacer. Los socios que actualmente tienen este plan no lo perderán, pero ya no estará disponible para nuevas ventas.</p>
+                    </div>
+                    
+                    <p className="text-text-main">¿Estás seguro de que deseas eliminar el plan <strong>&quot;{currentPlan.name}&quot;</strong>?</p>
+
+                    <div className="flex justify-end gap-3 mt-4">
+                        <button 
+                            onClick={() => setIsDeleteModalOpen(false)}
+                            disabled={isDeleting}
+                            className="px-4 py-2 text-sm font-medium text-text-main border border-zinc-700 hover:bg-zinc-800 transition-colors rounded cursor-pointer"
+                        >
+                            Cancelar
+                        </button>
+                        <button 
+                            onClick={confirmDelete}
+                            disabled={isDeleting}
+                            className="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 transition-colors rounded flex items-center gap-2 cursor-pointer"
+                        >
+                            {isDeleting ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Sí, eliminar plan'}
+                        </button>
+                    </div>
+                </div>
+            </Modal>
+        </>
     );
 }
