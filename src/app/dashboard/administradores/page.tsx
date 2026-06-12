@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { AdminList } from '@/features/administrators/components/AdminList';
 
 const mockAdmins: { name: string; adminID: string; status: 'Activo' | 'Inactivo'; rol: string; email: string }[] = [
@@ -17,12 +16,6 @@ export default function AdministradoresPage() {
             Gestione a los administradores secundarios del sistema.
           </p>
         </div>
-        <Link 
-          href="/dashboard/administradores/nuevo" 
-          className="px-4 py-2 bg-brand-main hover:bg-brand-hover text-white rounded text-xs font-bold transition-colors shadow-sm dark:shadow-none uppercase tracking-widest"
-        >
-          Nuevo Admin
-        </Link>
       </div>
 
       <div className="bg-surface border border-border-primary rounded-lg flex flex-col">

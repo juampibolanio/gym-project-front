@@ -33,30 +33,7 @@ export function EditAdminForm({ id }: { id: string }) {
   return (
     <div className="flex flex-col gap-6">
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
-        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
-          <div className="flex flex-col">
-            <h1 className="text-2xl font-bold text-text-main">Editar Administrador</h1>
-            <p className="text-sm text-text-muted mt-1">
-              Modificá los datos del administrador secundario o cambialo a inactivo (baja).
-            </p>
-          </div>
-          
-          <div className="flex items-center gap-3">
-            <Link 
-              href={`/dashboard/administradores/${id}`}
-              className="px-4 py-2 border border-border-primary bg-transparent text-text-muted hover:text-text-main hover:bg-surface-hover rounded text-xs font-bold transition-colors"
-            >
-              Cancelar
-            </Link>
-            <button 
-              type="submit" 
-              disabled={isSubmitting}
-              className="px-4 py-2 bg-brand-main hover:bg-brand-hover text-white rounded text-xs font-bold transition-colors shadow-sm disabled:opacity-50"
-            >
-              {isSubmitting ? "Guardando..." : "Guardar Cambios"}
-            </button>
-          </div>
-        </div>
+
 
         <div className="border border-border-primary rounded-lg bg-surface flex flex-col p-6 gap-8 shadow-sm dark:shadow-none">
           
@@ -174,6 +151,22 @@ export function EditAdminForm({ id }: { id: string }) {
               {errors.notas && <p className="text-xs text-red-500">{errors.notas.message}</p>}
             </div>
             
+          </div>
+
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-border-primary">
+            <Link 
+              href={`/dashboard/administradores/${id}`}
+              className="px-4 py-2 border border-border-primary bg-transparent text-text-muted hover:text-text-main hover:bg-surface-hover rounded text-xs font-bold transition-colors"
+            >
+              Cancelar
+            </Link>
+            <button 
+              type="submit" 
+              disabled={isSubmitting}
+              className="px-4 py-2 bg-brand-main hover:bg-brand-hover text-white rounded text-xs font-bold transition-colors shadow-sm disabled:opacity-50"
+            >
+              {isSubmitting ? "Guardando..." : "Guardar Cambios"}
+            </button>
           </div>
 
         </div>
