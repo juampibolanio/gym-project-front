@@ -42,7 +42,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
           <div className="flex flex-col">
             <div className="h-20 flex flex-col justify-center px-8 border-b border-border-primary">
-              <span className="font-bold text-xl text-text-main tracking-wide">GymSystem</span>
+              <span className="font-bold text-xl text-text-main tracking-wide">ChacuGym</span>
               <span className="text-[9px] text-text-muted font-bold tracking-widest mt-1">ADMIN TERMINAL</span>
             </div>
 
