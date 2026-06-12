@@ -4,13 +4,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-
-const forgotPasswordSchema = z.object({
-  email: z.string().min(1, 'El email es requerido').email('Por favor ingresa un email válido'),
-});
-
-type ForgotPasswordFormValues = z.infer<typeof forgotPasswordSchema>;
+import { ForgotPasswordFormValues, forgotPasswordSchema } from '../schemas/forgot-password.schema';
 
 export function ForgotPasswordForm() {
   const [isSubmitted, setIsSubmitted] = useState(false);
