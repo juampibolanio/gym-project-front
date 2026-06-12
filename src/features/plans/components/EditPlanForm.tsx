@@ -22,30 +22,7 @@ export function EditPlanForm({ id }: { id: string }) {
     };
 
     return (
-        <div className="flex flex-col bg-background gap-8">
-            <div className="flex items-center justify-between">
-                <div className="flex flex-col gap-1">
-                    <h1 className="text-2xl font-bold text-text-main">Editar Plan</h1>
-                    <p className="text-sm text-text-muted">Edite la información del plan</p>
-                </div>
-
-                <div className="flex gap-3">
-                    <Link href="/dashboard/planes">
-                        <button type="button" className="bg-transparent border border-zinc-700 text-text-main text-sm font-medium py-2 px-4 cursor-pointer hover:bg-zinc-800 transition-colors">
-                            Descartar
-                        </button>
-                    </Link>
-                    <button type="button" onClick={handleSubmit(onSubmit)} className="bg-[#2A5D44] text-white text-sm font-medium py-2 px-4 cursor-pointer hover:bg-[#1e4431] transition-colors">
-                        Guardar cambios
-                    </button>
-
-                    <button type="button" className="bg-red-500 text-white text-sm font-medium py-2 px-4 cursor-pointer hover:bg-red-700 transition-colors">
-                        Eliminar plan
-                    </button>
-                </div>
-            </div>
-
-            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8 w-full max-w-3xl border-l-4 border-zinc-700 p-6 border">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8 w-full max-w-3xl border-l-4 border-zinc-700 p-6 border bg-background">
                 
                 <div className="flex flex-col gap-6">
                     <h2 className="text-lg font-semibold text-text-main border-b border-zinc-700 pb-2">Información general</h2>
@@ -108,7 +85,18 @@ export function EditPlanForm({ id }: { id: string }) {
                     </div>
                 </div>
 
+                <div className="flex gap-3 justify-end pt-4 border-t border-zinc-700">
+                    <Link href="/dashboard/planes" className="bg-transparent border border-zinc-700 text-text-main text-sm font-medium py-2 px-4 cursor-pointer hover:bg-zinc-800 transition-colors">
+                        Descartar
+                    </Link>
+                    <button type="submit" className="bg-[#2A5D44] text-white text-sm font-medium py-2 px-4 cursor-pointer hover:bg-[#1e4431] transition-colors">
+                        Guardar cambios
+                    </button>
+                    <button type="button" className="bg-red-500 text-white text-sm font-medium py-2 px-4 cursor-pointer hover:bg-red-700 transition-colors">
+                        Eliminar plan
+                    </button>
+                </div>
+
             </form>
-        </div>
     );
 }

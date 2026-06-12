@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Check, Plus } from "lucide-react";
+import { Check } from "lucide-react";
 
 const plansMock = [
     {
@@ -49,11 +49,6 @@ export default function PlansPage() {
                     <h1 className="text-2xl font-bold text-text-main">Configuración de planes</h1>
                     <p className="text-md text-text-muted transition-colors">Gestione los planes y la estructura de precios</p>
                 </div>
-
-                <Link href="/dashboard/planes/nuevo" className="bg-brand-main hover:bg-brand-hover text-white transition-colors flex items-center gap-1 px-3 py-1.5 md:px-4 md:py-2 rounded-md shadow-sm">
-                    <Plus size={16} />
-                    <span className="text-xs md:text-sm font-bold">Crear nuevo</span>
-                </Link>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
