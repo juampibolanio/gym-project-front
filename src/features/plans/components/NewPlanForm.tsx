@@ -22,31 +22,31 @@ export function NewPlanForm() {
     };
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8 w-full max-w-3xl border-l-4 border-zinc-700 p-6 border bg-background">
+        <form onSubmit={handleSubmit(onSubmit)} className="border border-border-primary rounded-lg bg-surface flex flex-col p-6 gap-8 shadow-sm dark:shadow-none">
                 
                 <div className="flex flex-col gap-6">
-                    <h2 className="text-lg font-semibold text-text-main border-b border-zinc-700 pb-2">Información general</h2>
+                    <h2 className="text-[15px] font-bold text-text-main">Información general</h2>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="flex flex-col gap-2">
-                            <label className="text-sm text-zinc-400 font-medium">Nombre del Plan</label>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="flex flex-col gap-1.5">
+                            <label className="text-xs font-semibold text-text-muted tracking-wide">Nombre del Plan</label>
                             <input 
                                 {...register("name")} 
                                 placeholder="Ej: Pase Libre"
-                                className="w-full bg-[#121214] border border-zinc-700 p-3 text-white text-sm focus:outline-none focus:border-[#2A5D44] transition-colors placeholder:text-zinc-600" 
+                                className={`w-full bg-background border ${errors.name ? 'border-red-500' : 'border-border-primary'} rounded px-3 py-2.5 text-sm text-text-main placeholder:text-text-muted focus:outline-none focus:border-brand-main transition-colors`} 
                             />
                             {errors.name && <span className="text-red-500 text-xs mt-1">{errors.name.message}</span>}
                         </div>
 
-                        <div className="flex flex-col gap-2">
-                            <label className="text-sm text-zinc-400 font-medium">Precio</label>
+                        <div className="flex flex-col gap-1.5">
+                            <label className="text-xs font-semibold text-text-muted tracking-wide">Precio</label>
                             <div className="relative">
-                                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500">$</span>
+                                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted">$</span>
                                 <input 
                                     type="number" 
                                     {...register("price")} 
                                     placeholder="0.00"
-                                    className="w-full bg-[#121214] border border-zinc-700 p-3 pl-8 text-white text-sm focus:outline-none focus:border-[#2A5D44] transition-colors placeholder:text-zinc-600" 
+                                    className={`w-full bg-background border ${errors.price ? 'border-red-500' : 'border-border-primary'} rounded pl-8 pr-3 py-2.5 text-sm text-text-main placeholder:text-text-muted focus:outline-none focus:border-brand-main transition-colors`} 
                                 />
                             </div>
                             {errors.price && <span className="text-red-500 text-xs mt-1">Precio inválido</span>}
@@ -54,15 +54,17 @@ export function NewPlanForm() {
                     </div>
                 </div>
 
+                <hr className="border-border-primary" />
+
                 <div className="flex flex-col gap-6">
-                    <h2 className="text-lg font-semibold text-text-main border-b border-zinc-700 pb-2">Especificaciones del plan</h2>
+                    <h2 className="text-[15px] font-bold text-text-main">Especificaciones del plan</h2>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="flex flex-col gap-2">
-                            <label className="text-sm text-zinc-400 font-medium">Frecuencia de cobro</label>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="flex flex-col gap-1.5">
+                            <label className="text-xs font-semibold text-text-muted tracking-wide">Frecuencia de cobro</label>
                             <select 
                                 {...register("frequency")} 
-                                className="w-full bg-[#121214] border border-zinc-700 p-3 text-white text-sm focus:outline-none focus:border-[#2A5D44] transition-colors cursor-pointer appearance-none"
+                                className={`w-full bg-background border ${errors.frequency ? 'border-red-500' : 'border-border-primary'} rounded px-3 py-2.5 text-sm text-text-muted focus:outline-none focus:border-brand-main transition-colors appearance-none`}
                             >
                                 <option value="day">Diaria</option>
                                 <option value="weekly">Semanal</option>
@@ -72,28 +74,27 @@ export function NewPlanForm() {
                             {errors.frequency && <span className="text-red-500 text-xs mt-1">{errors.frequency.message}</span>}
                         </div>
 
-                        <div className="flex flex-col gap-2">
-                            <label className="text-sm text-zinc-400 font-medium">Duración (Días)</label>
+                        <div className="flex flex-col gap-1.5">
+                            <label className="text-xs font-semibold text-text-muted tracking-wide">Duración (Días)</label>
                             <input 
                                 type="number" 
                                 {...register("durationDays", { valueAsNumber: true })} 
                                 placeholder="Ej: 30"
-                                className="w-full bg-[#121214] border border-zinc-700 p-3 text-white text-sm focus:outline-none focus:border-[#2A5D44] transition-colors placeholder:text-zinc-600" 
+                                className={`w-full bg-background border ${errors.durationDays ? 'border-red-500' : 'border-border-primary'} rounded px-3 py-2.5 text-sm text-text-main placeholder:text-text-muted focus:outline-none focus:border-brand-main transition-colors`} 
                             />
                             {errors.durationDays && <span className="text-red-500 text-xs mt-1">Duración inválida</span>}
                         </div>
                     </div>
                 </div>
 
-                <div className="flex gap-3 justify-end pt-4 border-t border-zinc-700">
-                    <Link href="/dashboard/planes" className="bg-transparent border border-zinc-700 text-text-main text-sm font-medium py-2 px-4 cursor-pointer hover:bg-zinc-800 transition-colors">
+                <div className="flex items-center justify-end gap-3 pt-4 border-t border-border-primary">
+                    <Link href="/dashboard/planes" className="px-4 py-2 border border-border-primary bg-transparent text-text-muted hover:text-text-main hover:bg-surface-hover rounded text-xs font-bold transition-colors">
                         Descartar
                     </Link>
-                    <button type="submit" className="bg-[#2A5D44] text-white text-sm font-medium py-2 px-4 cursor-pointer hover:bg-[#1e4431] transition-colors">
+                    <button type="submit" className="px-4 py-2 bg-brand-main hover:bg-brand-hover text-white rounded text-xs font-bold transition-colors shadow-sm">
                         Crear plan
                     </button>
                 </div>
-
             </form>
     );
 }
