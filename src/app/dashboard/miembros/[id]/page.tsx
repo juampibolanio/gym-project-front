@@ -49,19 +49,10 @@ export default async function MemberDetailPage({
                 <span>Volver a la lista de miembros</span>
             </Link>
 
-            <div className="flex justify-between items-center border-b-2 border-border-primary pb-4">
+            <div className="flex justify-between items-center border-b-2 border-border-primary pb-4 mb-6">
                 <div className="flex flex-col gap-2">
                     <h1 className="text-3xl text-text-main font-bold">{member.name} {member.surname}</h1>
                     <p className="text-sm text-text-muted">ID: {member.id}</p>
-                </div>
-
-                <div className="flex gap-4">
-                    <Link href={`/dashboard/miembros/${member.id}/editar`} className="flex items-center gap-2 bg-transparent border border-border-primary rounded py-2 px-4 cursor-pointer hover:bg-surface-hover transition-colors">
-                        <Pencil size={20} />
-                        <span className="text-text-main text-sm font-medium">Editar datos</span>
-                    </Link>
-
-                    <RegisterPaymentButton memberName={member.name} memberSurname={member.surname} uuid={member.id} />
                 </div>
             </div>
 
@@ -92,23 +83,25 @@ export default async function MemberDetailPage({
                             <span className="text-xs text-text-muted font-bold uppercase tracking-wider">Teléfono</span>
                             <span className="text-sm text-text-main">{member.phoneNumber}</span>
                         </div>
+                    </div>
 
+                    <div className="flex flex-col gap-3 mt-8 pt-6 border-t border-border-primary">
+                        <RegisterPaymentButton memberName={member.name} memberSurname={member.surname} uuid={member.id} />
+                        <Link href={`/dashboard/miembros/${member.id}/editar`} className="w-full py-2.5 bg-transparent border border-border-primary hover:bg-surface-hover text-text-main font-medium text-sm transition-colors rounded-sm shadow-sm dark:shadow-none flex items-center justify-center gap-2">
+                            <Pencil size={16} /> Editar datos
+                        </Link>
                     </div>
                 </div>
 
                 <div className="lg:col-span-2 flex flex-col gap-6">
 
-                    <div className="bg-surface border border-border-primary shadow-sm dark:shadow-none rounded-lg p-6 flex justify-between items-center transition-colors">
+                    <div className="bg-surface border border-border-primary shadow-sm dark:shadow-none rounded-lg p-6 flex items-center transition-colors">
                         <div className="flex flex-col gap-1">
                             <span className="text-xs text-text-muted font-bold uppercase tracking-wider">Plan Actual</span>
                             <div className="flex items-center gap-2 mt-1">
                                 <h3 className="text-2xl font-bold text-text-main">{member.plan}</h3>
                                 <Award size={20} className="text-success-main" />
                             </div>
-                        </div>
-                        <div className="flex flex-col gap-1 text-right">
-                            <span className="text-xs text-text-muted font-bold uppercase tracking-wider">Próximo Vencimiento</span>
-                            <span className="text-xl font-bold text-success-main">{new Date(member.endDate).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
                         </div>
                     </div>
 
@@ -123,14 +116,9 @@ export default async function MemberDetailPage({
                             </div>
                         </div>
 
-                        <div className="bg-surface border border-border-primary shadow-sm dark:shadow-none rounded-lg p-6 flex flex-col justify-center gap-4 transition-colors">
-                            <div className="flex justify-between items-end">
-                                <span className="text-xs text-text-muted font-bold uppercase tracking-wider">Visitas Este Mes</span>
-                                <span className="text-sm text-text-main font-bold">12 / 30</span>
-                            </div>
-                            <div className="w-full bg-border-primary h-2 rounded-full overflow-hidden">
-                                <div className="bg-text-muted w-[40%] h-full rounded-full"></div>
-                            </div>
+                        <div className="bg-surface border border-border-primary shadow-sm dark:shadow-none rounded-lg p-6 flex flex-col justify-center gap-2 transition-colors">
+                            <span className="text-xs text-text-muted font-bold uppercase tracking-wider">Próximo Vencimiento</span>
+                            <span className="text-xl font-bold text-text-main">{new Date(member.endDate).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
                         </div>
                     </div>
 

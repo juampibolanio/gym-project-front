@@ -27,17 +27,10 @@ export default async function AdminDetailPage({
                 <span>Volver a la lista de administradores</span>
             </Link>
 
-            <div className="flex justify-between items-center border-b-2 border-border-primary pb-4">
+            <div className="flex justify-between items-center border-b-2 border-border-primary pb-4 mb-6">
                 <div className="flex flex-col gap-2">
                     <h1 className="text-3xl text-text-main font-bold">{admin.name} {admin.surname}</h1>
                     <p className="text-sm text-text-muted">ID: {admin.id}</p>
-                </div>
-
-                <div className="flex gap-4">
-                    <Link href={`/dashboard/administradores/${admin.id}/editar`} className="flex items-center gap-2 bg-transparent border border-border-primary rounded py-2 px-4 cursor-pointer hover:bg-surface-hover transition-colors">
-                        <Pencil size={20} />
-                        <span className="text-text-main text-sm font-medium">Editar datos</span>
-                    </Link>
                 </div>
             </div>
 
@@ -74,6 +67,12 @@ export default async function AdminDetailPage({
                             <span className="text-xs text-text-muted font-bold uppercase tracking-wider">Teléfono</span>
                             <span className="text-sm text-text-main">{admin.phoneNumber}</span>
                         </div>
+                    </div>
+
+                    <div className="flex flex-col gap-3 mt-8 pt-6 border-t border-border-primary">
+                        <Link href={`/dashboard/administradores/${admin.id}/editar`} className="w-full py-2.5 bg-transparent border border-border-primary hover:bg-surface-hover text-text-main font-medium text-sm transition-colors rounded-sm shadow-sm dark:shadow-none flex items-center justify-center gap-2">
+                            <Pencil size={16} /> Editar datos
+                        </Link>
                     </div>
                 </div>
 
