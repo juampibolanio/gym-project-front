@@ -43,13 +43,7 @@ export function MembersDirectory() {
   return (
     <div className="bg-background flex flex-col gap-6">
       
-      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
-        <div className="flex flex-col">
-          <h1 className="text-2xl font-bold text-text-main">Directorio de miembros</h1>
-          <p className="text-sm text-text-muted mt-1 transition-colors">
-            Administre todas las membresias activas e inactivas del gimnasio
-          </p>
-        </div>
+      <div className="flex justify-end">
         
         <div className="flex items-center gap-4">
           <div className="flex bg-surface border border-border-primary rounded-lg p-1">
