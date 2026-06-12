@@ -1,6 +1,6 @@
 'use client'
 import { Mail, Lock, EyeOff, Eye, Dumbbell, User } from 'lucide-react'
-import Link from 'next/link'
+
 import { useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -46,18 +46,7 @@ export function RegisterForm() {
     }
 
     return (
-        <div className="w-full max-w-100 flex flex-col items-center">
-            
-            <div className="flex flex-col items-center mb-8">
-                <div className="w-12 h-12 rounded-full border border-border-primary bg-surface flex items-center justify-center mb-4 shadow-sm dark:shadow-none transition-colors">
-                    <Dumbbell className="text-brand-main" size={24} />
-                </div>
-                <h1 className="text-xl font-bold text-text-main transition-colors">GymSystem</h1>
-                <p className="text-sm text-text-muted mt-1 transition-colors">Terminal de Registro Administradores</p>
-            </div>
-
-            <div className="w-full bg-surface border-t-4 border-t-brand-main border border-border-primary rounded-xl p-6 shadow-xl dark:shadow-2xl transition-colors">
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
                     
                     <div className="space-y-2">
                         <label className="text-[10px] font-bold text-text-muted tracking-wider uppercase transition-colors">
@@ -152,16 +141,7 @@ export function RegisterForm() {
                     >
                         Crear Cuenta <span className="text-lg leading-none">→</span>
                     </button>
-                </form>
-
-                <div className="mt-6 pt-4 border-t border-border-primary flex items-center justify-center text-text-muted text-xs transition-colors">
-                    Ya tienes una cuenta?{' '}
-                    <Link href="/login" className="ml-1 font-medium text-brand-main hover:text-brand-hover transition-colors">
-                        Inicia Sesión
-                    </Link>
-                </div>
-            </div>
-
-        </div>
+        </form>
     );
 }
+
