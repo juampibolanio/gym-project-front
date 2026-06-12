@@ -43,12 +43,10 @@ plansMock.map(plan => {
 
 export default function PlansPage() {
     return (
-        <div className="bg-background flex flex-col gap-6">
-            <div className="flex justify-between items-start">
-                <div className="flex flex-col gap-1">
-                    <h1 className="text-2xl font-bold text-text-main">Configuración de planes</h1>
-                    <p className="text-md text-text-muted transition-colors">Gestione los planes y la estructura de precios</p>
-                </div>
+        <div className="flex flex-col gap-6">
+            <div className="flex flex-col">
+                <h1 className="text-2xl font-bold text-text-main">Configuración de planes</h1>
+                <p className="text-sm text-text-muted mt-1 transition-colors">Gestione los planes y la estructura de precios</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
