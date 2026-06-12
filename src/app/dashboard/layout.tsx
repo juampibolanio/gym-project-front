@@ -84,14 +84,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 <Plus size={16} /> Agregar nuevo admin
               </Link>
             )}
-            {pathname === '/dashboard/planes' && (
-              <Link
-                href='/dashboard/planes/nuevo'
-                className="w-full py-2.5 bg-brand-main hover:bg-brand-hover text-white font-medium text-sm transition-colors rounded-sm shadow-sm flex items-center justify-center gap-2"
-              >
-                <Plus size={16} /> Agregar nuevo plan
-              </Link>
-            )}
             <button onClick={handleLogout} className="w-full py-2.5 bg-brand-main hover:bg-brand-hover text-white font-medium text-sm transition-colors rounded-sm shadow-sm dark:shadow-none">
               Cerrar sesión
             </button>
