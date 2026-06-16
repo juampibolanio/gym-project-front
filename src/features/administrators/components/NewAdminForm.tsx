@@ -1,152 +1,120 @@
 'use client';
 
-import { Phone, Mail, ChevronDown } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { createAdminSchema } from '@/features/administrators/schemas/createAdmin.schema';
+import { userSchema } from '@/features/administrators/schemas/user.schema';
+import { useCreateUser } from '../hooks/useUsers'; // Ajusta la ruta si es necesario
+import { Loader2 } from 'lucide-react';
 
-type CreateAdminFormValues = z.infer<typeof createAdminSchema>;
+type CreateAdminFormValues = z.infer<typeof userSchema>;
 
 export function NewAdminForm() {
+  const router = useRouter();
+  
+  const { mutate, isPending } = useCreateUser();
+
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<CreateAdminFormValues>({
-    resolver: zodResolver(createAdminSchema),
+    resolver: zodResolver(userSchema),
     defaultValues: {
-      primerNombre: '',
-      apellido: '',
-      telefono: '',
+      dni: '',
+      name: '',
+      surname: '',
       email: '',
-      rol: 'Administrador designado',
-      notas: '',
     }
   });
 
-  const onSubmit = async () => {
+  const onSubmit = (data: CreateAdminFormValues) => {
+    mutate(data, {
+      onSuccess: () => {
+        router.push('/dashboard/administradores');
+      }
+    });
   };
 
   return (
     <div className="flex flex-col gap-6">
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
 
-
         <div className="border border-border-primary rounded-lg bg-surface flex flex-col p-6 gap-8 shadow-sm dark:shadow-none">
           
           <div className="flex flex-col gap-6">
-            <h2 className="text-[15px] font-bold text-text-main">Identidad y Contacto</h2>
+            <h2 className="text-[15px] font-bold text-text-main">Datos del usuario</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-text-muted tracking-wide">Primer Nombre</label>
+                <label className="text-xs font-semibold text-text-muted tracking-wide">DNI</label>
                 <input 
                   type="text" 
-                  {...register('primerNombre')}
-                  className={`w-full bg-background border ${errors.primerNombre ? 'border-red-500' : 'border-border-primary'} rounded px-3 py-2.5 text-sm text-text-main focus:outline-none focus:border-brand-main transition-colors`}
+                  disabled={isPending}
+                  {...register('dni')}
+                  className={`w-full bg-background border ${errors.dni ? 'border-red-500' : 'border-border-primary'} rounded px-3 py-2.5 text-sm text-text-main focus:outline-none focus:border-brand-main transition-colors`}
                 />
-                {errors.primerNombre && <p className="text-xs text-red-500">{errors.primerNombre.message}</p>}
+                {errors.dni && <p className="text-xs text-red-500">{errors.dni.message}</p>}
               </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-semibold text-text-muted tracking-wide">Nombre</label>
+                <input 
+                  type="text" 
+                  disabled={isPending}
+                  {...register('name')}
+                  className={`w-full bg-background border ${errors.name ? 'border-red-500' : 'border-border-primary'} rounded px-3 py-2.5 text-sm text-text-main focus:outline-none focus:border-brand-main transition-colors`}
+                />
+                {errors.name && <p className="text-xs text-red-500">{errors.name.message}</p>}
+              </div>
+
               <div className="flex flex-col gap-1.5">
                 <label className="text-xs font-semibold text-text-muted tracking-wide">Apellido</label>
                 <input 
                   type="text" 
-                  {...register('apellido')}
-                  className={`w-full bg-background border ${errors.apellido ? 'border-red-500' : 'border-border-primary'} rounded px-3 py-2.5 text-sm text-text-main focus:outline-none focus:border-brand-main transition-colors`}
+                  disabled={isPending}
+                  {...register('surname')}
+                  className={`w-full bg-background border ${errors.surname ? 'border-red-500' : 'border-border-primary'} rounded px-3 py-2.5 text-sm text-text-main focus:outline-none focus:border-brand-main transition-colors`}
                 />
-                {errors.apellido && <p className="text-xs text-red-500">{errors.apellido.message}</p>}
+                {errors.surname && <p className="text-xs text-red-500">{errors.surname.message}</p>}
               </div>
-            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-text-muted tracking-wide">Teléfono</label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Phone size={14} className="text-text-muted" />
-                  </div>
-                  <input 
-                    type="tel" 
-                    placeholder="(555) 000-0000"
-                    {...register('telefono')}
-                    className={`w-full bg-background border ${errors.telefono ? 'border-red-500' : 'border-border-primary'} rounded pl-9 pr-3 py-2.5 text-sm text-text-main placeholder:text-text-muted focus:outline-none focus:border-brand-main transition-colors`}
-                  />
-                </div>
-                {errors.telefono && <p className="text-xs text-red-500">{errors.telefono.message}</p>}
-              </div>
-              
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-text-muted tracking-wide">Email</label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Mail size={14} className="text-text-muted" />
-                  </div>
-                  <input 
-                    type="email" 
-                    {...register('email')}
-                    className={`w-full bg-background border ${errors.email ? 'border-red-500' : 'border-border-primary'} rounded pl-9 pr-3 py-2 text-sm text-text-main focus:outline-none focus:border-brand-main transition-colors`}
-                  />
-                </div>
+                <label className="text-xs font-semibold text-text-muted tracking-wide">Correo electrónico</label>
+                <input 
+                  type="email" 
+                  disabled={isPending}
+                  {...register('email')}
+                  className={`w-full bg-background border ${errors.email ? 'border-red-500' : 'border-border-primary'} rounded px-3 py-2.5 text-sm text-text-main focus:outline-none focus:border-brand-main transition-colors`}
+                />
                 {errors.email && <p className="text-xs text-red-500">{errors.email.message}</p>}
               </div>
             </div>
           </div>
 
-          <hr className="border-border-primary" />
-
-          <div className="flex flex-col gap-6">
-            <h2 className="text-[15px] font-bold text-text-main">Configuración de Acceso</h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-text-muted tracking-wide">Rol Asignado</label>
-                <div className="relative">
-                  <select 
-                    {...register('rol')}
-                    className={`w-full bg-background border ${errors.rol ? 'border-red-500' : 'border-border-primary'} rounded px-3 py-2.5 text-sm text-text-main appearance-none focus:outline-none focus:border-brand-main transition-colors`}
-                  >
-                    <option value="Administrador designado">Administrador designado</option>
-                  </select>
-                  <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                    <ChevronDown size={14} className="text-text-muted" />
-                  </div>
-                </div>
-                {errors.rol && <p className="text-xs text-red-500">{errors.rol.message}</p>}
-                <p className="text-[10px] text-text-muted mt-0.5">El administrador general se maneja en Configuración.</p>
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-              <div className="flex justify-between items-center">
-                <label className="text-xs font-semibold text-text-muted tracking-wide">Notas Internas</label>
-                <span className="text-[9px] font-bold tracking-widest text-text-muted uppercase">Opcional</span>
-              </div>
-              <textarea 
-                rows={4}
-                {...register('notas')}
-                placeholder="Datos relevantes sobre el administrador"
-                className={`w-full bg-background border ${errors.notas ? 'border-red-500' : 'border-border-primary'} rounded px-3 py-2.5 text-sm text-text-main placeholder:text-text-muted focus:outline-none focus:border-brand-main transition-colors resize-none`}
-              ></textarea>
-              {errors.notas && <p className="text-xs text-red-500">{errors.notas.message}</p>}
-            </div>
-            
-          </div>
-
           <div className="flex items-center justify-end gap-3 pt-4 border-t border-border-primary">
             <Link 
               href="/dashboard/administradores"
-              className="px-4 py-2 border border-border-primary bg-transparent text-text-muted hover:text-text-main hover:bg-surface-hover rounded text-xs font-bold transition-colors"
+              className="px-4 py-2 border border-border-primary bg-transparent text-text-muted hover:text-text-main hover:bg-surface-hover rounded text-xs font-bold transition-colors cursor-pointer"
             >
               Cancelar
             </Link>
             <button 
               type="submit" 
-              disabled={isSubmitting}
-              className="px-4 py-2 bg-brand-main hover:bg-brand-hover text-white rounded text-xs font-bold transition-colors shadow-sm disabled:opacity-50"
+              disabled={isPending}
+              className="px-4 py-2 flex items-center gap-2 bg-brand-main hover:bg-brand-hover text-white rounded text-xs font-bold transition-colors shadow-sm disabled:opacity-50 cursor-pointer"
             >
-              {isSubmitting ? "Creando..." : "Crear Administrador"}
+              {isPending ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  Creando...
+                </>
+              ) : (
+                "Crear Administrador"
+              )}
             </button>
           </div>
 
