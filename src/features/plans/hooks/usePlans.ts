@@ -50,8 +50,8 @@ export const useUpdatePlan = () => {
             const message = error.response?.data?.message || 'No se pudo actualizar el plan';
             toast.error(message);
         },
-    })
-}
+    });
+};
 
 export const useDeletePlan = () => {
     const queryClient = useQueryClient();
@@ -65,6 +65,6 @@ export const useDeletePlan = () => {
         onError: (error: any) => {
             const message = error.response?.data?.message || 'Ocurrió un error al eliminar el plan';
             toast.error(message);
-        }
-    })
-}
+        },
+    });
+};
