@@ -6,6 +6,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { ThemeToggle } from '@/common/components/layout/ThemeToggle';
 import { AuthGuard } from '@/features/auth/components/AuthGuard';
 import { useAuthStore } from '@/features/auth/store/auth.store';
+import { useRole } from '@/features/auth/hooks/useRole';
 
 const SEARCH_CONFIG: Record<string, { placeholder: string }> = {
   '/dashboard/miembros': {
@@ -20,6 +21,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const pathname = usePathname();
   const router = useRouter();
   const setLogout = useAuthStore((state) => state.setLogout);
+  const { isAdmin } = useRole();
 
   const handleLogout = () => {
     setLogout();
@@ -27,12 +29,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   };
 
   const navItems = [
-    { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard, exact: true },
-    { name: 'Miembros', href: '/dashboard/miembros', icon: Users },
-    { name: 'Administradores', href: '/dashboard/administradores', icon: Shield },
-    { name: 'Planes', href: '/dashboard/planes', icon: ClipboardList },
-    { name: 'Configuración', href: '/dashboard/configuracion', icon: Settings },
-  ];
+    { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard, exact: true, show: true },
+    { name: 'Miembros', href: '/dashboard/miembros', icon: Users, show: true },
+    { name: 'Administradores', href: '/dashboard/administradores', icon: Shield, show: isAdmin },
+    { name: 'Planes', href: '/dashboard/planes', icon: ClipboardList, show: true },
+    { name: 'Configuración', href: '/dashboard/configuracion', icon: Settings, show: true },
+  ].filter(item => item.show);
 
   return (
     <AuthGuard>
@@ -74,14 +76,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 className="w-full py-2.5 bg-brand-main hover:bg-brand-hover text-white font-medium text-sm transition-colors rounded-sm shadow-sm flex items-center justify-center gap-2"
               >
                 <Plus size={16} /> Agregar nuevo miembro
-              </Link>
-            )}
-            {pathname === '/dashboard/administradores' && (
-              <Link
-                href='/dashboard/administradores/nuevo'
-                className="w-full py-2.5 bg-brand-main hover:bg-brand-hover text-white font-medium text-sm transition-colors rounded-sm shadow-sm flex items-center justify-center gap-2"
-              >
-                <Plus size={16} /> Agregar nuevo admin
               </Link>
             )}
             <button onClick={handleLogout} className="w-full py-2.5 bg-brand-main hover:bg-brand-hover text-white font-medium text-sm transition-colors rounded-sm shadow-sm dark:shadow-none">

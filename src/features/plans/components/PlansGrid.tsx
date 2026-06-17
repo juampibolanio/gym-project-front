@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Check, Loader2, AlertCircle } from "lucide-react";
 import { usePlans } from "../hooks/usePlans";
 import { formatDuration } from "../utils/format-duration";
+import { useRole } from "@/features/auth/hooks/useRole";
 
 const parseDescription = (description?: string | null): string[] => {
     if (!description) return ['Sin beneficios especificados'];
@@ -12,6 +13,7 @@ const parseDescription = (description?: string | null): string[] => {
 
 export function PlansGrid() {
     const { data, isLoading, isError } = usePlans(1, 10);
+    const { isAdmin } = useRole();
 
     if (isLoading) {
         return (
@@ -67,14 +69,18 @@ export function PlansGrid() {
                             </ul>
                         </div>
 
-                        <div className="flex justify-end border-t border-border-primary p-2 bg-background/50 rounded-b-lg">
-                            <Link 
-                                href={`/dashboard/planes/${plan.uuid}/editar`} 
-                                className="text-xs tracking-widest text-text-muted font-bold cursor-pointer uppercase px-4 py-3 rounded hover:bg-surface-hover hover:text-text-main transition-colors"
-                            >
-                                Editar
-                            </Link>
-                        </div>
+                        {
+                            isAdmin && (
+                                <div className="flex justify-end border-t border-border-primary p-2 bg-background/50 rounded-b-lg">
+                                    <Link
+                                        href={`/dashboard/planes/${plan.uuid}/editar`}
+                                        className="text-xs tracking-widest text-text-muted font-bold cursor-pointer uppercase px-4 py-3 rounded hover:bg-surface-hover hover:text-text-main transition-colors"
+                                    >
+                                        Editar
+                                    </Link>
+                                </div>
+                            )
+                        }
                     </div>
                 );
             })}
