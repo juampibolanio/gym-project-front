@@ -7,6 +7,7 @@ import { ThemeToggle } from '@/common/components/layout/ThemeToggle';
 import { AuthGuard } from '@/features/auth/components/AuthGuard';
 import { useAuthStore } from '@/features/auth/store/auth.store';
 import { useRole } from '@/features/auth/hooks/useRole';
+import { useGym } from '@/features/gyms/hooks/useGyms';
 
 const SEARCH_CONFIG: Record<string, { placeholder: string }> = {
   '/dashboard/miembros': {
@@ -22,7 +23,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const router = useRouter();
   const setLogout = useAuthStore((state) => state.setLogout);
   const { isAdmin } = useRole();
-
+  const gymDomain = useAuthStore((state) => state.user?.gymUuid);
+  const { data: gymData, isLoading } = useGym(gymDomain);
+  
   const handleLogout = () => {
     setLogout();
     router.replace('/login');
@@ -44,7 +47,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
           <div className="flex flex-col">
             <div className="h-20 flex flex-col justify-center px-8 border-b border-border-primary">
-              <span className="font-bold text-xl text-text-main tracking-wide">GymSystem</span>
+              {isLoading && <div className="h-4 w-24 bg-surface-hover animate-pulse rounded mb-1" />}
+
+              <span className="font-bold text-xl text-text-main tracking-wide">
+                {gymData?.name}
+              </span>
               <span className="text-[9px] text-text-muted font-bold tracking-widest mt-1">ADMIN TERMINAL</span>
             </div>
 
