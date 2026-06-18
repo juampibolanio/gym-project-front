@@ -120,7 +120,7 @@ export function SecurityTab() {
           <button 
             type="submit"
             disabled={isPending}
-            className="w-fit flex items-center justify-center gap-2 px-6 py-2.5 mt-2 bg-brand-main hover:bg-brand-hover text-white rounded-sm font-medium text-sm transition-colors shadow-sm dark:shadow-none disabled:opacity-50"
+            className="w-fit flex items-center justify-center gap-2 px-6 py-2.5 mt-2 bg-brand-main hover:bg-brand-hover text-white rounded-sm font-medium text-sm transition-colors shadow-sm dark:shadow-none disabled:opacity-50 cursor-pointer"
           >
             {isPending ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
             <span>{isPending ? "Actualizando..." : "Actualizar Contraseña"}</span>
