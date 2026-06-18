@@ -22,4 +22,9 @@ export interface CreateUserPayload {
     email: string;
 }
 
+export interface ChangePasswordPayload {
+    currentPassword: string;
+    newPassword: string;
+}
+
 export type UpdateUserPayload = Partial<CreateUserPayload>;

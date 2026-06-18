@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { UsersService } from "../services/users.service";
-import { CreateUserPayload, UpdateUserPayload } from "../interfaces/user.interface";
+import { ChangePasswordPayload, CreateUserPayload, UpdateUserPayload } from "../interfaces/user.interface";
 import toast from "react-hot-toast";
 
 export const useUsers = (page: number = 1, limit: number = 10) => {
@@ -65,5 +65,12 @@ export const useDeleteUser = () => {
             const message = error.response?.data?.message || 'Ocurrió un error al eliminar el usuario';
             toast.error(message);
         },
+    });
+};
+
+export const useChangePassword = () => {
+    return useMutation({
+        mutationFn: ({ id, payload }: { id: string; payload: ChangePasswordPayload }) => 
+            UsersService.changePassword(id, payload),
     });
 };

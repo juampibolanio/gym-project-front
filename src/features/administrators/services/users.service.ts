@@ -1,5 +1,5 @@
 import { PaginatedResult } from "@/common/interfaces/pagination.interface";
-import { CreateUserPayload, UpdateUserPayload, User } from "../interfaces/user.interface";
+import { ChangePasswordPayload, CreateUserPayload, UpdateUserPayload, User } from "../interfaces/user.interface";
 import { httpClient } from "@/core/api/axios.adapter";
 
 export class UsersService {
@@ -23,5 +23,9 @@ export class UsersService {
 
     static async remove(id: string): Promise<User> {
         return await httpClient.delete<User>(`${this.ENDPOINT}/${id}`);
+    }
+
+    static async changePassword(id: string, payload: ChangePasswordPayload): Promise<{ message: string }> {
+        return await httpClient.patch<{ message: string }>(`${this.ENDPOINT}/${id}/change-password`, payload);
     }
 }
