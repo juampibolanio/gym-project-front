@@ -1,11 +1,13 @@
 'use client';
 
-import { Bell, LayoutDashboard, Users, ClipboardList, Settings, Plus, Search, Shield } from 'lucide-react';
+import { Bell, LayoutDashboard, Users, ClipboardList, Settings, Search, Shield } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { ThemeToggle } from '@/common/components/layout/ThemeToggle';
 import { AuthGuard } from '@/features/auth/components/AuthGuard';
 import { useAuthStore } from '@/features/auth/store/auth.store';
+import { useRole } from '@/features/auth/hooks/useRole';
+import { useGym } from '@/features/gyms/hooks/useGyms';
 
 const SEARCH_CONFIG: Record<string, { placeholder: string }> = {
   '/dashboard/miembros': {
@@ -20,19 +22,22 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const pathname = usePathname();
   const router = useRouter();
   const setLogout = useAuthStore((state) => state.setLogout);
-
+  const { isAdmin } = useRole();
+  const gymDomain = useAuthStore((state) => state.user?.gymUuid);
+  const { data: gymData, isLoading } = useGym(gymDomain);
+  
   const handleLogout = () => {
     setLogout();
     router.replace('/login');
   };
 
   const navItems = [
-    { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard, exact: true },
-    { name: 'Miembros', href: '/dashboard/miembros', icon: Users },
-    { name: 'Administradores', href: '/dashboard/administradores', icon: Shield },
-    { name: 'Planes', href: '/dashboard/planes', icon: ClipboardList },
-    { name: 'Configuración', href: '/dashboard/configuracion', icon: Settings },
-  ];
+    { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard, exact: true, show: true },
+    { name: 'Miembros', href: '/dashboard/miembros', icon: Users, show: true },
+    { name: 'Administradores', href: '/dashboard/administradores', icon: Shield, show: isAdmin },
+    { name: 'Planes', href: '/dashboard/planes', icon: ClipboardList, show: true },
+    { name: 'Configuración', href: '/dashboard/configuracion', icon: Settings, show: true },
+  ].filter(item => item.show);
 
   return (
     <AuthGuard>
@@ -42,7 +47,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
           <div className="flex flex-col">
             <div className="h-20 flex flex-col justify-center px-8 border-b border-border-primary">
-              <span className="font-bold text-xl text-text-main tracking-wide">ChacuGym</span>
+              {isLoading && <div className="h-4 w-24 bg-surface-hover animate-pulse rounded mb-1" />}
+
+              <span className="font-bold text-xl text-text-main tracking-wide">
+                {gymData?.name}
+              </span>
               <span className="text-[9px] text-text-muted font-bold tracking-widest mt-1">ADMIN TERMINAL</span>
             </div>
 
@@ -68,31 +77,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </div>
 
           <div className="px-6 pb-6 flex flex-col gap-4">
-            {pathname === '/dashboard/miembros' && (
-              <Link
-                href='/dashboard/miembros/nuevo'
-                className="w-full py-2.5 bg-brand-main hover:bg-brand-hover text-white font-medium text-sm transition-colors rounded-sm shadow-sm flex items-center justify-center gap-2"
-              >
-                <Plus size={16} /> Agregar nuevo miembro
-              </Link>
-            )}
-            {pathname === '/dashboard/administradores' && (
-              <Link
-                href='/dashboard/administradores/nuevo'
-                className="w-full py-2.5 bg-brand-main hover:bg-brand-hover text-white font-medium text-sm transition-colors rounded-sm shadow-sm flex items-center justify-center gap-2"
-              >
-                <Plus size={16} /> Agregar nuevo admin
-              </Link>
-            )}
-            {pathname === '/dashboard/planes' && (
-              <Link
-                href='/dashboard/planes/nuevo'
-                className="w-full py-2.5 bg-brand-main hover:bg-brand-hover text-white font-medium text-sm transition-colors rounded-sm shadow-sm flex items-center justify-center gap-2"
-              >
-                <Plus size={16} /> Agregar nuevo plan
-              </Link>
-            )}
-            <button onClick={handleLogout} className="w-full py-2.5 bg-brand-main hover:bg-brand-hover text-white font-medium text-sm transition-colors rounded-sm shadow-sm dark:shadow-none">
+            <button onClick={handleLogout} className="w-full py-2.5 bg-brand-main hover:bg-brand-hover text-white font-medium text-sm transition-colors rounded-sm shadow-sm dark:shadow-none cursor-pointer">
               Cerrar sesión
             </button>
           </div>
