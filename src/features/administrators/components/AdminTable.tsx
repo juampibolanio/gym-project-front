@@ -1,8 +1,8 @@
 'use client';
 
 import { ChevronRight, ChevronLeft, Loader2, AlertCircle } from 'lucide-react';
-import { useUsers } from '../hooks/useUsers'; 
-import { useAuthStore } from '@/features/auth/store/auth.store'; 
+import { useUsers } from '../hooks/useUsers';
+import { useAuthStore } from '@/features/auth/store/auth.store';
 import { AdminRow } from './AdminRow';
 import { useState, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
@@ -10,10 +10,10 @@ import { useSearchParams } from 'next/navigation';
 export function AdminTable() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
-  
+
   const searchParams = useSearchParams();
   const q = searchParams.get('q') || undefined;
-  
+
   const prevQRef = useRef(q);
   if (prevQRef.current !== q) {
     prevQRef.current = q;
@@ -21,24 +21,24 @@ export function AdminTable() {
   }
 
   const { data, isLoading, isError } = useUsers(currentPage, itemsPerPage, q);
-  
+
   const currentUserUuid = useAuthStore((state) => state.user?.uuid);
 
   if (isLoading && currentPage === 1) {
     return (
-        <div className="flex flex-col items-center justify-center h-64 w-full bg-surface border border-border-primary rounded-lg">
-            <Loader2 className="w-8 h-8 text-brand-main animate-spin mb-4" />
-            <p className="text-text-muted text-sm">Cargando administradores...</p>
-        </div>
+      <div className="flex flex-col items-center justify-center h-64 w-full bg-surface border border-border-primary rounded-lg">
+        <Loader2 className="w-8 h-8 text-brand-main animate-spin mb-4" />
+        <p className="text-text-muted text-sm">Cargando administradores...</p>
+      </div>
     );
   }
 
   if (isError) {
     return (
-        <div className="flex flex-col items-center justify-center h-64 w-full bg-surface border border-danger-main/20 rounded-lg">
-            <AlertCircle className="w-8 h-8 text-danger-main mb-4" />
-            <p className="text-text-main text-sm">Error al cargar la lista.</p>
-        </div>
+      <div className="flex flex-col items-center justify-center h-64 w-full bg-surface border border-danger-main/20 rounded-lg">
+        <AlertCircle className="w-8 h-8 text-danger-main mb-4" />
+        <p className="text-text-main text-sm">Error al cargar la lista.</p>
+      </div>
     );
   }
 
@@ -65,19 +65,21 @@ export function AdminTable() {
 
       <div className="flex flex-col relative">
         {isLoading && currentPage > 1 && (
-            <div className="absolute inset-0 bg-surface/80 flex flex-col items-center justify-center z-10 backdrop-blur-[1px]">
-              <Loader2 className="w-6 h-6 text-brand-main animate-spin" />
-            </div>
+          <div className="absolute inset-0 bg-surface/80 flex flex-col items-center justify-center z-10 backdrop-blur-[1px]">
+            <Loader2 className="w-6 h-6 text-brand-main animate-spin" />
+          </div>
         )}
         {admins.map((admin) => (
-          <AdminRow 
+          <AdminRow
             key={admin.uuid}
             admin={admin}
             isCurrentUser={admin.uuid === currentUserUuid}
           />
         ))}
         {admins.length === 0 && !isLoading && (
-            <p className="text-center text-text-muted py-8 text-sm">No hay administradores registrados.</p>
+          <p className="text-center text-text-muted py-8 text-sm">
+            No hay administradores registrados.
+          </p>
         )}
       </div>
 
@@ -86,14 +88,14 @@ export function AdminTable() {
           Mostrando página {currentPage} de {totalPages || 1}
         </p>
         <div className="flex items-center gap-2">
-          <button 
+          <button
             onClick={handlePrevPage}
             disabled={currentPage === 1 || isLoading}
             className="p-1 text-text-muted hover:text-text-main disabled:opacity-50 disabled:hover:text-text-muted transition-colors cursor-pointer disabled:cursor-not-allowed"
           >
             <ChevronLeft size={18} />
           </button>
-          <button 
+          <button
             onClick={handleNextPage}
             disabled={currentPage >= totalPages || isLoading}
             className="p-1 text-text-muted hover:text-text-main disabled:opacity-50 disabled:hover:text-text-muted transition-colors cursor-pointer disabled:cursor-not-allowed"

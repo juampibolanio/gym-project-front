@@ -22,7 +22,7 @@ export function LoginForm() {
     defaultValues: {
       email: '',
       password: '',
-    }
+    },
   });
 
   const onSubmit = (data: LoginFormValues) => {
@@ -50,14 +50,17 @@ export function LoginForm() {
 
       <InputField
         label="CONTRASEÑA"
-        type={showPassword ? "text" : "password"}
+        type={showPassword ? 'text' : 'password'}
         placeholder="••••••••"
         disabled={isPending}
         registration={register('password')}
         error={errors.password?.message}
         icon={<Lock className="text-text-muted transition-colors" size={16} />}
         labelRightElement={
-          <Link href="/forgot-password" className="text-[10px] font-bold text-text-muted hover:text-text-main transition-colors">
+          <Link
+            href="/forgot-password"
+            className="text-[10px] font-bold text-text-muted hover:text-text-main transition-colors"
+          >
             Has olvidado la contraseña?
           </Link>
         }

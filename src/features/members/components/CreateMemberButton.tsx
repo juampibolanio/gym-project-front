@@ -1,10 +1,10 @@
 'use client';
 
-import { useRole } from "@/features/auth/hooks/useRole";
-import Link from "next/link";
+import { useRole } from '@/features/auth/hooks/useRole';
+import Link from 'next/link';
 
 export default function CreateMemberButton() {
-  const { isAdmin } = useRole()
+  const { isAdmin } = useRole();
 
   return (
     <>

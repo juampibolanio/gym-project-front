@@ -16,7 +16,6 @@ export function ConfigurationTabs() {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col lg:flex-row gap-6">
-        
         <div className="w-full lg:w-64 flex flex-col gap-1 shrink-0">
           {tabs.map((tab) => {
             const Icon = tab.icon;
@@ -26,8 +25,8 @@ export function ConfigurationTabs() {
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 cursor-pointer ${
-                  isActive 
-                    ? 'bg-brand-surface text-brand-main ' 
+                  isActive
+                    ? 'bg-brand-surface text-brand-main '
                     : 'text-text-muted hover:bg-surface hover:text-text-main'
                 }`}
               >
@@ -42,7 +41,6 @@ export function ConfigurationTabs() {
           {activeTab === 'general' && <GeneralTab />}
           {activeTab === 'seguridad' && <SecurityTab />}
         </div>
-
       </div>
     </div>
   );

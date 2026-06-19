@@ -9,13 +9,13 @@ interface MetricCardProps {
   trendColor?: string;
 }
 
-export function MetricCard({ 
-  title, 
-  value, 
-  icon, 
-  trendText, 
-  trendIcon, 
-  trendColor = 'text-brand-main' 
+export function MetricCard({
+  title,
+  value,
+  icon,
+  trendText,
+  trendIcon,
+  trendColor = 'text-brand-main',
 }: MetricCardProps) {
   return (
     <div className="bg-surface rounded-lg p-5 border border-border-primary  transition-colors">
@@ -28,7 +28,9 @@ export function MetricCard({
       <div className="text-3xl font-bold text-text-main transition-colors">
         {value}
       </div>
-      <div className={`text-xs ${trendColor} mt-2 flex items-center gap-1 transition-colors`}>
+      <div
+        className={`text-xs ${trendColor} mt-2 flex items-center gap-1 transition-colors`}
+      >
         {trendIcon}
         <span>{trendText}</span>
       </div>
