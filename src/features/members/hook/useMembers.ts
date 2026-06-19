@@ -62,17 +62,30 @@ export const useUpdateMember = () => {
 };
 
 export const useDeleteMember = () => {
-    const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: MembersService.remove,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['members'] });
+      toast.success('Socio eliminado correctamente');
+    },
+    onError: (error: any) => {
+      toast.error(error.response?.data?.message || 'Error al eliminar el socio');
+    },
+  });
+};
 
-    return useMutation({
-        mutationFn: (id: string) => MembersService.remove(id),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['members'] })
-            toast.success('Miembro eliminado con éxito');
-        },
-        onError: (error: any) => {
-            const message = error.response?.data?.message || 'Ocurrió un error al eliminar el miembro';
-            toast.error(message);
-        },
-    });
+export const useSubscribeAndPay = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, payload }: { id: string; payload: import('../interfaces/members.interface').SubscribeAndPayPayload }) => MembersService.subscribeAndPay(id, payload),
+    onSuccess: (_, { id }) => {
+      queryClient.invalidateQueries({ queryKey: ['members'] });
+      queryClient.invalidateQueries({ queryKey: ['members', id] });
+      toast.success('Suscripción y pago registrados correctamente');
+    },
+    onError: (error: any) => {
+      toast.error(error.response?.data?.message || 'Error al registrar suscripción y pago');
+    },
+  });
 };

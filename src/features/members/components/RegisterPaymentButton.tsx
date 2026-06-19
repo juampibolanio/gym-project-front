@@ -7,6 +7,9 @@ import { CreditCard } from "lucide-react";
 import { Modal } from "@/common/components/ui/Modal";
 import * as z from "zod";
 import { paymentSchema } from "@/features/members/schemas/payment.schema";
+import { useSubscribeAndPay } from "../hook/useMembers";
+import { usePlans } from "@/features/plans/hooks/usePlans";
+import { useEffect } from "react";
 
 type PaymentFormValues = z.infer<typeof paymentSchema>;
 
@@ -18,26 +21,53 @@ interface RegisterPaymentButtonProps {
 
 export default function RegisterPaymentButton({ memberName, memberSurname, uuid }: RegisterPaymentButtonProps) {
     const [isOpen, setIsOpen] = useState(false);
+    const { mutate: subscribeAndPay, isPending } = useSubscribeAndPay();
+    const { data: plansData } = usePlans(1, 100); // Fetch all active plans
+    const plans = plansData?.data || [];
 
     const {
         register,
         handleSubmit,
         reset,
+        watch,
+        setValue,
         formState: { errors },
     } = useForm<PaymentFormValues>({
         resolver: zodResolver(paymentSchema),
         defaultValues: {
-            amount: undefined,
-            method: "credit_card",
+            planUuid: "",
+            amount: 0,
+            method: "CASH",
             date: new Date().toISOString().split('T')[0],
             notes: "",
         }
     });
 
+    const selectedPlanUuid = watch("planUuid");
+
+    useEffect(() => {
+        if (selectedPlanUuid) {
+            const plan = plans.find(p => p.uuid === selectedPlanUuid);
+            if (plan) {
+                setValue("amount", Number(plan.price));
+            }
+        }
+    }, [selectedPlanUuid, plans, setValue]);
+
     const onSubmit = (data: PaymentFormValues) => {
-        console.log("Pago registrado para:", memberName, uuid, data);
-        reset();
-        setIsOpen(false);
+        subscribeAndPay({
+            id: uuid,
+            payload: {
+                planUuid: data.planUuid,
+                paymentMethod: data.method,
+                amountPaid: data.amount,
+            }
+        }, {
+            onSuccess: () => {
+                reset();
+                setIsOpen(false);
+            }
+        });
     };
 
     const handleClose = () => {
@@ -70,9 +100,25 @@ export default function RegisterPaymentButton({ memberName, memberSurname, uuid 
                         />
                     </div>
 
+                    <div className="flex flex-col gap-2">
+                        <label className="text-sm text-text-muted font-medium">Plan a asignar</label>
+                        <select
+                            {...register("planUuid")}
+                            className={`w-full bg-background border ${errors.planUuid ? 'border-danger-main' : 'border-border-primary'} rounded-md p-3 text-text-main text-sm focus:outline-none focus:border-brand-main transition-colors cursor-pointer`}
+                        >
+                            <option value="">Seleccione un plan</option>
+                            {plans.map((plan) => (
+                                <option key={plan.uuid} value={plan.uuid}>
+                                    {plan.name} ({plan.durationDays} días)
+                                </option>
+                            ))}
+                        </select>
+                        {errors.planUuid && <span className="text-danger-main text-xs">{errors.planUuid.message}</span>}
+                    </div>
+
                     <div className="grid grid-cols-2 gap-4">
                         <div className="flex flex-col gap-2">
-                            <label className="text-sm text-text-muted font-medium">Monto</label>
+                            <label className="text-sm text-text-muted font-medium">Monto a cobrar</label>
                             <div className="relative">
                                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted">$</span>
                                 <input
@@ -86,27 +132,16 @@ export default function RegisterPaymentButton({ memberName, memberSurname, uuid 
                         </div>
 
                         <div className="flex flex-col gap-2">
-                            <label className="text-sm text-text-muted font-medium">Fecha</label>
-                            <input
-                                type="date"
-                                {...register("date")}
-                                className={`w-full bg-background border ${errors.date ? 'border-danger-main' : 'border-border-primary'} rounded-md p-3 text-text-main text-sm focus:outline-none focus:border-brand-main transition-colors`}
-                            />
-                            {errors.date && <span className="text-danger-main text-xs">{errors.date.message}</span>}
+                            <label className="text-sm text-text-muted font-medium">Método de pago</label>
+                            <select
+                                {...register("method")}
+                                className={`w-full bg-background border ${errors.method ? 'border-danger-main' : 'border-border-primary'} rounded-md p-3 text-text-main text-sm focus:outline-none focus:border-brand-main transition-colors cursor-pointer`}
+                            >
+                                <option value="CASH">Efectivo</option>
+                                <option value="BANK_TRANSFER">Transferencia bancaria</option>
+                            </select>
+                            {errors.method && <span className="text-danger-main text-xs">{errors.method.message}</span>}
                         </div>
-                    </div>
-
-                    <div className="flex flex-col gap-2">
-                        <label className="text-sm text-text-muted font-medium">Método de pago</label>
-                        <select
-                            {...register("method")}
-                            className={`w-full bg-background border ${errors.method ? 'border-danger-main' : 'border-border-primary'} rounded-md p-3 text-text-main text-sm focus:outline-none focus:border-brand-main transition-colors cursor-pointer`}
-                        >
-                            <option value="credit_card">Tarjeta de crédito / débito</option>
-                            <option value="cash">Efectivo</option>
-                            <option value="transfer">Transferencia bancaria</option>
-                        </select>
-                        {errors.method && <span className="text-danger-main text-xs">{errors.method.message}</span>}
                     </div>
 
                     <div className="flex flex-col gap-2">
@@ -129,9 +164,10 @@ export default function RegisterPaymentButton({ memberName, memberSurname, uuid 
                         </button>
                         <button
                             type="submit"
-                            className="bg-brand-main text-white text-sm font-medium py-2.5 px-6 rounded-sm cursor-pointer hover:bg-brand-hover transition-colors"
+                            disabled={isPending}
+                            className="bg-brand-main text-white text-sm font-medium py-2.5 px-6 rounded-sm cursor-pointer hover:bg-brand-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            Confirmar Pago
+                            {isPending ? 'Procesando...' : 'Confirmar Pago'}
                         </button>
                     </div>
 
