@@ -38,13 +38,8 @@ export interface CreateMemberPayload {
     phoneNumber?: string;
     state?: string;
     observations?: string;
+    planUuid: string;
 }
 
 export type UpdateMemberPayload = Partial<CreateMemberPayload>;
 
-export interface SubscribeAndPayPayload {
-    planUuid: string;
-    paymentMethod: 'CASH' | 'BANK_TRANSFER';
-    amountPaid: number;
-    notes?: string;
-}

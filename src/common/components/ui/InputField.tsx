@@ -3,7 +3,7 @@ import React from "react";
 
 interface InputFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
     label: string;
-    registration: UseFormRegisterReturn;
+    registration?: UseFormRegisterReturn;
     error?: string;
     icon?: React.ReactNode;
     rightElement?: React.ReactNode;
@@ -24,7 +24,7 @@ export function InputField({ label, registration, error, icon, rightElement, lab
                     </div>
                 )}
                 <input
-                    {...registration}
+                    {...(registration || {})}
                     {...props}
                     className={`w-full bg-background border ${error ? 'border-danger-main' : 'border-border-primary'} rounded ${icon ? 'pl-9' : 'pl-3'} ${rightElement ? 'pr-10' : 'pr-3'} py-2.5 text-sm text-text-main focus:outline-none focus:border-brand-main transition-colors disabled:opacity-50`}
                 />

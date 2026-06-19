@@ -74,18 +74,4 @@ export const useDeleteMember = () => {
     },
   });
 };
-
-export const useSubscribeAndPay = () => {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: ({ id, payload }: { id: string; payload: import('../interfaces/members.interface').SubscribeAndPayPayload }) => MembersService.subscribeAndPay(id, payload),
-    onSuccess: (_, { id }) => {
-      queryClient.invalidateQueries({ queryKey: ['members'] });
-      queryClient.invalidateQueries({ queryKey: ['member', id] });
-      toast.success('Suscripción y pago registrados correctamente');
-    },
-    onError: (error: any) => {
-      toast.error(error.response?.data?.message || 'Error al registrar suscripción y pago');
-    },
-  });
-};
+

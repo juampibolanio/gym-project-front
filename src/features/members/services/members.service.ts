@@ -32,7 +32,4 @@ export class MembersService {
         return await httpClient.delete<Member>(`${this.ENDPOINT}/${id}`);
     }
 
-    static async subscribeAndPay(id: string, payload: import('../interfaces/members.interface').SubscribeAndPayPayload): Promise<{ subscription: import('../interfaces/members.interface').Subscription; payment: import('../interfaces/members.interface').Payment }> {
-        return await httpClient.post(`${this.ENDPOINT}/${id}/subscribe-and-pay`, payload);
-    }
 }
