@@ -8,7 +8,7 @@ import { useState } from 'react';
 
 export function AdminTable() {
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 5;
   
   const { data, isLoading, isError } = useUsers(currentPage, itemsPerPage);
   
@@ -46,14 +46,14 @@ export function AdminTable() {
 
   return (
     <div className="bg-surface border border-border-primary rounded-lg flex flex-col relative">
-      <div className="grid grid-cols-[2fr_1fr_1fr_2fr_100px] px-5 py-4 border-b border-border-primary text-[10px] font-bold text-text-muted tracking-widest uppercase">
+      <div className="grid grid-cols-[2fr_1fr_2fr_100px] px-5 py-4 border-b border-border-primary text-[10px] font-bold text-text-muted tracking-widest uppercase">
         <div>ADMINISTRADOR E ID</div>
         <div>ROL</div>
         <div>EMAIL</div>
         <div>ACCIONES</div>
       </div>
 
-      <div className="flex flex-col relative min-h-[100px]">
+      <div className="flex flex-col relative">
         {isLoading && currentPage > 1 && (
             <div className="absolute inset-0 bg-surface/80 flex flex-col items-center justify-center z-10 backdrop-blur-[1px]">
               <Loader2 className="w-6 h-6 text-brand-main animate-spin" />
