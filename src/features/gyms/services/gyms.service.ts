@@ -11,7 +11,5 @@ export class GymsService {
 
     static async update(id: string, payload: UpdateGymPayload): Promise<Gym> {
         return await httpClient.patch<Gym>(`${this.ENDPOINT}/${id}`, payload);
-    }
-
-    // todo: agregar el resto de metodos cuando se haga el dashboard para los superadmin
+    }
 }

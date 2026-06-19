@@ -21,7 +21,7 @@ export default function TanStackQueryProvider({ children }: { children: React.Re
     return (
         <QueryClientProvider client={queryClient}>
             {children}
-            <ReactQueryDevtools initialIsOpen={false} /> {/* en desarrollo se ve la cache, en prod no */}
+            <ReactQueryDevtools initialIsOpen={false} /> {}
         </QueryClientProvider>
     )
 }

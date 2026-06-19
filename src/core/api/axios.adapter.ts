@@ -10,9 +10,7 @@ export class AxiosAdapter implements HttpAdapter {
             headers: {
                 'Content-Type': 'application/json',
             },
-        });
-
-        // request interceptor
+        });
         this.axiosInstance.interceptors.request.use(
             (config) => {
                 if (typeof window !== 'undefined') {
@@ -27,9 +25,7 @@ export class AxiosAdapter implements HttpAdapter {
             (error) => {
                 return Promise.reject(error);
             }
-        );
-
-        // response interceptor
+        );
         this.axiosInstance.interceptors.response.use(
             (response) => {
                 return response;
@@ -40,8 +36,7 @@ export class AxiosAdapter implements HttpAdapter {
                         localStorage.removeItem('jwt_token'); 
                         window.location.href = '/login';     
                     }
-                }
-                // todo: aca se puede agregar mas logica para manejar distintos errores
+                }
                 return Promise.reject(error);
             }
         )
