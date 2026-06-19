@@ -12,6 +12,15 @@ export interface UpcomingRenewal {
   isUrgent: boolean;
 }
 
+export interface RenewalItemProps {
+  initials: string;
+  name: string;
+  plan: string;
+  daysText: string;
+  isUrgent?: boolean;
+  hasBorder?: boolean;
+}
+
 export interface DashboardMetrics {
   activeMembers: MetricValue;
   monthlyRevenue: MetricValue;

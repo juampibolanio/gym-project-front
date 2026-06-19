@@ -1,12 +1,9 @@
 'use client';
 
-import ReactECharts from 'echarts-for-react';
-import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
-
-interface RevenueChartProps {
-  data: { month: string; amount: number }[];
-}
+import { useTheme } from 'next-themes';
+import ReactECharts from 'echarts-for-react';
+import { RevenueChartProps } from '../interfaces/revenue-chart.interface';
 
 let hasAnimated = false;
 
@@ -116,7 +113,7 @@ export function RevenueChart({ data }: RevenueChartProps) {
           Evolución de recaudación en los últimos 12 meses
         </p>
       </div>
-      <div className="h-[300px] w-full mt-4">
+      <div className="h-75 w-full mt-4">
         <ReactECharts
           option={option}
           style={{ height: '300px', width: '100%' }}

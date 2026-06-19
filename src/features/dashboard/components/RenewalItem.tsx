@@ -1,13 +1,4 @@
-import * as React from 'react';
-
-interface RenewalItemProps {
-  initials: string;
-  name: string;
-  plan: string;
-  daysText: string;
-  isUrgent?: boolean;
-  hasBorder?: boolean;
-}
+import { RenewalItemProps } from "../interfaces/metrics.interface";
 
 export function RenewalItem({
   initials,
