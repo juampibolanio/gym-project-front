@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Pencil, User } from "lucide-react";
-import RegisterPaymentButton from "./RegisterPaymentButton";
+import RegisterPaymentButton from "@/features/payments/components/RegisterPaymentButton";
 
 interface MemberProfileCardProps {
     member: {
@@ -14,9 +14,10 @@ interface MemberProfileCardProps {
     };
     displayStatus: string;
     safeStatusStyles: string;
+    defaultAmount: number;
 }
 
-export function MemberProfileCard({ member, displayStatus, safeStatusStyles }: MemberProfileCardProps) {
+export function MemberProfileCard({ member, displayStatus, safeStatusStyles, defaultAmount }: MemberProfileCardProps) {
     return (
         <div className="lg:col-span-1 bg-surface border border-border-primary rounded-lg p-6 flex flex-col transition-colors">
             <div className="flex justify-between items-center mb-4">
@@ -48,7 +49,7 @@ export function MemberProfileCard({ member, displayStatus, safeStatusStyles }: M
             </div>
 
             <div className="flex flex-col gap-3 mt-8 pt-6 border-t border-border-primary">
-                <RegisterPaymentButton memberName={member.name} memberSurname={member.surname} uuid={member.uuid} />
+                <RegisterPaymentButton memberName={member.name} memberSurname={member.surname} uuid={member.uuid} defaultAmount={defaultAmount} />
                 <Link href={`/dashboard/miembros/${member.uuid}/editar`} className="w-full py-2.5 bg-transparent border border-border-primary hover:bg-surface-hover text-text-main font-medium text-sm transition-colors rounded-sm flex items-center justify-center gap-2">
                     <Pencil size={16} /> Editar datos
                 </Link>

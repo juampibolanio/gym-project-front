@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { ArrowLeft, Award, Loader2 } from "lucide-react";
 import { useMember } from "@/features/members/hook/useMembers";
-import { PaymentHistoryTable } from "@/features/members/components/PaymentHistoryTable";
+import { PaymentHistoryTable } from "@/features/payments/components/PaymentHistoryTable";
 import { MemberProfileCard } from "@/features/members/components/MemberProfileCard";
 import { use } from "react";
 
@@ -35,7 +35,11 @@ export default function MemberDetailPage({
         );
     }
 
-    const activeSubscription = member.subscriptions?.find(sub => sub.status === 'ACTIVE') || member.subscriptions?.[0];
+    const now = new Date();
+    const activeSubscription = member.subscriptions?.find(sub => sub.status === 'ACTIVE' && new Date(sub.startDate) <= now) 
+        || member.subscriptions?.find(sub => sub.status === 'ACTIVE') 
+        || member.subscriptions?.[0];
+    const futureSubscriptions = member.subscriptions?.filter(sub => sub.status === 'ACTIVE' && new Date(sub.startDate) > now).sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime()) || [];
     const planName = activeSubscription?.plan?.name || "Sin plan asignado";
 
     let daysRemaining = 0;
@@ -72,6 +76,7 @@ export default function MemberDetailPage({
     const memberState = member.state || 'INACTIVE';
     const displayStatus = statusTranslations[memberState] || memberState;
     const safeStatusStyles = statusStyles[memberState] || statusStyles['INACTIVE'];
+    const defaultAmount = activeSubscription?.plan?.price ? Number(activeSubscription.plan.price) : 0;
 
     return (
         <section>
@@ -93,6 +98,7 @@ export default function MemberDetailPage({
                     member={member} 
                     displayStatus={displayStatus} 
                     safeStatusStyles={safeStatusStyles} 
+                    defaultAmount={defaultAmount}
                 />
 
                 <div className="lg:col-span-2 flex flex-col gap-6">
@@ -106,6 +112,26 @@ export default function MemberDetailPage({
                             </div>
                         </div>
                     </div>
+
+                    {futureSubscriptions.length > 0 && (
+                        <div className="bg-surface border border-border-primary rounded-lg p-6 flex flex-col gap-4 transition-colors">
+                            <span className="text-xs text-text-muted font-bold uppercase tracking-wider">Planes Programados ({futureSubscriptions.length})</span>
+                            <div className="flex flex-col gap-3 mt-1">
+                                {futureSubscriptions.map((sub) => (
+                                    <div key={sub.uuid} className="flex justify-between items-center p-3 bg-background border border-border-primary rounded-md">
+                                        <div className="flex flex-col gap-1">
+                                            <span className="text-sm font-bold text-text-main">{sub.plan?.name || "Plan desconocido"}</span>
+                                            <span className="text-xs text-text-muted">Inicia: {new Date(sub.startDate).toLocaleDateString('es-ES')}</span>
+                                        </div>
+                                        <div className="flex flex-col items-end gap-1">
+                                            <span className="text-[10px] font-bold px-2 py-0.5 bg-brand-main/10 text-brand-main rounded-sm">EN ESPERA</span>
+                                            <span className="text-xs text-text-muted">Vence: {new Date(sub.endDate).toLocaleDateString('es-ES')}</span>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="bg-surface border border-border-primary  rounded-lg p-6 flex flex-col justify-center gap-4 transition-colors">
