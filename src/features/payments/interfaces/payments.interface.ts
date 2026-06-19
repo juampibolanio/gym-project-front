@@ -21,3 +21,24 @@ export interface CreatePaymentPayload {
   notes?: string;
   memberUuid: string;
 }
+
+export interface PaymentFormProps {
+  memberName: string;
+  memberSurname: string;
+  uuid: string;
+  defaultAmount: number;
+  onSuccess: () => void;
+  onCancel: () => void;
+  isNewMember?: boolean;
+}
+
+export interface PaymentHistoryTableProps {
+  payments: Payment[];
+}
+
+export interface RegisterPaymentButtonProps {
+  memberName: string;
+  memberSurname: string;
+  uuid: string;
+  defaultAmount: number;
+}

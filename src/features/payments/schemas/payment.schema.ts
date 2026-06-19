@@ -41,3 +41,5 @@ export const paymentSchema = z.object({
     .max(500, 'Las notas no pueden superar los 500 caracteres')
     .optional(),
 });
+
+export type PaymentFormValues = z.infer<typeof paymentSchema>;

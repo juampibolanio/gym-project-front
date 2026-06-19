@@ -1,10 +1,7 @@
-import { CreditCard, ChevronLeft, ChevronRight } from 'lucide-react';
-import { Payment } from '@/features/members/interfaces/members.interface';
 import { useState } from 'react';
-
-interface PaymentHistoryTableProps {
-  payments: Payment[];
-}
+import { PaymentHistoryTableProps } from '../interfaces/payments.interface';
+import { paymentMethods } from '../constants/payment-methods.constant';
+import { CreditCard, ChevronLeft, ChevronRight } from 'lucide-react';
 
 export function PaymentHistoryTable({ payments }: PaymentHistoryTableProps) {
   const [currentPage, setCurrentPage] = useState(1);
@@ -15,10 +12,6 @@ export function PaymentHistoryTable({ payments }: PaymentHistoryTableProps) {
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
-  const paymentMethods: Record<string, string> = {
-    CASH: 'Efectivo',
-    BANK_TRANSFER: 'Transferencia',
-  };
 
   return (
     <div className="bg-surface border border-border-primary rounded-lg p-6 overflow-hidden flex flex-col transition-colors">
@@ -29,7 +22,7 @@ export function PaymentHistoryTable({ payments }: PaymentHistoryTableProps) {
       </div>
 
       <div className="overflow-x-auto">
-        <table className="w-full min-w-[600px] text-left border-collapse">
+        <table className="w-full min-w-150 text-left border-collapse">
           <thead>
             <tr className="border-b border-t border-border-primary">
               <th className="pb-3 pt-3 text-xs font-bold text-text-muted uppercase tracking-wider">
@@ -75,7 +68,7 @@ export function PaymentHistoryTable({ payments }: PaymentHistoryTableProps) {
                   </div>
                 </td>
                 <td
-                  className="py-4 max-w-[200px] truncate"
+                  className="py-4 max-w-50 truncate"
                   title={payment.notes || ''}
                 >
                   {payment.notes ? (

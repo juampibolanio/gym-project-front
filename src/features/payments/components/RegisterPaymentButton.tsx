@@ -1,16 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { CreditCard } from 'lucide-react';
-import { Modal } from '@/common/components/ui/Modal';
 import { PaymentForm } from './PaymentForm';
-
-interface RegisterPaymentButtonProps {
-  memberName: string;
-  memberSurname: string;
-  uuid: string;
-  defaultAmount: number;
-}
+import { RegisterPaymentButtonProps } from '../interfaces/payments.interface';
+import { Modal } from '@/common/components/ui/Modal';
+import { CreditCard } from 'lucide-react';
 
 export default function RegisterPaymentButton({
   memberName,
