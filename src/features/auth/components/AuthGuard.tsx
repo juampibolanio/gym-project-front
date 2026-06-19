@@ -8,7 +8,7 @@ import { Loader2 } from 'lucide-react';
 export function AuthGuard({ children }: { children: React.ReactNode }) {
   const token = useAuthStore((state) => state.token);
   const router = useRouter();
-  const [isChecking, setIsChecking] = useState(true);
+  const [isChecking] = useState(true);
 
   useEffect(() => {
     if (!token) {
