@@ -34,8 +34,32 @@ export default function MemberDetailPage({
         );
     }
 
-    const planName = "Pase Libre (Próximamente)";
-    const paymentHistory: { id: string; date: string; amount: number; method: string }[] = [];
+    const activeSubscription = member.subscriptions?.find(sub => sub.status === 'ACTIVE') || member.subscriptions?.[0];
+    const planName = activeSubscription?.plan?.name || "Sin plan asignado";
+
+    let daysRemaining = 0;
+    let progressPercentage = 0;
+    let nextDueDate = "-";
+
+    if (activeSubscription) {
+        const end = new Date(activeSubscription.endDate);
+        const start = new Date(activeSubscription.startDate);
+        const now = new Date();
+        
+        const totalDuration = end.getTime() - start.getTime();
+        const elapsed = now.getTime() - start.getTime();
+        
+        daysRemaining = Math.max(0, Math.ceil((end.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)));
+        progressPercentage = Math.min(100, Math.max(0, (elapsed / totalDuration) * 100));
+        nextDueDate = end.toLocaleDateString('es-ES', { year: 'numeric', month: 'short', day: 'numeric' });
+    }
+
+    const paymentHistory = member.payments || [];
+
+    const paymentMethods: Record<string, string> = {
+        'CASH': 'Efectivo',
+        'BANK_TRANSFER': 'Transferencia',
+    };
 
     const statusTranslations: Record<string, string> = {
         'ACTIVE': 'ACTIVO',
@@ -122,22 +146,22 @@ export default function MemberDetailPage({
                         <div className="bg-surface border border-border-primary  rounded-lg p-6 flex flex-col justify-center gap-4 transition-colors">
                             <div className="flex justify-between items-end">
                                 <span className="text-xs text-text-muted font-bold uppercase tracking-wider">Tiempo Restante</span>
-                                <span className="text-sm text-text-main font-bold">-</span>
+                                <span className="text-sm text-text-main font-bold">{daysRemaining > 0 ? `${daysRemaining} días` : '-'}</span>
                             </div>
                             <div className="w-full bg-border-primary h-2 rounded-full overflow-hidden">
-                                <div className="bg-text-muted h-full rounded-full" style={{ width: `0%` }}></div>
+                                <div className="bg-brand-main h-full rounded-full transition-all duration-500" style={{ width: `${progressPercentage}%` }}></div>
                             </div>
                         </div>
 
                         <div className="bg-surface border border-border-primary  rounded-lg p-6 flex flex-col justify-center gap-2 transition-colors">
                             <span className="text-xs text-text-muted font-bold uppercase tracking-wider">Próximo Vencimiento</span>
-                            <span className="text-xl font-bold text-text-main">-</span>
+                            <span className="text-xl font-bold text-text-main">{nextDueDate}</span>
                         </div>
                     </div>
 
                     <div className="bg-surface border border-border-primary  rounded-lg p-6 overflow-hidden flex flex-col transition-colors">
                         <div className="flex justify-between items-center mb-6">
-                            <h3 className="text-sm font-bold text-text-main uppercase tracking-wider">Historial de Pagos (Próximamente)</h3>
+                            <h3 className="text-sm font-bold text-text-main uppercase tracking-wider">Historial de Pagos</h3>
                             <Filter size={18} className="text-text-muted cursor-pointer hover:text-text-main transition-colors" />
                         </div>
 
@@ -154,14 +178,14 @@ export default function MemberDetailPage({
                                 </thead>
                                 <tbody className="text-sm text-text-main">
                                     {paymentHistory.map((payment) => (
-                                        <tr key={payment.id} className="border-b border-border-primary hover:bg-surface-hover transition-colors">
+                                        <tr key={payment.uuid} className="border-b border-border-primary hover:bg-surface-hover transition-colors">
                                             <td className="py-4">{new Date(payment.date).toLocaleDateString('es-ES', { year: 'numeric', month: 'short', day: 'numeric' })}</td>
-                                            <td className="py-4">{payment.id}</td>
-                                            <td className="py-4 font-bold text-text-main">${payment.amount.toFixed(2)}</td>
+                                            <td className="py-4">{payment.uuid.split('-')[0].toUpperCase()}</td>
+                                            <td className="py-4 font-bold text-text-main">${Number(payment.amountPaid).toLocaleString('es-AR')}</td>
                                             <td className="py-4">
                                                 <div className="flex items-center gap-2">
                                                     <CreditCard size={16} className="text-text-muted" />
-                                                    <span>{payment.method}</span>
+                                                    <span>{paymentMethods[payment.paymentMethod] || payment.paymentMethod}</span>
                                                 </div>
                                             </td>
                                             <td className="py-4 text-right">
