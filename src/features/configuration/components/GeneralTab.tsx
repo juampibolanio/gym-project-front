@@ -10,6 +10,7 @@ import { useRole } from '@/features/auth/hooks/useRole';
 import { useAuthStore } from '@/features/auth/store/auth.store';
 import { useGym, useUpdateGym } from '@/features/gyms/hooks/useGyms';
 import toast from 'react-hot-toast';
+import { GeneralTabSkeleton } from './GeneralTabSkeleton';
 
 type GeneralFormValues = z.infer<typeof configGeneralSchema>;
 
@@ -60,17 +61,15 @@ export function GeneralTab() {
     });
   };
 
-  const isProcessing = isFetching || isUpdating;
+  if (isFetching) {
+    return <GeneralTabSkeleton isAdmin={isAdmin} />;
+  }
+
+  const isProcessing = isUpdating;
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="p-6 md:p-8 flex flex-col gap-8 animate-in fade-in duration-300">
       <div className="relative">
-        
-        {isFetching && (
-            <div className="absolute inset-0 bg-surface/50 backdrop-blur-[1px] z-10 flex items-center justify-center rounded-md">
-                <Loader2 className="animate-spin text-brand-main w-8 h-8" />
-            </div>
-        )}
 
         <h2 className="text-lg font-bold text-text-main mb-1">Información del Gimnasio</h2>
         <p className="text-sm text-text-muted mb-6">
