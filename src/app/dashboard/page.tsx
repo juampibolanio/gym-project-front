@@ -13,7 +13,7 @@ import {
 import { MetricCard } from '@/features/dashboard/components/MetricCard';
 import { RenewalItem } from '@/features/dashboard/components/RenewalItem';
 import { useDashboardMetrics } from '@/features/dashboard/hooks/useDashboard';
-import { FormSkeleton } from '@/common/components/ui/FormSkeleton';
+import { DashboardSkeleton } from '@/common/components/ui/skeletons/DashboardSkeleton';
 
 export default function DashboardPage() {
   const { data: metrics, isLoading, isError } = useDashboardMetrics();
@@ -43,17 +43,7 @@ export default function DashboardPage() {
   const todayStr = new Date().toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
 
   if (isLoading) {
-    return (
-      <div className="flex flex-col gap-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-text-main">Vista General</h1>
-            <p className="text-sm text-text-muted mt-1">Cargando métricas en tiempo real...</p>
-          </div>
-        </div>
-        <FormSkeleton />
-      </div>
-    );
+    return <DashboardSkeleton />;
   }
 
   if (isError || !metrics) {
@@ -82,7 +72,7 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <MetricCard
           title="Miembros Activos"
           value={metrics.activeMembers.total.toLocaleString('es-AR')}
