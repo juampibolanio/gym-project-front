@@ -2,11 +2,12 @@ import * as React from 'react';
 
 interface MetricCardProps {
   title: string;
-  value: string | number;
+  value: string | number | React.ReactNode;
   icon: React.ReactNode;
   trendText: string;
   trendIcon: React.ReactNode;
   trendColor?: string;
+  action?: React.ReactNode;
 }
 
 export function MetricCard({
@@ -16,13 +17,17 @@ export function MetricCard({
   trendText,
   trendIcon,
   trendColor = 'text-brand-main',
+  action,
 }: MetricCardProps) {
   return (
     <div className="bg-surface rounded-lg p-5 border border-border-primary  transition-colors">
       <div className="flex justify-between items-center mb-4">
-        <span className="text-[10px] font-bold text-text-muted tracking-wider uppercase">
-          {title}
-        </span>
+        <div className="flex items-center gap-2">
+          <span className="text-[10px] font-bold text-text-muted tracking-wider uppercase">
+            {title}
+          </span>
+          {action}
+        </div>
         {icon}
       </div>
       <div className="text-3xl font-bold text-text-main transition-colors">

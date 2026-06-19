@@ -2,6 +2,7 @@
 import { MemberList } from '@/features/members/components/MemberList';
 import { ChevronRight, ChevronLeft, Loader2 } from 'lucide-react';
 import { useState, useRef } from 'react';
+import { TableSkeleton } from '@/common/components/ui/skeletons/TableSkeleton';
 import { useMembers } from '../hook/useMembers';
 import { useSearchParams } from 'next/navigation';
 
@@ -40,6 +41,10 @@ export function MembersDirectory() {
   const handleNextPage = () => {
     if (currentPage < totalPages) setCurrentPage(currentPage + 1);
   };
+
+  if (isLoading && members.length === 0) {
+    return <TableSkeleton />;
+  }
 
   return (
     <div className="bg-background flex flex-col gap-6">
@@ -86,51 +91,55 @@ export function MembersDirectory() {
         </div>
       </div>
 
-      <div className="bg-surface border border-border-primary rounded-lg flex flex-col">
-        <div className="grid grid-cols-[2fr_1fr_1fr_1fr_1fr_100px] items-center px-5 py-3 border-b border-border-primary text-[10px] font-bold text-text-muted tracking-widest uppercase">
-          <h5>NOMBRE E ID</h5>
-          <h5>ESTADO</h5>
-          <h5>TELÉFONO</h5>
-          <h5>OBSERVACIONES</h5>
-          <h5>FECHA NAC.</h5>
-          <h5>ACCIONES</h5>
-        </div>
+      <div className="bg-surface border border-border-primary rounded-lg flex flex-col overflow-hidden">
+        <div className="overflow-x-auto">
+          <div className="min-w-[1000px]">
+            <div className="grid grid-cols-[2fr_1fr_1fr_1fr_1fr_100px] items-center px-5 py-3 border-b border-border-primary text-[10px] font-bold text-text-muted tracking-widest uppercase">
+              <h5>NOMBRE E ID</h5>
+              <h5>ESTADO</h5>
+              <h5>TELÉFONO</h5>
+              <h5>OBSERVACIONES</h5>
+              <h5>FECHA NAC.</h5>
+              <h5>ACCIONES</h5>
+            </div>
 
-        <div className="flex flex-col relative">
-          {isLoading && members.length === 0 && (
-            <div className="flex flex-col items-center justify-center py-16 z-10">
-              <Loader2 className="w-8 h-8 text-brand-main animate-spin mb-3" />
-              <p className="text-text-muted text-sm">
-                Cargando directorio de miembros...
-              </p>
-            </div>
-          )}
-          {isLoading && members.length > 0 && (
-            <div className="absolute inset-0 bg-surface/80 flex flex-col items-center justify-center z-10 backdrop-blur-[1px]">
-              <Loader2 className="w-8 h-8 text-brand-main animate-spin mb-3" />
-              <p className="text-text-muted text-sm">
-                Cargando directorio de miembros...
-              </p>
-            </div>
-          )}
-          {members.length > 0
-            ? members.map((member) => (
-                <MemberList
-                  key={member.uuid}
-                  name={`${member.name} ${member.surname}`}
-                  memberID={member.dni}
-                  uuid={member.uuid}
-                  status={member.state as any}
-                  phoneNumber={member.phoneNumber || ''}
-                  observations={member.observations || ''}
-                  birthdate={new Date(member.birthDate).toLocaleDateString()}
-                />
-              ))
-            : !isLoading && (
-                <div className="flex-1 flex items-center justify-center py-10 text-sm text-text-muted">
-                  No hay miembros que coincidan con los filtros.
+            <div className="flex flex-col relative">
+              {isLoading && members.length === 0 && (
+                <div className="flex flex-col items-center justify-center py-16 z-10">
+                  <Loader2 className="w-8 h-8 text-brand-main animate-spin mb-3" />
+                  <p className="text-text-muted text-sm">
+                    Cargando directorio de miembros...
+                  </p>
                 </div>
               )}
+              {isLoading && members.length > 0 && (
+                <div className="absolute inset-0 bg-surface/80 flex flex-col items-center justify-center z-10 backdrop-blur-[1px]">
+                  <Loader2 className="w-8 h-8 text-brand-main animate-spin mb-3" />
+                  <p className="text-text-muted text-sm">
+                    Cargando directorio de miembros...
+                  </p>
+                </div>
+              )}
+              {members.length > 0
+                ? members.map((member) => (
+                    <MemberList
+                      key={member.uuid}
+                      name={`${member.name} ${member.surname}`}
+                      memberID={member.dni}
+                      uuid={member.uuid}
+                      status={member.state as any}
+                      phoneNumber={member.phoneNumber || ''}
+                      observations={member.observations || ''}
+                      birthdate={new Date(member.birthDate).toLocaleDateString()}
+                    />
+                  ))
+                : !isLoading && (
+                    <div className="flex-1 flex items-center justify-center py-10 text-sm text-text-muted">
+                      No hay miembros que coincidan con los filtros.
+                    </div>
+                  )}
+            </div>
+          </div>
         </div>
 
         <div className="flex items-center justify-between px-5 py-4 border-t border-border-primary">

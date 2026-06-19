@@ -17,4 +17,5 @@ export interface DashboardMetrics {
   monthlyRevenue: MetricValue;
   overdueAccounts: MetricValue;
   upcomingRenewals: UpcomingRenewal[];
+  revenueTrajectory: { month: string; amount: number }[];
 }

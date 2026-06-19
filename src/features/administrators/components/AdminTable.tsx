@@ -5,6 +5,7 @@ import { useUsers } from '../hooks/useUsers';
 import { useAuthStore } from '@/features/auth/store/auth.store';
 import { AdminRow } from './AdminRow';
 import { useState, useRef } from 'react';
+import { TableSkeleton } from '@/common/components/ui/skeletons/TableSkeleton';
 import { useSearchParams } from 'next/navigation';
 
 export function AdminTable() {
@@ -25,12 +26,7 @@ export function AdminTable() {
   const currentUserUuid = useAuthStore((state) => state.user?.uuid);
 
   if (isLoading && currentPage === 1) {
-    return (
-      <div className="flex flex-col items-center justify-center h-64 w-full bg-surface border border-border-primary rounded-lg">
-        <Loader2 className="w-8 h-8 text-brand-main animate-spin mb-4" />
-        <p className="text-text-muted text-sm">Cargando administradores...</p>
-      </div>
-    );
+    return <TableSkeleton />;
   }
 
   if (isError) {
@@ -56,31 +52,35 @@ export function AdminTable() {
 
   return (
     <div className="bg-surface border border-border-primary rounded-lg flex flex-col relative">
-      <div className="grid grid-cols-[2fr_1fr_2fr_100px] px-5 py-4 border-b border-border-primary text-[10px] font-bold text-text-muted tracking-widest uppercase">
-        <div>ADMINISTRADOR E ID</div>
-        <div>ROL</div>
-        <div>EMAIL</div>
-        <div>ACCIONES</div>
-      </div>
-
-      <div className="flex flex-col relative">
-        {isLoading && currentPage > 1 && (
-          <div className="absolute inset-0 bg-surface/80 flex flex-col items-center justify-center z-10 backdrop-blur-[1px]">
-            <Loader2 className="w-6 h-6 text-brand-main animate-spin" />
+      <div className="overflow-x-auto">
+        <div className="min-w-[800px]">
+          <div className="grid grid-cols-[2fr_1fr_2fr_100px] px-5 py-4 border-b border-border-primary text-[10px] font-bold text-text-muted tracking-widest uppercase">
+            <div>ADMINISTRADOR E ID</div>
+            <div>ROL</div>
+            <div>EMAIL</div>
+            <div>ACCIONES</div>
           </div>
-        )}
-        {admins.map((admin) => (
-          <AdminRow
-            key={admin.uuid}
-            admin={admin}
-            isCurrentUser={admin.uuid === currentUserUuid}
-          />
-        ))}
-        {admins.length === 0 && !isLoading && (
-          <p className="text-center text-text-muted py-8 text-sm">
-            No hay administradores registrados.
-          </p>
-        )}
+
+          <div className="flex flex-col relative">
+            {isLoading && currentPage > 1 && (
+              <div className="absolute inset-0 bg-surface/80 flex flex-col items-center justify-center z-10 backdrop-blur-[1px]">
+                <Loader2 className="w-6 h-6 text-brand-main animate-spin" />
+              </div>
+            )}
+            {admins.map((admin) => (
+              <AdminRow
+                key={admin.uuid}
+                admin={admin}
+                isCurrentUser={admin.uuid === currentUserUuid}
+              />
+            ))}
+            {admins.length === 0 && !isLoading && (
+              <p className="text-center text-text-muted py-8 text-sm">
+                No hay administradores registrados.
+              </p>
+            )}
+          </div>
+        </div>
       </div>
 
       <div className="flex items-center justify-between px-5 py-4 border-t border-border-primary">

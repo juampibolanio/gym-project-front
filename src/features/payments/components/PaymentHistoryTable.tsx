@@ -24,7 +24,7 @@ export function PaymentHistoryTable({ payments }: PaymentHistoryTableProps) {
             </div>
 
             <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse">
+                <table className="w-full min-w-[600px] text-left border-collapse">
                     <thead>
                         <tr className="border-b border-t border-border-primary">
                             <th className="pb-3 pt-3 text-xs font-bold text-text-muted uppercase tracking-wider">Fecha</th>

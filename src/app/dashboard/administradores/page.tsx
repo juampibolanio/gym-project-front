@@ -6,7 +6,7 @@ export default function AdministratorsPage() {
   return (
     <RoleGuard allowedRoles={['admin', 'superadmin']}>
       <div className="flex flex-col gap-6">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <h1 className="text-2xl font-bold text-text-main">
               Administradores
@@ -17,7 +17,7 @@ export default function AdministratorsPage() {
           </div>
           <Link
             href="/dashboard/administradores/nuevo"
-            className="bg-brand-main hover:bg-brand-hover text-white px-4 py-2 rounded-lg font-medium text-sm transition-colors "
+            className="bg-brand-main hover:bg-brand-hover text-white px-4 py-2 rounded-lg font-medium text-sm transition-colors text-center"
           >
             + Nuevo Admin
           </Link>

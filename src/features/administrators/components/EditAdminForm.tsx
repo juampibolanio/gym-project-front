@@ -10,7 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { userSchema } from '@/features/administrators/schemas/user.schema';
 import { useUser, useUpdateUser } from '../hooks/useUsers';
-import { FormSkeleton } from '@/common/components/ui/FormSkeleton';
+import { FormSkeleton } from '@/common/components/ui/skeletons/FormSkeleton';
 
 type EditAdminFormValues = z.infer<typeof userSchema>;
 
