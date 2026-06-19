@@ -35,3 +35,7 @@ export const configSecuritySchema = z
     message: 'Las contraseñas no coinciden',
     path: ['confirmNewPassword'],
   });
+
+export type GeneralFormValues = z.infer<typeof configGeneralSchema>;
+
+export type SecurityFormValues = z.infer<typeof configSecuritySchema>;

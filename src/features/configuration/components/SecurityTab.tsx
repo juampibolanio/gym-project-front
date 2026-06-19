@@ -1,17 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import { Save, Eye, EyeOff, Loader2 } from 'lucide-react';
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { configSecuritySchema } from '@/features/configuration/schemas/config.schema';
+import { useForm } from 'react-hook-form';
 import { useAuthStore } from '@/features/auth/store/auth.store';
 import { useChangePassword } from '@/features/administrators/hooks/useUsers';
-import { toast } from 'react-hot-toast';
+import { configSecuritySchema, SecurityFormValues } from '@/features/configuration/schemas/config.schema';
 import { InputField } from '@/common/components/ui/InputField';
-
-type SecurityFormValues = z.infer<typeof configSecuritySchema>;
+import { Save, Eye, EyeOff, Loader2 } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 
 export function SecurityTab() {
   const [showCurrentPass, setShowCurrentPass] = useState(false);
@@ -67,7 +64,7 @@ export function SecurityTab() {
           Seguridad de la Cuenta
         </h2>
         <p className="text-sm text-text-muted mb-6">
-          Gestiona tus credenciales y aumenta la seguridad de tu sistema.
+          Gestiona tus credenciales y métodos de Autenticación.
         </p>
 
         <div className="max-w-md flex flex-col gap-5">

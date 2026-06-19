@@ -1,9 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { Building, Lock } from 'lucide-react';
 import { GeneralTab } from './GeneralTab';
 import { SecurityTab } from './SecurityTab';
+import { Building, Lock } from 'lucide-react';
 
 export function ConfigurationTabs() {
   const [activeTab, setActiveTab] = useState('general');

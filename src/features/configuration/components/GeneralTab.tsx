@@ -1,19 +1,16 @@
 'use client';
 
 import { useEffect } from 'react';
-import { Save, Loader2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { configGeneralSchema } from '@/features/configuration/schemas/config.schema';
 import { useRole } from '@/features/auth/hooks/useRole';
 import { useAuthStore } from '@/features/auth/store/auth.store';
 import { useGym, useUpdateGym } from '@/features/gyms/hooks/useGyms';
-import toast from 'react-hot-toast';
-import { GeneralTabSkeleton } from './GeneralTabSkeleton';
+import { configGeneralSchema, GeneralFormValues } from '@/features/configuration/schemas/config.schema';
 import { InputField } from '@/common/components/ui/InputField';
-
-type GeneralFormValues = z.infer<typeof configGeneralSchema>;
+import { GeneralTabSkeleton } from './GeneralTabSkeleton';
+import toast from 'react-hot-toast';
+import { Save, Loader2 } from 'lucide-react';
 
 export function GeneralTab() {
   const { isAdmin } = useRole();
