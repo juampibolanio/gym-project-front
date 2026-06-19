@@ -1,10 +1,11 @@
 'use client';
-import { MemberList } from '@/features/members/components/MemberList';
-import { ChevronRight, ChevronLeft, Loader2 } from 'lucide-react';
+
 import { useState, useRef } from 'react';
-import { TableSkeleton } from '@/common/components/ui/skeletons/TableSkeleton';
-import { useMembers } from '../hook/useMembers';
 import { useSearchParams } from 'next/navigation';
+import { useMembers } from '../hooks/useMembers';
+import { MemberList } from '@/features/members/components/MemberList';
+import { TableSkeleton } from '@/common/components/ui/skeletons/TableSkeleton';
+import { ChevronRight, ChevronLeft, Loader2 } from 'lucide-react';
 
 export function MembersDirectory() {
   const [filter, setFilter] = useState<
@@ -93,7 +94,7 @@ export function MembersDirectory() {
 
       <div className="bg-surface border border-border-primary rounded-lg flex flex-col overflow-hidden">
         <div className="overflow-x-auto">
-          <div className="min-w-[1000px]">
+          <div className="min-w-250">
             <div className="grid grid-cols-[2fr_1fr_1fr_1fr_1fr_100px] items-center px-5 py-3 border-b border-border-primary text-[10px] font-bold text-text-muted tracking-widest uppercase">
               <h5>NOMBRE E ID</h5>
               <h5>ESTADO</h5>

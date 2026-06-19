@@ -1,5 +1,5 @@
-import { PaginatedResult } from '@/common/interfaces/pagination.interface';
 import { httpClient } from '@/core/api/axios.adapter';
+import { PaginatedResult } from '@/common/interfaces/pagination.interface';
 import {
   CreateMemberPayload,
   Member,

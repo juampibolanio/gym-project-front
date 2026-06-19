@@ -1,22 +1,19 @@
 'use client';
 
 import { useState } from 'react';
-import { Phone, IdCard } from 'lucide-react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useCreateMember } from '@/features/members/hooks/useMembers';
+import { usePlans } from '@/features/plans/hooks/usePlans';
+import { createMemberSchema, MemberFormValues } from '@/features/members/schemas/createMember.schema';
 import { InputField } from '@/common/components/ui/InputField';
 import { TextareaField } from '@/common/components/ui/TextareaField';
 import { SelectField } from '@/common/components/ui/SelectField';
-import Link from 'next/link';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { createMemberSchema } from '@/features/members/schemas/createMember.schema';
-import { useCreateMember } from '@/features/members/hook/useMembers';
-import { usePlans } from '@/features/plans/hooks/usePlans';
-import { useRouter } from 'next/navigation';
 import { Modal } from '@/common/components/ui/Modal';
 import { PaymentForm } from '@/features/payments/components/PaymentForm';
-
-type MemberFormValues = z.infer<typeof createMemberSchema>;
+import { Phone, IdCard } from 'lucide-react';
 
 export function NewMemberForm() {
   const router = useRouter();

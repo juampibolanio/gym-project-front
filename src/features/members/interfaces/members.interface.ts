@@ -41,4 +41,29 @@ export interface CreateMemberPayload {
   planUuid: string;
 }
 
+export interface MemberListProps {
+  name: string;
+  memberID: string;
+  uuid: string;
+  status: 'Activo' | 'Vencido' | 'Inactivo' | string;
+  phoneNumber: string;
+  observations: string;
+  birthdate: string;
+}
+
+export interface MemberProfileCardProps {
+  member: {
+    uuid: string;
+    name: string;
+    surname: string;
+    birthDate: string;
+    phoneNumber?: string;
+    observations?: string;
+    state?: string;
+  };
+  displayStatus: string;
+  safeStatusStyles: string;
+  defaultAmount: number;
+}
+
 export type UpdateMemberPayload = Partial<CreateMemberPayload>;

@@ -37,3 +37,5 @@ export const createMemberSchema = z.object({
     .or(z.literal('')),
   planUuid: z.string().min(1, 'El plan de membresía es obligatorio'),
 });
+
+export type MemberFormValues = z.infer<typeof createMemberSchema>;

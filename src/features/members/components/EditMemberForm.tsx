@@ -1,20 +1,17 @@
 'use client';
 
-import { Phone, IdCard, Loader2 } from 'lucide-react';
+import { useEffect } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { usePlans } from '@/features/plans/hooks/usePlans';
+import { useUpdateMember, useMember } from '@/features/members/hooks/useMembers';
+import { EditMemberFormValues, editMemberSchema } from '@/features/members/schemas/editMember.schema';
 import { InputField } from '@/common/components/ui/InputField';
 import { SelectField } from '@/common/components/ui/SelectField';
 import { TextareaField } from '@/common/components/ui/TextareaField';
-import Link from 'next/link';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { editMemberSchema } from '@/features/members/schemas/editMember.schema';
-import { useUpdateMember, useMember } from '@/features/members/hook/useMembers';
-import { usePlans } from '@/features/plans/hooks/usePlans';
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
-
-type EditMemberFormValues = z.infer<typeof editMemberSchema>;
+import { Phone, IdCard, Loader2 } from 'lucide-react';
 
 export function EditMemberForm({ id }: { id: string }) {
   const router = useRouter();

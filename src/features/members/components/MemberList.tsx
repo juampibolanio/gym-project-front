@@ -1,19 +1,11 @@
 'use client';
-import * as React from 'react';
-import { MoreHorizontal, Edit, Eye } from 'lucide-react';
+
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
+import { MemberListProps } from '../interfaces/members.interface';
+import { statusStyles, dotStyles, statusTranslations } from '../constants/member-styles-ui.constants';
 import { DeleteMemberButton } from './DeleteMemberButton';
-
-interface MemberListProps {
-  name: string;
-  memberID: string;
-  uuid: string;
-  status: 'Activo' | 'Vencido' | 'Inactivo' | string;
-  phoneNumber: string;
-  observations: string;
-  birthdate: string;
-}
+import { MoreHorizontal, Edit, Eye } from 'lucide-react';
 
 export function MemberList({
   name,
@@ -26,36 +18,6 @@ export function MemberList({
 }: MemberListProps) {
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-
-  const statusTranslations: Record<string, string> = {
-    ACTIVE: 'Activo',
-    INACTIVE: 'Inactivo',
-    SUSPENDED: 'Suspendido',
-    Activo: 'Activo',
-    Vencido: 'Vencido',
-    Inactivo: 'Inactivo',
-    Suspendido: 'Suspendido',
-  };
-
-  const statusStyles: Record<string, string> = {
-    ACTIVE: 'bg-success-surface text-success-main border-success-main/30',
-    SUSPENDED: 'bg-warning-surface text-warning-main border-warning-main/30',
-    INACTIVE: 'bg-surface-hover text-text-muted border-border-primary',
-    Activo: 'bg-success-surface text-success-main border-success-main/30',
-    Vencido: 'bg-warning-surface text-warning-main border-warning-main/30',
-    Inactivo: 'bg-surface-hover text-text-muted border-border-primary',
-    Suspendido: 'bg-warning-surface text-warning-main border-warning-main/30',
-  };
-
-  const dotStyles: Record<string, string> = {
-    ACTIVE: 'bg-success-main',
-    SUSPENDED: 'bg-warning-main',
-    INACTIVE: 'bg-text-muted',
-    Activo: 'bg-success-main',
-    Vencido: 'bg-warning-main',
-    Inactivo: 'bg-text-muted',
-    Suspendido: 'bg-warning-main',
-  };
 
   const safeStatusStyles = statusStyles[status] || statusStyles['INACTIVE'];
   const safeDotStyles = dotStyles[status] || dotStyles['INACTIVE'];
@@ -112,7 +74,7 @@ export function MemberList({
       </div>
 
       <div>
-        <p className="text-sm font-light text-text-main truncate max-w-[120px]">
+        <p className="text-sm font-light text-text-main truncate max-w-30">
           {observations || '-'}
         </p>
       </div>

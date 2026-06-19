@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { ArrowLeft, Award, Loader2 } from 'lucide-react';
-import { useMember } from '@/features/members/hook/useMembers';
+import { useMember } from '@/features/members/hooks/useMembers';
 import { PaymentHistoryTable } from '@/features/payments/components/PaymentHistoryTable';
 import { MemberProfileCard } from '@/features/members/components/MemberProfileCard';
 import { use } from 'react';

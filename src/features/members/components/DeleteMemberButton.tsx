@@ -1,15 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { Loader2, Trash2, AlertTriangle } from 'lucide-react';
+import { useDeleteMember } from '@/features/members/hooks/useMembers';
 import { Modal } from '@/common/components/ui/Modal';
-import { useDeleteMember } from '@/features/members/hook/useMembers';
-
-interface DeleteMemberButtonProps {
-  uuid: string;
-  name: string;
-  onDeleted: () => void;
-}
+import { DeleteMemberButtonProps } from '../interfaces/delete-member-button.interface';
+import { Loader2, Trash2, AlertTriangle } from 'lucide-react';
 
 export function DeleteMemberButton({
   uuid,

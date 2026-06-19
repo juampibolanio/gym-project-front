@@ -1,21 +1,7 @@
 import Link from 'next/link';
-import { Pencil, User } from 'lucide-react';
+import { MemberProfileCardProps } from '../interfaces/members.interface';
 import RegisterPaymentButton from '@/features/payments/components/RegisterPaymentButton';
-
-interface MemberProfileCardProps {
-  member: {
-    uuid: string;
-    name: string;
-    surname: string;
-    birthDate: string;
-    phoneNumber?: string;
-    observations?: string;
-    state?: string;
-  };
-  displayStatus: string;
-  safeStatusStyles: string;
-  defaultAmount: number;
-}
+import { Pencil, User } from 'lucide-react';
 
 export function MemberProfileCard({
   member,
