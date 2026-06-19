@@ -58,7 +58,7 @@ export function LoginForm() {
         icon={<Lock className="text-text-muted transition-colors" size={16} />}
         labelRightElement={
           <Link
-            href="/forgot-password"
+            href="/recuperar-contrasenia"
             className="text-[10px] font-bold text-text-muted hover:text-text-main transition-colors"
           >
             Has olvidado la contraseña?
