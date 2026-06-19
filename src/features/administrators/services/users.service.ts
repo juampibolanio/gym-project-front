@@ -1,3 +1,4 @@
+import { httpClient } from '@/core/api/axios.adapter';
 import { PaginatedResult } from '@/common/interfaces/pagination.interface';
 import {
   ChangePasswordPayload,
@@ -5,7 +6,6 @@ import {
   UpdateUserPayload,
   User,
 } from '../interfaces/user.interface';
-import { httpClient } from '@/core/api/axios.adapter';
 
 export class UsersService {
   private static readonly ENDPOINT = '/users';

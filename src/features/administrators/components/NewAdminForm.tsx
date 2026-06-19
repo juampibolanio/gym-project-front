@@ -4,14 +4,13 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-
 import {
   createUserSchema,
   CreateUserFormValues,
 } from '@/features/administrators/schemas/user.schema';
 import { useCreateUser } from '../hooks/useUsers';
-import { Loader2 } from 'lucide-react';
 import { InputField } from '@/common/components/ui/InputField';
+import { Loader2 } from 'lucide-react';
 
 export function NewAdminForm() {
   const router = useRouter();

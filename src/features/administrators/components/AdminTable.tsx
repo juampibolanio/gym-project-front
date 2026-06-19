@@ -1,12 +1,12 @@
 'use client';
 
-import { ChevronRight, ChevronLeft, Loader2, AlertCircle } from 'lucide-react';
-import { useUsers } from '../hooks/useUsers';
-import { useAuthStore } from '@/features/auth/store/auth.store';
-import { AdminRow } from './AdminRow';
 import { useState, useRef } from 'react';
-import { TableSkeleton } from '@/common/components/ui/skeletons/TableSkeleton';
 import { useSearchParams } from 'next/navigation';
+import { useAuthStore } from '@/features/auth/store/auth.store';
+import { useUsers } from '../hooks/useUsers';
+import { AdminRow } from './AdminRow';
+import { TableSkeleton } from '@/common/components/ui/skeletons/TableSkeleton';
+import { ChevronRight, ChevronLeft, Loader2, AlertCircle } from 'lucide-react';
 
 export function AdminTable() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -53,7 +53,7 @@ export function AdminTable() {
   return (
     <div className="bg-surface border border-border-primary rounded-lg flex flex-col relative">
       <div className="overflow-x-auto">
-        <div className="min-w-[800px]">
+        <div className="min-w-200">
           <div className="grid grid-cols-[2fr_1fr_2fr_100px] px-5 py-4 border-b border-border-primary text-[10px] font-bold text-text-muted tracking-widest uppercase">
             <div>ADMINISTRADOR E ID</div>
             <div>ROL</div>

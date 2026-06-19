@@ -1,15 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { Loader2, Trash2 } from 'lucide-react';
-import { Modal } from '@/common/components/ui/Modal';
 import { useDeleteUser } from '../hooks/useUsers';
-import { User } from '../interfaces/user.interface';
-
-interface DeleteAdminButtonProps {
-  admin: User;
-  onDeleted: () => void;
-}
+import { DeleteAdminButtonProps } from '../interfaces/delete-admin-button.interface';
+import { Modal } from '@/common/components/ui/Modal';
+import { Loader2, Trash2 } from 'lucide-react';
 
 export function DeleteAdminButton({
   admin,

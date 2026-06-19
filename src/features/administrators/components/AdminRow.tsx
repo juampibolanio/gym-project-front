@@ -1,15 +1,10 @@
 'use client';
 
-import { MoreHorizontal, Edit, ShieldAlert } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
-import { User } from '../interfaces/user.interface';
+import { AdminRowProps } from '../interfaces/admin-row.interface';
 import { DeleteAdminButton } from './DeleteAdminButton';
-
-interface AdminRowProps {
-  admin: User;
-  isCurrentUser: boolean;
-}
+import { MoreHorizontal, Edit, ShieldAlert } from 'lucide-react';
 
 export function AdminRow({ admin, isCurrentUser }: AdminRowProps) {
   const [showDropdown, setShowDropdown] = useState(false);

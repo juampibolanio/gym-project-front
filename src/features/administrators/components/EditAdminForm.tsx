@@ -1,18 +1,15 @@
 'use client';
 
 import { useEffect } from 'react';
-import { Mail, Loader2, CreditCard, ShieldCheck } from 'lucide-react';
-import { InputField } from '@/common/components/ui/InputField';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { userSchema } from '@/features/administrators/schemas/user.schema';
+import { useForm } from 'react-hook-form';
 import { useUser, useUpdateUser } from '../hooks/useUsers';
+import { EditAdminFormValues, userSchema } from '@/features/administrators/schemas/user.schema';
+import { InputField } from '@/common/components/ui/InputField';
 import { FormSkeleton } from '@/common/components/ui/skeletons/FormSkeleton';
-
-type EditAdminFormValues = z.infer<typeof userSchema>;
+import { Mail, Loader2, CreditCard, ShieldCheck } from 'lucide-react';
 
 export function EditAdminForm({ id }: { id: string }) {
   const router = useRouter();
