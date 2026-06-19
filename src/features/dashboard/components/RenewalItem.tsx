@@ -19,7 +19,7 @@ export function RenewalItem({
 }: RenewalItemProps) {
   
   const borderClass = hasBorder ? "border-b border-border-primary" : "";
-  const daysColorClass = isUrgent ? "text-red-500" : "text-text-muted";
+  const daysColorClass = isUrgent ? "text-danger-main" : "text-text-muted";
 
   return (
     <div className={`flex items-center justify-between px-5 py-4 hover:bg-surface-hover transition-colors cursor-pointer ${borderClass}`}>

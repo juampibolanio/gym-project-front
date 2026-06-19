@@ -36,7 +36,7 @@ export default async function AdminDetailPage({
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start max-w-7xl mx-auto p-4 mt-4">
 
-                <div className="lg:col-span-1 bg-surface border border-border-primary rounded-lg p-6 flex flex-col shadow-sm dark:shadow-none transition-colors">
+                <div className="lg:col-span-1 bg-surface border border-border-primary rounded-lg p-6 flex flex-col  transition-colors">
                     <div className="flex justify-between items-center mb-4">
                         <span className="text-sm font-bold text-text-main">Perfil del Admin</span>
                         {admin.status === 'activo' ? (
@@ -70,7 +70,7 @@ export default async function AdminDetailPage({
                     </div>
 
                     <div className="flex flex-col gap-3 mt-8 pt-6 border-t border-border-primary">
-                        <Link href={`/dashboard/administradores/${admin.id}/editar`} className="w-full py-2.5 bg-transparent border border-border-primary hover:bg-surface-hover text-text-main font-medium text-sm transition-colors rounded-sm shadow-sm dark:shadow-none flex items-center justify-center gap-2">
+                        <Link href={`/dashboard/administradores/${admin.id}/editar`} className="w-full py-2.5 bg-transparent border border-border-primary hover:bg-surface-hover text-text-main font-medium text-sm transition-colors rounded-sm  flex items-center justify-center gap-2">
                             <Pencil size={16} /> Editar datos
                         </Link>
                     </div>
@@ -78,7 +78,7 @@ export default async function AdminDetailPage({
 
                 <div className="lg:col-span-2 flex flex-col gap-6">
 
-                    <div className="bg-surface border border-border-primary shadow-sm dark:shadow-none rounded-lg p-6 flex justify-between items-center transition-colors">
+                    <div className="bg-surface border border-border-primary  rounded-lg p-6 flex justify-between items-center transition-colors">
                         <div className="flex flex-col gap-1">
                             <span className="text-xs text-text-muted font-bold uppercase tracking-wider">Rol Asignado</span>
                             <div className="flex items-center gap-2 mt-1">
@@ -87,7 +87,7 @@ export default async function AdminDetailPage({
                         </div>
                     </div>
 
-                    <div className="bg-surface border border-border-primary shadow-sm dark:shadow-none rounded-lg p-6 flex flex-col transition-colors">
+                    <div className="bg-surface border border-border-primary  rounded-lg p-6 flex flex-col transition-colors">
                         <div className="flex flex-col gap-1">
                             <span className="text-xs text-text-muted font-bold uppercase tracking-wider">Notas Internas</span>
                             <p className="text-sm text-text-main mt-2 leading-relaxed">

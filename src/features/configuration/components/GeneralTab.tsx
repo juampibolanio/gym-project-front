@@ -83,9 +83,9 @@ export function GeneralTab() {
               type="text" 
               disabled={!isAdmin || isProcessing}
               {...register('nombreGimnasio')}
-              className={`w-full px-4 py-2.5 bg-background border ${errors.nombreGimnasio ? 'border-red-500' : 'border-border-primary'} rounded-md text-sm text-text-main focus:outline-none focus:border-brand-main focus:ring-1 focus:ring-brand-main transition-colors disabled:opacity-70 disabled:cursor-not-allowed`}
+              className={`w-full px-4 py-2.5 bg-background border ${errors.nombreGimnasio ? 'border-danger-main' : 'border-border-primary'} rounded-md text-sm text-text-main focus:outline-none focus:border-brand-main focus:ring-1 focus:ring-brand-main transition-colors disabled:opacity-70 disabled:cursor-not-allowed`}
             />
-            {errors.nombreGimnasio && <p className="text-xs text-red-500">{errors.nombreGimnasio.message}</p>}
+            {errors.nombreGimnasio && <p className="text-xs text-danger-main">{errors.nombreGimnasio.message}</p>}
           </div>
 
           <div className="flex flex-col gap-2">
@@ -94,9 +94,9 @@ export function GeneralTab() {
               type="text" 
               disabled={!isAdmin || isProcessing}
               {...register('telefono')}
-              className={`w-full px-4 py-2.5 bg-background border ${errors.telefono ? 'border-red-500' : 'border-border-primary'} rounded-md text-sm text-text-main focus:outline-none focus:border-brand-main transition-colors disabled:opacity-70 disabled:cursor-not-allowed`}
+              className={`w-full px-4 py-2.5 bg-background border ${errors.telefono ? 'border-danger-main' : 'border-border-primary'} rounded-md text-sm text-text-main focus:outline-none focus:border-brand-main transition-colors disabled:opacity-70 disabled:cursor-not-allowed`}
             />
-            {errors.telefono && <p className="text-xs text-red-500">{errors.telefono.message}</p>}
+            {errors.telefono && <p className="text-xs text-danger-main">{errors.telefono.message}</p>}
           </div>
 
           <div className="flex flex-col gap-2 md:col-span-2">
@@ -105,9 +105,9 @@ export function GeneralTab() {
               type="text" 
               disabled={!isAdmin || isProcessing}
               {...register('direccion')}
-              className={`w-full px-4 py-2.5 bg-background border ${errors.direccion ? 'border-red-500' : 'border-border-primary'} rounded-md text-sm text-text-main focus:outline-none focus:border-brand-main transition-colors disabled:opacity-70 disabled:cursor-not-allowed`}
+              className={`w-full px-4 py-2.5 bg-background border ${errors.direccion ? 'border-danger-main' : 'border-border-primary'} rounded-md text-sm text-text-main focus:outline-none focus:border-brand-main transition-colors disabled:opacity-70 disabled:cursor-not-allowed`}
             />
-            {errors.direccion && <p className="text-xs text-red-500">{errors.direccion.message}</p>}
+            {errors.direccion && <p className="text-xs text-danger-main">{errors.direccion.message}</p>}
           </div>
         </div>
         
@@ -116,7 +116,7 @@ export function GeneralTab() {
             <button 
               type="submit" 
               disabled={isProcessing}
-              className="flex items-center justify-center gap-2 px-6 py-2.5 bg-brand-main hover:bg-brand-hover text-white rounded-sm font-medium text-sm transition-colors shadow-sm disabled:opacity-50 cursor-pointer"
+              className="flex items-center justify-center gap-2 px-6 py-2.5 bg-brand-main hover:bg-brand-hover text-white rounded-sm font-medium text-sm transition-colors  disabled:opacity-50 cursor-pointer"
             >
               {isUpdating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save size={16} />}
               <span>{isUpdating ? 'Guardando...' : 'Guardar Cambios'}</span>

@@ -69,7 +69,7 @@ export default function MemberDetailPage({
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start max-w-7xl mx-auto p-4">
 
-                <div className="lg:col-span-1 bg-surface border border-border-primary shadow-sm dark:shadow-none rounded-lg p-6 flex flex-col transition-colors">
+                <div className="lg:col-span-1 bg-surface border border-border-primary  rounded-lg p-6 flex flex-col transition-colors">
                     <div className="flex justify-between items-center mb-4">
                         <span className="text-sm font-bold text-text-main">Perfil del Miembro</span>
                         <span className={`px-2.5 py-1 rounded-md border text-[10px] font-bold tracking-widest uppercase ${safeStatusStyles}`}>
@@ -100,7 +100,7 @@ export default function MemberDetailPage({
 
                     <div className="flex flex-col gap-3 mt-8 pt-6 border-t border-border-primary">
                         <RegisterPaymentButton memberName={member.name} memberSurname={member.surname} uuid={member.uuid} />
-                        <Link href={`/dashboard/miembros/${member.uuid}/editar`} className="w-full py-2.5 bg-transparent border border-border-primary hover:bg-surface-hover text-text-main font-medium text-sm transition-colors rounded-sm shadow-sm dark:shadow-none flex items-center justify-center gap-2">
+                        <Link href={`/dashboard/miembros/${member.uuid}/editar`} className="w-full py-2.5 bg-transparent border border-border-primary hover:bg-surface-hover text-text-main font-medium text-sm transition-colors rounded-sm  flex items-center justify-center gap-2">
                             <Pencil size={16} /> Editar datos
                         </Link>
                     </div>
@@ -108,7 +108,7 @@ export default function MemberDetailPage({
 
                 <div className="lg:col-span-2 flex flex-col gap-6">
 
-                    <div className="bg-surface border border-border-primary shadow-sm dark:shadow-none rounded-lg p-6 flex items-center transition-colors">
+                    <div className="bg-surface border border-border-primary  rounded-lg p-6 flex items-center transition-colors">
                         <div className="flex flex-col gap-1">
                             <span className="text-xs text-text-muted font-bold uppercase tracking-wider">Plan Actual</span>
                             <div className="flex items-center gap-2 mt-1">
@@ -119,7 +119,7 @@ export default function MemberDetailPage({
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="bg-surface border border-border-primary shadow-sm dark:shadow-none rounded-lg p-6 flex flex-col justify-center gap-4 transition-colors">
+                        <div className="bg-surface border border-border-primary  rounded-lg p-6 flex flex-col justify-center gap-4 transition-colors">
                             <div className="flex justify-between items-end">
                                 <span className="text-xs text-text-muted font-bold uppercase tracking-wider">Tiempo Restante</span>
                                 <span className="text-sm text-text-main font-bold">-</span>
@@ -129,13 +129,13 @@ export default function MemberDetailPage({
                             </div>
                         </div>
 
-                        <div className="bg-surface border border-border-primary shadow-sm dark:shadow-none rounded-lg p-6 flex flex-col justify-center gap-2 transition-colors">
+                        <div className="bg-surface border border-border-primary  rounded-lg p-6 flex flex-col justify-center gap-2 transition-colors">
                             <span className="text-xs text-text-muted font-bold uppercase tracking-wider">Próximo Vencimiento</span>
                             <span className="text-xl font-bold text-text-main">-</span>
                         </div>
                     </div>
 
-                    <div className="bg-surface border border-border-primary shadow-sm dark:shadow-none rounded-lg p-6 overflow-hidden flex flex-col transition-colors">
+                    <div className="bg-surface border border-border-primary  rounded-lg p-6 overflow-hidden flex flex-col transition-colors">
                         <div className="flex justify-between items-center mb-6">
                             <h3 className="text-sm font-bold text-text-main uppercase tracking-wider">Historial de Pagos (Próximamente)</h3>
                             <Filter size={18} className="text-text-muted cursor-pointer hover:text-text-main transition-colors" />

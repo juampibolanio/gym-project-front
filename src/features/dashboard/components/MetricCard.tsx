@@ -18,7 +18,7 @@ export function MetricCard({
   trendColor = 'text-brand-main' 
 }: MetricCardProps) {
   return (
-    <div className="bg-surface rounded-lg p-5 border border-border-primary shadow-sm dark:shadow-none transition-colors">
+    <div className="bg-surface rounded-lg p-5 border border-border-primary  transition-colors">
       <div className="flex justify-between items-center mb-4">
         <span className="text-[10px] font-bold text-text-muted tracking-wider uppercase">
           {title}

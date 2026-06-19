@@ -27,7 +27,7 @@ export function ConfigurationTabs() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 cursor-pointer ${
                   isActive 
-                    ? 'bg-brand-surface text-brand-main shadow-sm' 
+                    ? 'bg-brand-surface text-brand-main ' 
                     : 'text-text-muted hover:bg-surface hover:text-text-main'
                 }`}
               >
@@ -38,7 +38,7 @@ export function ConfigurationTabs() {
           })}
         </div>
 
-        <div className="flex-1 bg-surface border border-border-primary rounded-xl shadow-sm dark:shadow-none transition-colors overflow-hidden">
+        <div className="flex-1 bg-surface border border-border-primary rounded-xl  transition-colors overflow-hidden">
           {activeTab === 'general' && <GeneralTab />}
           {activeTab === 'seguridad' && <SecurityTab />}
         </div>

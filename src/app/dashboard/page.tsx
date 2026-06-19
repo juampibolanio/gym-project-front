@@ -44,10 +44,10 @@ export default function DashboardPage() {
         <MetricCard 
           title="Cuentas Vencidas"
           value="42"
-          icon={<AlertTriangle size={16} className="text-red-500 transition-colors" />}
+          icon={<AlertTriangle size={16} className="text-danger-main transition-colors" />}
           trendText="Requiere atención"
           trendIcon={<TrendingUp size={12} className="rotate-180 transform" />}
-          trendColor="text-red-500"
+          trendColor="text-danger-main"
         />
 
         <MetricCard 
@@ -62,12 +62,12 @@ export default function DashboardPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
-        <div className="lg:col-span-2 bg-surface border border-border-primary shadow-sm dark:shadow-none rounded-lg flex flex-col transition-colors overflow-hidden">
+        <div className="lg:col-span-2 bg-surface border border-border-primary  rounded-lg flex flex-col transition-colors overflow-hidden">
           <div className="flex items-center justify-between p-5 border-b border-border-primary">
             <h2 className="text-sm font-bold text-text-main transition-colors">Trayectoria de ingresos Semanales</h2>
             <div className="flex bg-background rounded text-xs font-medium transition-colors p-1">
               <button className="px-3 py-1 text-text-muted hover:text-text-main transition-colors">7D</button>
-              <button className="px-3 py-1 bg-surface text-text-main rounded shadow-sm dark:shadow-none transition-colors border border-border-primary">30D</button>
+              <button className="px-3 py-1 bg-surface text-text-main rounded  transition-colors border border-border-primary">30D</button>
               <button className="px-3 py-1 text-text-muted hover:text-text-main transition-colors">90D</button>
             </div>
           </div>
@@ -77,7 +77,7 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <div className="bg-surface border border-border-primary shadow-sm dark:shadow-none rounded-lg flex flex-col transition-colors overflow-hidden">
+        <div className="bg-surface border border-border-primary  rounded-lg flex flex-col transition-colors overflow-hidden">
           <div className="flex items-center justify-between p-5 border-b border-border-primary">
             <h2 className="text-sm font-bold text-text-main transition-colors">Próximos Vencimientos</h2>
           </div>
