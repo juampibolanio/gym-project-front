@@ -9,15 +9,19 @@ import {
   TrendingUp,
   Clock,
   Calendar,
+  Eye,
+  EyeOff,
 } from 'lucide-react';
 import { MetricCard } from '@/features/dashboard/components/MetricCard';
 import { RenewalItem } from '@/features/dashboard/components/RenewalItem';
 import { useDashboardMetrics } from '@/features/dashboard/hooks/useDashboard';
 import { DashboardSkeleton } from '@/common/components/ui/skeletons/DashboardSkeleton';
+import { RevenueChart } from '@/features/dashboard/components/RevenueChart';
 
 export default function DashboardPage() {
   const { data: metrics, isLoading, isError } = useDashboardMetrics();
   const [currentTime, setCurrentTime] = useState<string>('');
+  const [isRevenueVisible, setIsRevenueVisible] = useState(true);
 
   useEffect(() => {
     setCurrentTime(new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }));
@@ -84,13 +88,22 @@ export default function DashboardPage() {
 
         <MetricCard
           title="Ingresos Mensuales"
-          value={`$${metrics.monthlyRevenue.total.toLocaleString('es-AR')}`}
+          value={isRevenueVisible ? `$${metrics.monthlyRevenue.total.toLocaleString('es-AR')}` : '****'}
           icon={
             <Wallet size={16} className="text-brand-main transition-colors" />
           }
           trendText={getTrendText(metrics.monthlyRevenue.trend || 0, 'vs último mes')}
           trendIcon={<TrendingUp size={12} className={metrics.monthlyRevenue.trend && metrics.monthlyRevenue.trend < 0 ? 'rotate-180 transform' : ''} />}
           trendColor={getTrendColor(metrics.monthlyRevenue.trend || 0)}
+          action={
+            <button
+              onClick={() => setIsRevenueVisible(!isRevenueVisible)}
+              className="text-text-muted hover:text-text-main transition-colors ml-2"
+              title={isRevenueVisible ? "Ocultar ingresos" : "Mostrar ingresos"}
+            >
+              {isRevenueVisible ? <EyeOff size={14} /> : <Eye size={14} />}
+            </button>
+          }
         />
 
         <MetricCard
@@ -120,29 +133,17 @@ export default function DashboardPage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 bg-surface border border-border-primary  rounded-lg flex flex-col transition-colors overflow-hidden">
-          <div className="flex items-center justify-between p-5 border-b border-border-primary">
-            <h2 className="text-sm font-bold text-text-main transition-colors">
-              Trayectoria de ingresos Semanales
-            </h2>
-            <div className="flex bg-background rounded text-xs font-medium transition-colors p-1">
-              <button className="px-3 py-1 text-text-muted hover:text-text-main transition-colors">
-                7D
-              </button>
-              <button className="px-3 py-1 bg-surface text-text-main rounded  transition-colors border border-border-primary">
-                30D
-              </button>
-              <button className="px-3 py-1 text-text-muted hover:text-text-main transition-colors">
-                90D
-              </button>
+        <div className="lg:col-span-2 relative flex flex-col h-full">
+          <div className={`flex-1 h-full ${!isRevenueVisible ? 'filter blur-md select-none transition-all duration-300 opacity-50 pointer-events-none' : 'transition-all duration-300'}`}>
+            <RevenueChart data={metrics.revenueTrajectory || []} />
+          </div>
+          {!isRevenueVisible && (
+            <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
+              <span className="bg-background/80 border border-border-primary px-4 py-2 rounded-full text-sm font-bold text-text-main flex items-center gap-2 backdrop-blur-md shadow-lg">
+                <EyeOff size={16} /> Gráfico Oculto
+              </span>
             </div>
-          </div>
-
-          <div className="flex-1 p-5 min-h-[300px] flex items-center justify-center">
-            <p className="text-text-muted text-sm italic">
-              Espacio reservado para ECharts...
-            </p>
-          </div>
+          )}
         </div>
 
         <div className="bg-surface border border-border-primary  rounded-lg flex flex-col transition-colors overflow-hidden">

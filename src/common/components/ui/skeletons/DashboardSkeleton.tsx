@@ -1,7 +1,6 @@
 export function DashboardSkeleton() {
   return (
     <div className="flex flex-col gap-6 animate-pulse">
-      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <div className="h-8 w-48 bg-surface border border-border-primary rounded"></div>
@@ -25,24 +24,21 @@ export function DashboardSkeleton() {
           </div>
         ))}
       </div>
-
-      {/* Main Content Area */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Chart Area */}
-        <div className="lg:col-span-2 bg-surface border border-border-primary rounded-lg flex flex-col h-[400px]">
-          <div className="flex items-center justify-between p-5 border-b border-border-primary">
-            <div className="h-5 w-48 bg-border-primary/50 rounded"></div>
-            <div className="h-6 w-32 bg-border-primary/30 rounded"></div>
+        <div className="lg:col-span-2 bg-surface border border-border-primary rounded-xl p-6 flex flex-col h-full min-h-[400px]">
+          <div className="mb-4">
+            <div className="h-6 w-56 bg-border-primary/50 rounded mb-2"></div>
+            <div className="h-4 w-72 bg-border-primary/30 rounded"></div>
           </div>
-          <div className="flex-1 p-5 flex items-end gap-2 justify-center opacity-30">
-             {/* Fake Bars */}
-            {[40, 70, 30, 80, 50, 90, 60].map((height, idx) => (
-              <div key={idx} className="w-12 bg-border-primary rounded-t" style={{ height: `${height}%` }}></div>
-            ))}
+          <div className="flex-1 mt-4 flex items-end justify-between opacity-30 relative overflow-hidden">
+             <div className="absolute bottom-0 left-0 right-0 h-[200px] bg-gradient-to-t from-brand-main/20 to-transparent rounded-t-full blur-xl"></div>
+             
+             <div className="absolute inset-0 flex flex-col justify-between py-4">
+                {[1,2,3,4].map(i => <div key={i} className="w-full border-t border-dashed border-border-primary"></div>)}
+             </div>
           </div>
         </div>
 
-        {/* List Area */}
         <div className="bg-surface border border-border-primary rounded-lg flex flex-col h-[400px]">
           <div className="flex items-center justify-between p-5 border-b border-border-primary">
             <div className="h-5 w-32 bg-border-primary/50 rounded"></div>
