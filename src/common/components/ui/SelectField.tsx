@@ -1,12 +1,4 @@
-import { UseFormRegisterReturn } from 'react-hook-form';
-import React from 'react';
-
-interface SelectFieldProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
-  label: string;
-  registration: UseFormRegisterReturn;
-  error?: string;
-  children: React.ReactNode;
-}
+import { SelectFieldProps } from "@/common/interfaces/select-field.interface";
 
 export function SelectField({
   label,

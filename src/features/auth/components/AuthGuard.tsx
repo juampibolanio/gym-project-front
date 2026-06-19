@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useAuthStore } from '../store/auth.store';
 import { useRouter } from 'next/navigation';
+import { useAuthStore } from '../store/auth.store';
 import { Loader2 } from 'lucide-react';
 
 export function AuthGuard({ children }: { children: React.ReactNode }) {

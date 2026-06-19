@@ -1,17 +1,17 @@
 'use client';
 
-import { Mail, Send, Loader2 } from 'lucide-react';
-import { InputField } from '@/common/components/ui/InputField';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { toast } from 'react-hot-toast';
 import { useForgotPassword } from '@/features/auth/hooks/useAuth';
+import { InputField } from '@/common/components/ui/InputField';
 import {
   ForgotPasswordFormValues,
   forgotPasswordSchema,
 } from '../schemas/forgot-password.schema';
 import { getSubdomain } from '@/common/utils/extract-subdomain';
+import { toast } from 'react-hot-toast';
+import { Mail, Send, Loader2 } from 'lucide-react';
 
 export function ForgotPasswordForm() {
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -32,7 +32,7 @@ export function ForgotPasswordForm() {
     const domain = getSubdomain();
 
     if (!domain) {
-      toast.error('No se pudo determinar el gimnasio desde la URL.');
+      toast.error('No se pudo determinar el dominio asociado al gimnasio.');
       return;
     }
 
@@ -57,8 +57,7 @@ export function ForgotPasswordForm() {
       {!isSubmitted ? (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           <p className="text-sm text-text-main text-center mb-4 transition-colors">
-            Ingresa tu dirección de email y te enviaremos las instrucciones para
-            restablecer tu contraseña.
+            Ingresa tu dirección de email y te enviaremos un correo electrónico para reestablecer la contraseña.
           </p>
 
           <InputField
@@ -82,7 +81,7 @@ export function ForgotPasswordForm() {
               <Loader2 size={16} className="animate-spin" />
             ) : (
               <>
-                <Send size={16} /> Enviar Instrucciones
+                <Send size={16} /> Enviar correo de recuperación
               </>
             )}
           </button>

@@ -1,11 +1,4 @@
-import { UseFormRegisterReturn } from 'react-hook-form';
-import React from 'react';
-
-interface TextareaFieldProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
-  label: string;
-  registration: UseFormRegisterReturn;
-  error?: string;
-}
+import { TextareaFieldProps } from "@/common/interfaces/text-area-field.interface";
 
 export function TextareaField({
   label,

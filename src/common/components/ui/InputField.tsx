@@ -1,14 +1,4 @@
-import { UseFormRegisterReturn } from 'react-hook-form';
-import React from 'react';
-
-interface InputFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  label: string;
-  registration?: UseFormRegisterReturn;
-  error?: string;
-  icon?: React.ReactNode;
-  rightElement?: React.ReactNode;
-  labelRightElement?: React.ReactNode;
-}
+import { InputFieldProps } from '@/common/interfaces/input-field.interface';
 
 export function InputField({
   label,

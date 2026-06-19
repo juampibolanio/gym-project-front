@@ -1,9 +1,9 @@
 'use client';
 
-import { Search } from 'lucide-react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useDebounce } from '@/common/hooks/useDebounce';
+import { Search } from 'lucide-react';
 
 const SEARCH_CONFIG: Record<string, { placeholder: string }> = {
   '/dashboard/miembros': { placeholder: 'Buscar miembros, IDs o planes...' },

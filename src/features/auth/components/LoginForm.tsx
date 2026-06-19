@@ -1,13 +1,14 @@
 'use client';
-import { Mail, Lock, EyeOff, Eye, Loader2 } from 'lucide-react';
-import { InputField } from '@/common/components/ui/InputField';
-import Link from 'next/link';
+
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import Link from 'next/link';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { LoginFormValues, loginSchema } from '../schemas/login.schema';
 import { useLogin } from '../hooks/useLogin';
+import { LoginFormValues, loginSchema } from '../schemas/login.schema';
+import { InputField } from '@/common/components/ui/InputField';
 import { getSubdomain } from '@/common/utils/extract-subdomain';
+import { Mail, Lock, EyeOff, Eye, Loader2 } from 'lucide-react';
 
 export function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -61,7 +62,7 @@ export function LoginForm() {
             href="/recuperar-contrasenia"
             className="text-[10px] font-bold text-text-muted hover:text-text-main transition-colors"
           >
-            Has olvidado la contraseña?
+            ¿Has olvidado la contraseña?
           </Link>
         }
         rightElement={
