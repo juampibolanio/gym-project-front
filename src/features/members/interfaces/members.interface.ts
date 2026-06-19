@@ -1,22 +1,22 @@
 export interface Member {
+    uuid: string;
     dni: string;
     name: string;
     surname: string;
-    birthdate: Date;
-    phoneNumber: string;
+    birthDate: string;
+    phoneNumber?: string;
     state: string;
-    observations: string;
+    observations?: string;
 }
 
 export interface CreateMemberPayload {
     dni: string;
     name: string;
     surname: string;
-    birthdate: Date;
-    phoneNumber: string;
-    state: string;
-    observations: string;
+    birthDate: string;
+    phoneNumber?: string;
+    state?: string;
+    observations?: string;
 }
 
 export type UpdateMemberPayload = Partial<CreateMemberPayload>;
-
