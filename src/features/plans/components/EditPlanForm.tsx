@@ -33,7 +33,7 @@ export function EditPlanForm({ id }: { id: string }) {
         if (currentPlan) {
             reset({
                 name: currentPlan.name,
-                price: currentPlan.price,
+                price: new Intl.NumberFormat('es-AR').format(currentPlan.price) as any,
                 durationDays: currentPlan.durationDays,
                 description: currentPlan.description || '',
             });
@@ -58,13 +58,13 @@ export function EditPlanForm({ id }: { id: string }) {
     };
 
     if (isFetchingPlan) return <FormSkeleton />;
-    if (!currentPlan) return <div className="text-red-500">No se pudo cargar la información del plan.</div>;
+    if (!currentPlan) return <div className="text-danger-main">No se pudo cargar la información del plan.</div>;
 
     const isProcessing = isUpdating || isDeleting;
 
     return (
         <>
-            <form onSubmit={handleSubmit(onSubmit)} className="border border-border-primary rounded-lg bg-surface flex flex-col p-6 gap-8 shadow-sm dark:shadow-none relative">
+            <form onSubmit={handleSubmit(onSubmit)} className="border border-border-primary rounded-lg bg-surface flex flex-col p-6 gap-8  relative">
                 
                 <div className="flex flex-col gap-6">
                     <h2 className="text-[15px] font-bold text-text-main">Información general</h2>
@@ -76,9 +76,9 @@ export function EditPlanForm({ id }: { id: string }) {
                                 {...register("name")} 
                                 disabled={isProcessing}
                                 placeholder="Ej: Pase Libre"
-                                className={`w-full px-4 py-2.5 bg-background border ${errors.name ? 'border-red-500' : 'border-border-primary'} rounded-md text-sm text-text-main focus:outline-none focus:border-brand-main focus:ring-1 focus:ring-brand-main transition-colors disabled:opacity-70 disabled:cursor-not-allowed`} 
+                                className={`w-full px-4 py-2.5 bg-background border ${errors.name ? 'border-danger-main' : 'border-border-primary'} rounded-md text-sm text-text-main focus:outline-none focus:border-brand-main focus:ring-1 focus:ring-brand-main transition-colors disabled:opacity-70 disabled:cursor-not-allowed`} 
                             />
-                            {errors.name && <span className="text-red-500 text-xs">{errors.name.message}</span>}
+                            {errors.name && <span className="text-danger-main text-xs">{errors.name.message}</span>}
                         </div>
 
                         <div className="flex flex-col gap-2">
@@ -86,15 +86,19 @@ export function EditPlanForm({ id }: { id: string }) {
                             <div className="relative">
                                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted">$</span>
                                 <input 
-                                    type="number" 
-                                    step="0.01"
+                                    type="text" 
                                     disabled={isProcessing}
-                                    {...register("price")} 
+                                    {...register("price", {
+                                        onChange: (e) => {
+                                            const rawValue = e.target.value.replace(/\D/g, '');
+                                            e.target.value = rawValue ? new Intl.NumberFormat('es-AR').format(Number(rawValue)) : '';
+                                        }
+                                    })} 
                                     placeholder="0.00"
-                                    className={`w-full px-4 py-2.5 pl-8 bg-background border ${errors.price ? 'border-red-500' : 'border-border-primary'} rounded-md text-sm text-text-main focus:outline-none focus:border-brand-main focus:ring-1 focus:ring-brand-main transition-colors disabled:opacity-70 disabled:cursor-not-allowed`} 
+                                    className={`w-full px-4 py-2.5 pl-8 bg-background border ${errors.price ? 'border-danger-main' : 'border-border-primary'} rounded-md text-sm text-text-main focus:outline-none focus:border-brand-main focus:ring-1 focus:ring-brand-main transition-colors disabled:opacity-70 disabled:cursor-not-allowed`} 
                                 />
                             </div>
-                            {errors.price && <span className="text-red-500 text-xs">{errors.price.message}</span>}
+                            {errors.price && <span className="text-danger-main text-xs">{errors.price.message}</span>}
                         </div>
                     </div>
                 </div>
@@ -112,9 +116,9 @@ export function EditPlanForm({ id }: { id: string }) {
                                 disabled={isProcessing}
                                 {...register("durationDays")} 
                                 placeholder="Ej: 30"
-                                className={`w-full px-4 py-2.5 bg-background border ${errors.durationDays ? 'border-red-500' : 'border-border-primary'} rounded-md text-sm text-text-main focus:outline-none focus:border-brand-main focus:ring-1 focus:ring-brand-main transition-colors disabled:opacity-70 disabled:cursor-not-allowed`} 
+                                className={`w-full px-4 py-2.5 bg-background border ${errors.durationDays ? 'border-danger-main' : 'border-border-primary'} rounded-md text-sm text-text-main focus:outline-none focus:border-brand-main focus:ring-1 focus:ring-brand-main transition-colors disabled:opacity-70 disabled:cursor-not-allowed`} 
                             />
-                            {errors.durationDays && <span className="text-red-500 text-xs">{errors.durationDays.message}</span>}
+                            {errors.durationDays && <span className="text-danger-main text-xs">{errors.durationDays.message}</span>}
                         </div>
                     </div>
 
@@ -126,9 +130,9 @@ export function EditPlanForm({ id }: { id: string }) {
                             {...register("description")} 
                             placeholder="Acceso a sala de musculación&#10;Clases grupales incluidas"
                             rows={4}
-                            className={`w-full px-4 py-2.5 bg-background border ${errors.description ? 'border-red-500' : 'border-border-primary'} rounded-md text-sm text-text-main focus:outline-none focus:border-brand-main focus:ring-1 focus:ring-brand-main transition-colors disabled:opacity-70 disabled:cursor-not-allowed resize-none`} 
+                            className={`w-full px-4 py-2.5 bg-background border ${errors.description ? 'border-danger-main' : 'border-border-primary'} rounded-md text-sm text-text-main focus:outline-none focus:border-brand-main focus:ring-1 focus:ring-brand-main transition-colors disabled:opacity-70 disabled:cursor-not-allowed resize-none`} 
                         />
-                        {errors.description && <span className="text-red-500 text-xs">{errors.description.message}</span>}
+                        {errors.description && <span className="text-danger-main text-xs">{errors.description.message}</span>}
                     </div>
                 </div>
 
@@ -138,7 +142,7 @@ export function EditPlanForm({ id }: { id: string }) {
                         type="button" 
                         onClick={() => setIsDeleteModalOpen(true)}
                         disabled={isProcessing}
-                        className="bg-transparent text-danger-main hover:bg-danger-main/10 text-sm font-medium py-2 px-4 rounded-sm flex items-center justify-center gap-2 transition-colors disabled:opacity-50 cursor-pointer"
+                        className="bg-transparent text-danger-main hover:bg-danger-surface text-sm font-medium py-2 px-4 rounded-sm flex items-center justify-center gap-2 transition-colors disabled:opacity-50 cursor-pointer"
                     >
                         <Trash2 size={16} />
                         Eliminar plan
@@ -151,7 +155,7 @@ export function EditPlanForm({ id }: { id: string }) {
                         <button 
                             type="submit" 
                             disabled={isProcessing}
-                            className="bg-brand-main hover:bg-brand-hover text-white flex items-center justify-center gap-2 px-6 py-2.5 rounded-sm font-medium text-sm transition-colors shadow-sm disabled:opacity-50 cursor-pointer"
+                            className="bg-brand-main hover:bg-brand-hover text-white flex items-center justify-center gap-2 px-6 py-2.5 rounded-sm font-medium text-sm transition-colors  disabled:opacity-50 cursor-pointer"
                         >
                             {isUpdating ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Guardar cambios'}
                         </button>
@@ -165,7 +169,7 @@ export function EditPlanForm({ id }: { id: string }) {
                 title="Eliminar Plan"
             >
                 <div className="flex flex-col gap-4">
-                    <div className="flex items-center gap-3 text-red-500 bg-red-500/10 p-3 rounded border border-red-500/20">
+                    <div className="flex items-center gap-3 text-danger-main bg-danger-surface p-3 rounded border border-danger-main">
                         <AlertTriangle size={24} className="shrink-0" />
                         <p className="text-sm">Esta acción no se puede deshacer. Los socios que actualmente tienen este plan no lo perderán, pero ya no estará disponible para nuevas ventas.</p>
                     </div>
@@ -176,14 +180,14 @@ export function EditPlanForm({ id }: { id: string }) {
                         <button 
                             onClick={() => setIsDeleteModalOpen(false)}
                             disabled={isDeleting}
-                            className="px-4 py-2 text-sm font-medium text-text-main border border-zinc-700 hover:bg-zinc-800 transition-colors rounded cursor-pointer"
+                            className="px-4 py-2 text-sm font-medium text-text-main border border-border-primary hover:bg-surface-hover transition-colors rounded cursor-pointer"
                         >
                             Cancelar
                         </button>
                         <button 
                             onClick={confirmDelete}
                             disabled={isDeleting}
-                            className="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 transition-colors rounded flex items-center gap-2 cursor-pointer"
+                            className="px-4 py-2 text-sm font-medium text-white bg-danger-main hover:bg-danger-hover transition-colors rounded flex items-center gap-2 cursor-pointer"
                         >
                             {isDeleting ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Sí, eliminar plan'}
                         </button>

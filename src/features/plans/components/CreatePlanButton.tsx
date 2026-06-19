@@ -11,7 +11,7 @@ export default function CreatePlanButton() {
       {isAdmin && (
         <Link
           href="/dashboard/planes/nuevo"
-          className="bg-brand-main hover:bg-brand-hover text-white px-4 py-2 rounded-lg font-medium text-sm transition-colors shadow-sm"
+          className="bg-brand-main hover:bg-brand-hover text-white px-4 py-2 rounded-lg font-medium text-sm transition-colors "
         >
           + Nuevo Plan
         </Link>

@@ -36,7 +36,7 @@ export function NewPlanForm() {
     };
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="border border-border-primary rounded-lg bg-surface flex flex-col p-6 gap-8 shadow-sm dark:shadow-none">
+        <form onSubmit={handleSubmit(onSubmit)} className="border border-border-primary rounded-lg bg-surface flex flex-col p-6 gap-8 ">
                 
                 <div className="flex flex-col gap-6">
                     <h2 className="text-[15px] font-bold text-text-main">Información general</h2>
@@ -48,9 +48,9 @@ export function NewPlanForm() {
                                 {...register("name")} 
                                 disabled={isPending}
                                 placeholder="Ej: Pase Libre Mensual"
-                                className={`w-full px-4 py-2.5 bg-background border ${errors.name ? 'border-red-500' : 'border-border-primary'} rounded-md text-sm text-text-main focus:outline-none focus:border-brand-main focus:ring-1 focus:ring-brand-main transition-colors disabled:opacity-70 disabled:cursor-not-allowed`} 
+                                className={`w-full px-4 py-2.5 bg-background border ${errors.name ? 'border-danger-main' : 'border-border-primary'} rounded-md text-sm text-text-main focus:outline-none focus:border-brand-main focus:ring-1 focus:ring-brand-main transition-colors disabled:opacity-70 disabled:cursor-not-allowed`} 
                             />
-                            {errors.name && <span className="text-red-500 text-xs">{errors.name.message}</span>}
+                            {errors.name && <span className="text-danger-main text-xs">{errors.name.message}</span>}
                         </div>
 
                         <div className="flex flex-col gap-2">
@@ -58,15 +58,19 @@ export function NewPlanForm() {
                             <div className="relative">
                                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted">$</span>
                                 <input 
-                                    type="number" 
-                                    step="0.01"
+                                    type="text" 
                                     disabled={isPending}
-                                    {...register("price")} 
+                                    {...register("price", {
+                                        onChange: (e) => {
+                                            const rawValue = e.target.value.replace(/\D/g, '');
+                                            e.target.value = rawValue ? new Intl.NumberFormat('es-AR').format(Number(rawValue)) : '';
+                                        }
+                                    })} 
                                     placeholder="0.00"
-                                    className={`w-full px-4 py-2.5 pl-8 bg-background border ${errors.price ? 'border-red-500' : 'border-border-primary'} rounded-md text-sm text-text-main focus:outline-none focus:border-brand-main focus:ring-1 focus:ring-brand-main transition-colors disabled:opacity-70 disabled:cursor-not-allowed`} 
+                                    className={`w-full px-4 py-2.5 pl-8 bg-background border ${errors.price ? 'border-danger-main' : 'border-border-primary'} rounded-md text-sm text-text-main focus:outline-none focus:border-brand-main focus:ring-1 focus:ring-brand-main transition-colors disabled:opacity-70 disabled:cursor-not-allowed`} 
                                 />
                             </div>
-                            {errors.price && <span className="text-red-500 text-xs">{errors.price.message}</span>}
+                            {errors.price && <span className="text-danger-main text-xs">{errors.price.message}</span>}
                         </div>
                     </div>
                 </div>
@@ -84,9 +88,9 @@ export function NewPlanForm() {
                                 disabled={isPending}
                                 {...register("durationDays")} 
                                 placeholder="Ej: 30"
-                                className={`w-full px-4 py-2.5 bg-background border ${errors.durationDays ? 'border-red-500' : 'border-border-primary'} rounded-md text-sm text-text-main focus:outline-none focus:border-brand-main focus:ring-1 focus:ring-brand-main transition-colors disabled:opacity-70 disabled:cursor-not-allowed`} 
+                                className={`w-full px-4 py-2.5 bg-background border ${errors.durationDays ? 'border-danger-main' : 'border-border-primary'} rounded-md text-sm text-text-main focus:outline-none focus:border-brand-main focus:ring-1 focus:ring-brand-main transition-colors disabled:opacity-70 disabled:cursor-not-allowed`} 
                             />
-                            {errors.durationDays && <span className="text-red-500 text-xs">{errors.durationDays.message}</span>}
+                            {errors.durationDays && <span className="text-danger-main text-xs">{errors.durationDays.message}</span>}
                         </div>
                     </div>
 
@@ -98,9 +102,9 @@ export function NewPlanForm() {
                             {...register("description")} 
                             placeholder="Acceso a sala de musculación&#10;Clases grupales incluidas&#10;Duchas y vestuarios"
                             rows={4}
-                            className={`w-full px-4 py-2.5 bg-background border ${errors.description ? 'border-red-500' : 'border-border-primary'} rounded-md text-sm text-text-main focus:outline-none focus:border-brand-main focus:ring-1 focus:ring-brand-main transition-colors disabled:opacity-70 disabled:cursor-not-allowed resize-none`} 
+                            className={`w-full px-4 py-2.5 bg-background border ${errors.description ? 'border-danger-main' : 'border-border-primary'} rounded-md text-sm text-text-main focus:outline-none focus:border-brand-main focus:ring-1 focus:ring-brand-main transition-colors disabled:opacity-70 disabled:cursor-not-allowed resize-none`} 
                         />
-                        {errors.description && <span className="text-red-500 text-xs">{errors.description.message}</span>}
+                        {errors.description && <span className="text-danger-main text-xs">{errors.description.message}</span>}
                     </div>
                 </div>
 
@@ -111,7 +115,7 @@ export function NewPlanForm() {
                     <button 
                         type="submit" 
                         disabled={isPending}
-                        className="bg-brand-main hover:bg-brand-hover text-white flex items-center justify-center gap-2 px-6 py-2.5 rounded-sm font-medium text-sm transition-colors shadow-sm disabled:opacity-50 cursor-pointer"
+                        className="bg-brand-main hover:bg-brand-hover text-white flex items-center justify-center gap-2 px-6 py-2.5 rounded-sm font-medium text-sm transition-colors  disabled:opacity-50 cursor-pointer"
                     >
                         {isPending ? (
                             <>
