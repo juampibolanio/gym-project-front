@@ -10,7 +10,7 @@ export const paymentSchema = z.object({
         })
         .refine((val) => !isNaN(val) && val >= 0, { message: "El monto debe ser positivo" })
         .refine((val) => val <= 10000000, { message: "Monto excedido" }),
-    method: z.enum(["CASH", "BANK_TRANSFER"], {
+    method: z.enum(["CASH", "BANK_TRANSFER", "MERCADO_PAGO", "DEBIT_CARD", "CREDIT_CARD", "OTHER"], {
         errorMap: () => ({ message: "Selecciona un método de pago válido" }),
     }),
     date: z.string().min(1, "La fecha es obligatoria").refine((val) => {

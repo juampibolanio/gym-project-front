@@ -1,14 +1,22 @@
+export type PaymentMethod =
+    | 'CASH'
+    | 'CREDIT_CARD'
+    | 'DEBIT_CARD'
+    | 'MERCADO_PAGO'
+    | 'BANK_TRANSFER'
+    | 'OTHER';
+
 export interface Payment {
     uuid: string;
     date: string;
-    paymentMethod: 'CASH' | 'BANK_TRANSFER';
-    amountPaid: number | string;
+    paymentMethod: PaymentMethod;
+    amountPaid: number;
     notes?: string;
     memberUuid: string;
 }
 
 export interface CreatePaymentPayload {
-    paymentMethod: 'CASH' | 'BANK_TRANSFER';
+    paymentMethod: PaymentMethod;
     amountPaid: number;
     notes?: string;
     memberUuid: string;

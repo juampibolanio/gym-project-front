@@ -96,6 +96,10 @@ export function PaymentForm({ memberName, memberSurname, uuid, defaultAmount, on
                 >
                     <option value="CASH">Efectivo</option>
                     <option value="BANK_TRANSFER">Transferencia bancaria</option>
+                    <option value="MERCADO_PAGO">Mercado Pago</option>
+                    <option value="DEBIT_CARD">Tarjeta de débito </option>
+                    <option value="CREDIT_CARD">Tarjeta de crédito</option>
+                    <option value="OTHER">Otro</option>
                 </SelectField>
             </div>
 
