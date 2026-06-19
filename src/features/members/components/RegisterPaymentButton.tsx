@@ -22,7 +22,7 @@ interface RegisterPaymentButtonProps {
 export default function RegisterPaymentButton({ memberName, memberSurname, uuid }: RegisterPaymentButtonProps) {
     const [isOpen, setIsOpen] = useState(false);
     const { mutate: subscribeAndPay, isPending } = useSubscribeAndPay();
-    const { data: plansData } = usePlans(1, 100); // Fetch all active plans
+    const { data: plansData } = usePlans(1, 100);
     const plans = plansData?.data || [];
 
     const {
@@ -61,6 +61,7 @@ export default function RegisterPaymentButton({ memberName, memberSurname, uuid 
                 planUuid: data.planUuid,
                 paymentMethod: data.method,
                 amountPaid: data.amount,
+                notes: data.notes || undefined,
             }
         }, {
             onSuccess: () => {

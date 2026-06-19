@@ -27,7 +27,7 @@ export function NewMemberForm() {
       surname: '',
       phoneNumber: '',
       birthDate: '',
-      state: 'ACTIVE',
+      state: 'INACTIVE',
       observations: '',
     }
   });

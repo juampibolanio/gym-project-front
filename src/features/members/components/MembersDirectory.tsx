@@ -19,16 +19,14 @@ export function MembersDirectory() {
     setCurrentPage(1);
   }
 
-  const { data: response, isLoading } = useMembers(currentPage, itemsPerPage, q);
+  const stateQuery = filter === 'Todos' ? undefined : filter;
+  const { data: response, isLoading } = useMembers(currentPage, itemsPerPage, q, stateQuery);
 
   const members = response?.data || [];
   const meta = response?.meta;
   const totalPages = meta?.lastPage || 1;
 
-  const filteredMembers = members.filter(member => {
-    if (filter === 'Todos') return true;
-    return member.state === filter;
-  });
+
 
   const handlePrevPage = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
@@ -85,14 +83,20 @@ export function MembersDirectory() {
         </div>
 
         <div className="flex flex-col relative">
-          {isLoading && (
+          {isLoading && members.length === 0 && (
+            <div className="flex flex-col items-center justify-center py-16 z-10">
+              <Loader2 className="w-8 h-8 text-brand-main animate-spin mb-3" />
+              <p className="text-text-muted text-sm">Cargando directorio de miembros...</p>
+            </div>
+          )}
+          {isLoading && members.length > 0 && (
             <div className="absolute inset-0 bg-surface/80 flex flex-col items-center justify-center z-10 backdrop-blur-[1px]">
               <Loader2 className="w-8 h-8 text-brand-main animate-spin mb-3" />
               <p className="text-text-muted text-sm">Cargando directorio de miembros...</p>
             </div>
           )}
-          {filteredMembers.length > 0 ? (
-            filteredMembers.map((member) => (
+          {members.length > 0 ? (
+            members.map((member) => (
               <MemberList 
                 key={member.uuid}
                 name={`${member.name} ${member.surname}`}
