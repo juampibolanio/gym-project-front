@@ -1,13 +1,13 @@
 export interface MetaPagination {
-    total: number;
-    lastPage: number;
-    currentPage: number;
-    perPage: number;
-    prev: number | null;
-    next: number | null;
+  total: number;
+  lastPage: number;
+  currentPage: number;
+  perPage: number;
+  prev: number | null;
+  next: number | null;
 }
 
 export interface PaginatedResult<T> {
-    data: T[];
-    meta: MetaPagination;
+  data: T[];
+  meta: MetaPagination;
 }

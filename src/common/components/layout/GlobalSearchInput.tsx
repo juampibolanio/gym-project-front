@@ -7,7 +7,9 @@ import { useDebounce } from '@/common/hooks/useDebounce';
 
 const SEARCH_CONFIG: Record<string, { placeholder: string }> = {
   '/dashboard/miembros': { placeholder: 'Buscar miembros, IDs o planes...' },
-  '/dashboard/administradores': { placeholder: 'Buscar administradores, rol o estado...' },
+  '/dashboard/administradores': {
+    placeholder: 'Buscar administradores, rol o estado...',
+  },
 };
 
 export function GlobalSearchInput() {
@@ -15,7 +17,7 @@ export function GlobalSearchInput() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialQ = searchParams.get('q') || '';
-  
+
   const [searchTerm, setSearchTerm] = useState(initialQ);
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
@@ -32,7 +34,10 @@ export function GlobalSearchInput() {
     }
   }, [debouncedSearchTerm, pathname, router, searchParams]);
 
-  if (pathname !== '/dashboard/miembros' && pathname !== '/dashboard/administradores') {
+  if (
+    pathname !== '/dashboard/miembros' &&
+    pathname !== '/dashboard/administradores'
+  ) {
     return null;
   }
 
@@ -41,7 +46,7 @@ export function GlobalSearchInput() {
       <Search size={16} className="text-text-muted" />
       <input
         type="text"
-        placeholder={SEARCH_CONFIG[pathname]?.placeholder || "Buscar..."}
+        placeholder={SEARCH_CONFIG[pathname]?.placeholder || 'Buscar...'}
         className="bg-transparent border-none outline-none text-sm text-text-main w-full placeholder:text-text-muted"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}

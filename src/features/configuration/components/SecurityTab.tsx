@@ -8,7 +8,7 @@ import * as z from 'zod';
 import { configSecuritySchema } from '@/features/configuration/schemas/config.schema';
 import { useAuthStore } from '@/features/auth/store/auth.store';
 import { useChangePassword } from '@/features/administrators/hooks/useUsers';
-import { toast } from 'react-hot-toast'; 
+import { toast } from 'react-hot-toast';
 import { InputField } from '@/common/components/ui/InputField';
 
 type SecurityFormValues = z.infer<typeof configSecuritySchema>;
@@ -25,52 +25,61 @@ export function SecurityTab() {
     register,
     handleSubmit,
     formState: { errors },
-    reset
+    reset,
   } = useForm<SecurityFormValues>({
     resolver: zodResolver(configSecuritySchema),
     defaultValues: {
       currentPassword: '',
       newPassword: '',
-      confirmNewPassword: ''
-    }
+      confirmNewPassword: '',
+    },
   });
 
   const onSubmit = (data: SecurityFormValues) => {
     if (!userId) return;
 
     const payload = {
-        currentPassword: data.currentPassword,
-        newPassword: data.newPassword,
+      currentPassword: data.currentPassword,
+      newPassword: data.newPassword,
     };
 
-    changePassword({ id: userId, payload }, {
+    changePassword(
+      { id: userId, payload },
+      {
         onSuccess: () => {
-            toast.success('Contraseña actualizada con éxito');
-            reset(); 
+          toast.success('Contraseña actualizada con éxito');
+          reset();
         },
         onError: (error: any) => {
-            const errorMessage = error.response?.data?.message || 'Ocurrió un error al actualizar la contraseña';
-            toast.error(errorMessage);
-        }
-    });
+          const errorMessage =
+            error.response?.data?.message ||
+            'Ocurrió un error al actualizar la contraseña';
+          toast.error(errorMessage);
+        },
+      }
+    );
   };
 
   return (
     <div className="p-6 md:p-8 flex flex-col gap-8 animate-in fade-in duration-300">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <h2 className="text-lg font-bold text-text-main mb-1">Seguridad de la Cuenta</h2>
-        <p className="text-sm text-text-muted mb-6">Gestiona tus credenciales y aumenta la seguridad de tu sistema.</p>
-        
+        <h2 className="text-lg font-bold text-text-main mb-1">
+          Seguridad de la Cuenta
+        </h2>
+        <p className="text-sm text-text-muted mb-6">
+          Gestiona tus credenciales y aumenta la seguridad de tu sistema.
+        </p>
+
         <div className="max-w-md flex flex-col gap-5">
           <InputField
             label="Contraseña Actual"
-            type={showCurrentPass ? "text" : "password"}
+            type={showCurrentPass ? 'text' : 'password'}
             placeholder="••••••••"
             disabled={isPending}
             registration={register('currentPassword')}
             error={errors.currentPassword?.message}
             rightElement={
-              <button 
+              <button
                 type="button"
                 disabled={isPending}
                 onClick={() => setShowCurrentPass(!showCurrentPass)}
@@ -80,16 +89,16 @@ export function SecurityTab() {
               </button>
             }
           />
-          
+
           <InputField
             label="Nueva Contraseña"
-            type={showNewPass ? "text" : "password"}
+            type={showNewPass ? 'text' : 'password'}
             placeholder="••••••••"
             disabled={isPending}
             registration={register('newPassword')}
             error={errors.newPassword?.message}
             rightElement={
-              <button 
+              <button
                 type="button"
                 disabled={isPending}
                 onClick={() => setShowNewPass(!showNewPass)}
@@ -99,7 +108,7 @@ export function SecurityTab() {
               </button>
             }
           />
-          
+
           <InputField
             label="Confirmar Nueva Contraseña"
             type="password"
@@ -108,25 +117,35 @@ export function SecurityTab() {
             registration={register('confirmNewPassword')}
             error={errors.confirmNewPassword?.message}
           />
-          
-          <button 
+
+          <button
             type="submit"
             disabled={isPending}
             className="w-fit flex items-center justify-center gap-2 px-6 py-2.5 mt-2 bg-brand-main hover:bg-brand-hover text-white rounded-sm font-medium text-sm transition-colors  disabled:opacity-50 cursor-pointer"
           >
-            {isPending ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
-            <span>{isPending ? "Actualizando..." : "Actualizar Contraseña"}</span>
+            {isPending ? (
+              <Loader2 size={16} className="animate-spin" />
+            ) : (
+              <Save size={16} />
+            )}
+            <span>
+              {isPending ? 'Actualizando...' : 'Actualizar Contraseña'}
+            </span>
           </button>
         </div>
       </form>
-       
+
       <hr className="border-border-primary" />
 
       <div>
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-sm font-bold text-text-main">Autenticación de Dos Factores (2FA)</h3>
-            <p className="text-xs text-text-muted mt-1">Añade una capa extra de seguridad a tu cuenta.</p>
+            <h3 className="text-sm font-bold text-text-main">
+              Autenticación de Dos Factores (2FA)
+            </h3>
+            <p className="text-xs text-text-muted mt-1">
+              Añade una capa extra de seguridad a tu cuenta.
+            </p>
           </div>
           <button className="px-6 py-2.5 bg-brand-main/10 text-brand-main hover:bg-brand-main/20 rounded-sm text-sm font-medium transition-colors ">
             Próximamente

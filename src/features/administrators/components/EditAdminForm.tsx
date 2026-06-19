@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { userSchema } from '@/features/administrators/schemas/user.schema'; 
+import { userSchema } from '@/features/administrators/schemas/user.schema';
 import { useUser, useUpdateUser } from '../hooks/useUsers';
 import { FormSkeleton } from '@/common/components/ui/FormSkeleton';
 
@@ -18,7 +18,7 @@ export function EditAdminForm({ id }: { id: string }) {
   const router = useRouter();
 
   const { data: currentUser, isLoading: isFetching } = useUser(id);
-  
+
   const { mutate: updateUser, isPending } = useUpdateUser();
 
   const {
@@ -42,26 +42,34 @@ export function EditAdminForm({ id }: { id: string }) {
   }, [currentUser, reset]);
 
   const onSubmit = (data: EditAdminFormValues) => {
-    updateUser({ id, payload: data }, {
-      onSuccess: () => {
-        router.push('/dashboard/administradores');
+    updateUser(
+      { id, payload: data },
+      {
+        onSuccess: () => {
+          router.push('/dashboard/administradores');
+        },
       }
-    });
+    );
   };
 
   if (isFetching) return <FormSkeleton />;
-  
-  if (!currentUser) return <div className="text-danger-main">No se pudo cargar el administrador.</div>;
+
+  if (!currentUser)
+    return (
+      <div className="text-danger-main">
+        No se pudo cargar el administrador.
+      </div>
+    );
 
   return (
     <div className="flex flex-col gap-6">
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
-
         <div className="border border-border-primary rounded-lg bg-surface flex flex-col p-6 gap-8  relative">
-          
           <div className="flex flex-col gap-6">
-            <h2 className="text-[15px] font-bold text-text-main">Identidad y Contacto</h2>
-            
+            <h2 className="text-[15px] font-bold text-text-main">
+              Identidad y Contacto
+            </h2>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <InputField
                 label="Nombre"
@@ -90,7 +98,7 @@ export function EditAdminForm({ id }: { id: string }) {
                 error={errors.dni?.message}
                 icon={<CreditCard size={14} className="text-text-muted" />}
               />
-              
+
               <InputField
                 label="Email"
                 type="email"
@@ -105,17 +113,21 @@ export function EditAdminForm({ id }: { id: string }) {
           <hr className="border-border-primary" />
 
           <div className="flex flex-col gap-6">
-            <h2 className="text-[15px] font-bold text-text-main">Configuración de Acceso</h2>
-            
+            <h2 className="text-[15px] font-bold text-text-main">
+              Configuración de Acceso
+            </h2>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="flex flex-col gap-1.5 opacity-70">
-                <label className="text-xs font-semibold text-text-muted tracking-wide">Rol Asignado (Solo lectura)</label>
+                <label className="text-xs font-semibold text-text-muted tracking-wide">
+                  Rol Asignado (Solo lectura)
+                </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <ShieldCheck size={14} className="text-brand-main" />
                   </div>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     disabled
                     value="Administrador designado"
                     className="w-full bg-background border border-border-primary rounded pl-9 pr-3 py-2.5 text-sm text-text-main cursor-not-allowed"
@@ -126,14 +138,14 @@ export function EditAdminForm({ id }: { id: string }) {
           </div>
 
           <div className="flex items-center justify-end gap-3 pt-4 border-t border-border-primary">
-            <Link 
+            <Link
               href="/dashboard/administradores"
               className="px-6 py-2.5 border border-border-primary bg-transparent text-text-muted hover:text-text-main hover:bg-surface-hover rounded-sm text-sm font-medium transition-colors"
             >
               Cancelar
             </Link>
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               disabled={isPending}
               className="px-6 py-2.5 flex items-center justify-center gap-2 bg-brand-main hover:bg-brand-hover text-white rounded-sm text-sm font-medium transition-colors  disabled:opacity-50 cursor-pointer"
             >
@@ -142,10 +154,11 @@ export function EditAdminForm({ id }: { id: string }) {
                   <Loader2 className="w-4 h-4 animate-spin" />
                   Guardando...
                 </>
-              ) : "Guardar Cambios"}
+              ) : (
+                'Guardar Cambios'
+              )}
             </button>
           </div>
-
         </div>
       </form>
     </div>

@@ -1,20 +1,20 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @custom-variant dark (&:is(.dark *));
 
 @theme {
   --font-sans: var(--font-inter);
-  
+
   --color-background: var(--background);
   --color-surface: var(--surface);
   --color-surface-hover: var(--surface-hover);
   --color-sidebar: var(--sidebar);
-  
+
   --color-border-primary: var(--border-primary);
-  
+
   --color-text-main: var(--text-main);
   --color-text-muted: var(--text-muted);
-  
+
   --color-brand-main: var(--brand-main);
   --color-brand-hover: var(--brand-hover);
   --color-brand-surface: var(--brand-surface);
@@ -38,15 +38,15 @@
     --surface: #ffffff;
     --surface-hover: #f4f4f5;
     --sidebar: #ffffff;
-    
+
     --border-primary: #e4e4e7;
-    
+
     --text-main: #18181b;
     --text-muted: #71717a;
-    
-    --brand-main: #047857;    
-    --brand-hover: #065f46;    
-    --brand-surface: #ecfdf5;  
+
+    --brand-main: #047857;
+    --brand-hover: #065f46;
+    --brand-surface: #ecfdf5;
 
     --success-main: #10b981;
     --success-surface: #d1fae5;
@@ -66,12 +66,12 @@
     --surface: #242424;
     --surface-hover: #2a2a2a;
     --sidebar: #131313;
-    
+
     --border-primary: #27272a;
-    
+
     --text-main: #ffffff;
     --text-muted: #a1a1aa;
-    
+
     --brand-main: #2d5f43;
     --brand-hover: #244f36;
     --brand-surface: #1a2e22;

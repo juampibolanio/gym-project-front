@@ -31,7 +31,7 @@ export function NewMemberForm() {
       birthDate: '',
       state: 'INACTIVE',
       observations: '',
-    }
+    },
   });
 
   const onSubmit = (data: MemberFormValues) => {
@@ -44,7 +44,7 @@ export function NewMemberForm() {
     createMemberMutation.mutate(payload as any, {
       onSuccess: () => {
         router.push('/dashboard/miembros');
-      }
+      },
     });
   };
 
@@ -53,12 +53,12 @@ export function NewMemberForm() {
   return (
     <div className="flex flex-col gap-6">
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
-
         <div className="border border-border-primary rounded-lg bg-surface flex flex-col p-6 gap-8 ">
-          
           <div className="flex flex-col gap-6">
-            <h2 className="text-[15px] font-bold text-text-main">Identidad y Contacto</h2>
-            
+            <h2 className="text-[15px] font-bold text-text-main">
+              Identidad y Contacto
+            </h2>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <InputField
                 label="DNI"
@@ -112,7 +112,9 @@ export function NewMemberForm() {
           <hr className="border-border-primary" />
 
           <div className="flex flex-col gap-6">
-            <h2 className="text-[15px] font-bold text-text-main">Información Adicional</h2>
+            <h2 className="text-[15px] font-bold text-text-main">
+              Información Adicional
+            </h2>
 
             <TextareaField
               label="Observaciones / Notas"
@@ -122,25 +124,23 @@ export function NewMemberForm() {
               error={errors.observations?.message}
               rows={4}
             />
-            
           </div>
 
           <div className="flex items-center justify-end gap-3 pt-4 border-t border-border-primary">
-            <Link 
+            <Link
               href="/dashboard/miembros"
               className="px-6 py-2.5 border border-border-primary bg-transparent text-text-muted hover:text-text-main hover:bg-surface-hover rounded-sm text-sm font-medium transition-colors"
             >
               Descartar
             </Link>
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               disabled={isSubmitting}
               className="flex items-center justify-center gap-2 px-6 py-2.5 bg-brand-main hover:bg-brand-hover text-white rounded-sm text-sm font-medium transition-colors  disabled:opacity-50"
             >
-              {isSubmitting ? "Guardando..." : "Guardar Registro"}
+              {isSubmitting ? 'Guardando...' : 'Guardar Registro'}
             </button>
           </div>
-
         </div>
       </form>
     </div>

@@ -1,9 +1,13 @@
-import { Metadata } from "next";
+import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "Planes",
+  title: 'Planes',
 };
 
-export default function PlanesLayout({ children }: { children: React.ReactNode }) {
+export default function PlanesLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return children;
 }

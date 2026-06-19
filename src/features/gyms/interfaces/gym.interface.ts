@@ -1,15 +1,15 @@
 export interface Gym {
-    uuid: string;
-    name: string;
-    address: string;
-    phoneNumber: string;
-    subdomain: string;
+  uuid: string;
+  name: string;
+  address: string;
+  phoneNumber: string;
+  subdomain: string;
 }
 
 export interface CreateGymPayload {
-    name: string;
-    address: string;
-    phoneNumber: string;
+  name: string;
+  address: string;
+  phoneNumber: string;
 }
 
-export type UpdateGymPayload = Partial<CreateGymPayload>
+export type UpdateGymPayload = Partial<CreateGymPayload>;

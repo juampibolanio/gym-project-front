@@ -1,9 +1,13 @@
-import { Metadata } from "next";
+import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "Configuración",
+  title: 'Configuración',
 };
 
-export default function ConfiguracionLayout({ children }: { children: React.ReactNode }) {
+export default function ConfiguracionLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return children;
 }

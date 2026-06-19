@@ -1,9 +1,13 @@
-import { Metadata } from "next";
+import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "Registrarse",
+  title: 'Registrarse',
 };
 
-export default function RegisterLayout({ children }: { children: React.ReactNode }) {
+export default function RegisterLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return children;
 }

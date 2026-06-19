@@ -1,12 +1,14 @@
 'use client';
-import { MemberList } from "@/features/members/components/MemberList";
-import { ChevronRight, ChevronLeft, Loader2 } from "lucide-react";
-import { useState, useRef } from "react";
-import { useMembers } from "../hook/useMembers";
-import { useSearchParams } from "next/navigation";
+import { MemberList } from '@/features/members/components/MemberList';
+import { ChevronRight, ChevronLeft, Loader2 } from 'lucide-react';
+import { useState, useRef } from 'react';
+import { useMembers } from '../hook/useMembers';
+import { useSearchParams } from 'next/navigation';
 
 export function MembersDirectory() {
-  const [filter, setFilter] = useState<'Todos' | 'ACTIVE' | 'INACTIVE' | 'SUSPENDED'>('Todos');
+  const [filter, setFilter] = useState<
+    'Todos' | 'ACTIVE' | 'INACTIVE' | 'SUSPENDED'
+  >('Todos');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
@@ -20,13 +22,16 @@ export function MembersDirectory() {
   }
 
   const stateQuery = filter === 'Todos' ? undefined : filter;
-  const { data: response, isLoading } = useMembers(currentPage, itemsPerPage, q, stateQuery);
+  const { data: response, isLoading } = useMembers(
+    currentPage,
+    itemsPerPage,
+    q,
+    stateQuery
+  );
 
   const members = response?.data || [];
   const meta = response?.meta;
   const totalPages = meta?.lastPage || 1;
-
-
 
   const handlePrevPage = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
@@ -38,31 +43,41 @@ export function MembersDirectory() {
 
   return (
     <div className="bg-background flex flex-col gap-6">
-      
       <div className="flex justify-end">
-        
         <div className="flex items-center gap-4">
           <div className="flex bg-surface border border-border-primary rounded-lg p-1">
-            <button 
-              onClick={() => { setFilter('Todos'); setCurrentPage(1); }}
+            <button
+              onClick={() => {
+                setFilter('Todos');
+                setCurrentPage(1);
+              }}
               className={`px-4 py-1.5 text-[10px] font-bold rounded transition-colors tracking-wider uppercase cursor-pointer ${filter === 'Todos' ? 'bg-brand-main text-white ' : 'text-text-muted hover:text-text-main'}`}
             >
               Todos
             </button>
-            <button 
-              onClick={() => { setFilter('ACTIVE'); setCurrentPage(1); }}
+            <button
+              onClick={() => {
+                setFilter('ACTIVE');
+                setCurrentPage(1);
+              }}
               className={`px-4 py-1.5 text-[10px] font-bold rounded transition-colors tracking-wider uppercase cursor-pointer ${filter === 'ACTIVE' ? 'bg-brand-main text-white ' : 'text-text-muted hover:text-text-main'}`}
             >
               Activo
             </button>
-            <button 
-              onClick={() => { setFilter('INACTIVE'); setCurrentPage(1); }}
+            <button
+              onClick={() => {
+                setFilter('INACTIVE');
+                setCurrentPage(1);
+              }}
               className={`px-4 py-1.5 text-[10px] font-bold rounded transition-colors tracking-wider uppercase cursor-pointer ${filter === 'INACTIVE' ? 'bg-brand-main text-white ' : 'text-text-muted hover:text-text-main'}`}
             >
               Inactivo
             </button>
-            <button 
-              onClick={() => { setFilter('SUSPENDED'); setCurrentPage(1); }}
+            <button
+              onClick={() => {
+                setFilter('SUSPENDED');
+                setCurrentPage(1);
+              }}
               className={`px-4 py-1.5 text-[10px] font-bold rounded transition-colors tracking-wider uppercase cursor-pointer ${filter === 'SUSPENDED' ? 'bg-brand-main text-white ' : 'text-text-muted hover:text-text-main'}`}
             >
               Suspendido
@@ -72,7 +87,6 @@ export function MembersDirectory() {
       </div>
 
       <div className="bg-surface border border-border-primary rounded-lg flex flex-col">
-        
         <div className="grid grid-cols-[2fr_1fr_1fr_1fr_1fr_100px] items-center px-5 py-3 border-b border-border-primary text-[10px] font-bold text-text-muted tracking-widest uppercase">
           <h5>NOMBRE E ID</h5>
           <h5>ESTADO</h5>
@@ -86,35 +100,37 @@ export function MembersDirectory() {
           {isLoading && members.length === 0 && (
             <div className="flex flex-col items-center justify-center py-16 z-10">
               <Loader2 className="w-8 h-8 text-brand-main animate-spin mb-3" />
-              <p className="text-text-muted text-sm">Cargando directorio de miembros...</p>
+              <p className="text-text-muted text-sm">
+                Cargando directorio de miembros...
+              </p>
             </div>
           )}
           {isLoading && members.length > 0 && (
             <div className="absolute inset-0 bg-surface/80 flex flex-col items-center justify-center z-10 backdrop-blur-[1px]">
               <Loader2 className="w-8 h-8 text-brand-main animate-spin mb-3" />
-              <p className="text-text-muted text-sm">Cargando directorio de miembros...</p>
+              <p className="text-text-muted text-sm">
+                Cargando directorio de miembros...
+              </p>
             </div>
           )}
-          {members.length > 0 ? (
-            members.map((member) => (
-              <MemberList 
-                key={member.uuid}
-                name={`${member.name} ${member.surname}`}
-                memberID={member.dni}
-                uuid={member.uuid}
-                status={member.state as any}
-                phoneNumber={member.phoneNumber || ''}
-                observations={member.observations || ''}
-                birthdate={new Date(member.birthDate).toLocaleDateString()}
-              />
-            ))
-          ) : (
-            !isLoading && (
-              <div className="flex-1 flex items-center justify-center py-10 text-sm text-text-muted">
-                No hay miembros que coincidan con los filtros.
-              </div>
-            )
-          )}
+          {members.length > 0
+            ? members.map((member) => (
+                <MemberList
+                  key={member.uuid}
+                  name={`${member.name} ${member.surname}`}
+                  memberID={member.dni}
+                  uuid={member.uuid}
+                  status={member.state as any}
+                  phoneNumber={member.phoneNumber || ''}
+                  observations={member.observations || ''}
+                  birthdate={new Date(member.birthDate).toLocaleDateString()}
+                />
+              ))
+            : !isLoading && (
+                <div className="flex-1 flex items-center justify-center py-10 text-sm text-text-muted">
+                  No hay miembros que coincidan con los filtros.
+                </div>
+              )}
         </div>
 
         <div className="flex items-center justify-between px-5 py-4 border-t border-border-primary">
@@ -122,14 +138,14 @@ export function MembersDirectory() {
             Mostrando página {currentPage} de {totalPages || 1}
           </p>
           <div className="flex items-center gap-2">
-            <button 
+            <button
               onClick={handlePrevPage}
               disabled={currentPage === 1 || isLoading}
               className="p-1 text-text-muted hover:text-text-main disabled:opacity-50 disabled:hover:text-text-muted transition-colors cursor-pointer disabled:cursor-not-allowed"
             >
               <ChevronLeft size={18} />
             </button>
-            <button 
+            <button
               onClick={handleNextPage}
               disabled={currentPage >= totalPages || isLoading}
               className="p-1 text-text-muted hover:text-text-main disabled:opacity-50 disabled:hover:text-text-muted transition-colors cursor-pointer disabled:cursor-not-allowed"
@@ -138,9 +154,7 @@ export function MembersDirectory() {
             </button>
           </div>
         </div>
-
       </div>
-
     </div>
   );
 }

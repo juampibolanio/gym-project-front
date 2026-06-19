@@ -1,9 +1,9 @@
 'use client';
 
 import { Phone, IdCard, Loader2 } from 'lucide-react';
-import { InputField } from "@/common/components/ui/InputField";
-import { SelectField } from "@/common/components/ui/SelectField";
-import { TextareaField } from "@/common/components/ui/TextareaField";
+import { InputField } from '@/common/components/ui/InputField';
+import { SelectField } from '@/common/components/ui/SelectField';
+import { TextareaField } from '@/common/components/ui/TextareaField';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -17,7 +17,7 @@ type EditMemberFormValues = z.infer<typeof editMemberSchema>;
 
 export function EditMemberForm({ id }: { id: string }) {
   const router = useRouter();
-  
+
   const { data: member, isLoading } = useMember(id);
   const updateMemberMutation = useUpdateMember();
 
@@ -36,7 +36,7 @@ export function EditMemberForm({ id }: { id: string }) {
       birthDate: '',
       state: 'ACTIVE',
       observations: '',
-    }
+    },
   });
 
   useEffect(() => {
@@ -46,7 +46,9 @@ export function EditMemberForm({ id }: { id: string }) {
         name: member.name,
         surname: member.surname,
         phoneNumber: member.phoneNumber || '',
-        birthDate: member.birthDate ? new Date(member.birthDate).toISOString().split('T')[0] : '',
+        birthDate: member.birthDate
+          ? new Date(member.birthDate).toISOString().split('T')[0]
+          : '',
         state: member.state as 'ACTIVE' | 'INACTIVE' | 'SUSPENDED',
         observations: member.observations || '',
       });
@@ -64,7 +66,7 @@ export function EditMemberForm({ id }: { id: string }) {
       {
         onSuccess: () => {
           router.push(`/dashboard/miembros/${id}`);
-        }
+        },
       }
     );
   };
@@ -75,7 +77,9 @@ export function EditMemberForm({ id }: { id: string }) {
     return (
       <div className="flex flex-col justify-center items-center h-64">
         <Loader2 className="w-8 h-8 text-brand-main animate-spin mb-3" />
-        <span className="text-text-muted text-sm">Cargando datos del socio...</span>
+        <span className="text-text-muted text-sm">
+          Cargando datos del socio...
+        </span>
       </div>
     );
   }
@@ -83,11 +87,12 @@ export function EditMemberForm({ id }: { id: string }) {
   return (
     <div className="flex flex-col gap-6">
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
-
         <div className="border border-border-primary rounded-lg bg-surface flex flex-col p-6 gap-8 ">
           <div className="flex flex-col gap-6">
-            <h2 className="text-[15px] font-bold text-text-main">Identidad y Contacto</h2>
-            
+            <h2 className="text-[15px] font-bold text-text-main">
+              Identidad y Contacto
+            </h2>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <InputField
                 label="DNI"
@@ -140,7 +145,9 @@ export function EditMemberForm({ id }: { id: string }) {
 
           <hr className="border-border-primary" />
           <div className="flex flex-col gap-6">
-            <h2 className="text-[15px] font-bold text-text-main">Membresía y Estado</h2>
+            <h2 className="text-[15px] font-bold text-text-main">
+              Membresía y Estado
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="flex flex-col gap-1.5">
                 <SelectField
@@ -153,7 +160,9 @@ export function EditMemberForm({ id }: { id: string }) {
                   <option value="INACTIVE">Inactivo</option>
                   <option value="SUSPENDED">Suspendido</option>
                 </SelectField>
-                <p className="text-[10px] text-text-muted mt-0.5">Sobrescribe el estado automático de pagos.</p>
+                <p className="text-[10px] text-text-muted mt-0.5">
+                  Sobrescribe el estado automático de pagos.
+                </p>
               </div>
             </div>
 
@@ -167,21 +176,20 @@ export function EditMemberForm({ id }: { id: string }) {
             />
           </div>
           <div className="flex items-center justify-end gap-3 pt-4 border-t border-border-primary">
-            <Link 
+            <Link
               href={`/dashboard/miembros/${id}`}
               className="px-6 py-2.5 border border-border-primary bg-transparent text-text-muted hover:text-text-main hover:bg-surface-hover rounded-sm text-sm font-medium transition-colors"
             >
               Cancelar
             </Link>
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               disabled={isSubmitting}
               className="flex items-center justify-center gap-2 px-6 py-2.5 bg-brand-main hover:bg-brand-hover text-white rounded-sm text-sm font-medium transition-colors  disabled:opacity-50"
             >
-              {isSubmitting ? "Guardando..." : "Guardar Cambios"}
+              {isSubmitting ? 'Guardando...' : 'Guardar Cambios'}
             </button>
           </div>
-
         </div>
       </form>
     </div>
