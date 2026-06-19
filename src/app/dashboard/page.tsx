@@ -24,9 +24,19 @@ export default function DashboardPage() {
   const [isRevenueVisible, setIsRevenueVisible] = useState(true);
 
   useEffect(() => {
-    setCurrentTime(new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }));
+    setCurrentTime(
+      new Date().toLocaleTimeString('es-ES', {
+        hour: '2-digit',
+        minute: '2-digit',
+      })
+    );
     const interval = setInterval(() => {
-      setCurrentTime(new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }));
+      setCurrentTime(
+        new Date().toLocaleTimeString('es-ES', {
+          hour: '2-digit',
+          minute: '2-digit',
+        })
+      );
     }, 60000);
     return () => clearInterval(interval);
   }, []);
@@ -44,7 +54,11 @@ export default function DashboardPage() {
     return `${sign}${trend}% ${suffix}`;
   };
 
-  const todayStr = new Date().toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  const todayStr = new Date().toLocaleDateString('es-ES', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  });
 
   if (isLoading) {
     return <DashboardSkeleton />;
@@ -54,7 +68,9 @@ export default function DashboardPage() {
     return (
       <div className="flex flex-col gap-6">
         <h1 className="text-2xl font-bold text-text-main">Vista General</h1>
-        <p className="text-sm text-danger-main">Error al cargar las métricas. Intente nuevamente más tarde.</p>
+        <p className="text-sm text-danger-main">
+          Error al cargar las métricas. Intente nuevamente más tarde.
+        </p>
       </div>
     );
   }
@@ -82,24 +98,49 @@ export default function DashboardPage() {
           value={metrics.activeMembers.total.toLocaleString('es-AR')}
           icon={<Users size={16} className="text-text-muted" />}
           trendText={getTrendText(metrics.activeMembers.trend || 0, 'este mes')}
-          trendIcon={<TrendingUp size={12} className={metrics.activeMembers.trend && metrics.activeMembers.trend < 0 ? 'rotate-180 transform' : ''} />}
+          trendIcon={
+            <TrendingUp
+              size={12}
+              className={
+                metrics.activeMembers.trend && metrics.activeMembers.trend < 0
+                  ? 'rotate-180 transform'
+                  : ''
+              }
+            />
+          }
           trendColor={getTrendColor(metrics.activeMembers.trend || 0)}
         />
 
         <MetricCard
           title="Ingresos Mensuales"
-          value={isRevenueVisible ? `$${metrics.monthlyRevenue.total.toLocaleString('es-AR')}` : '****'}
+          value={
+            isRevenueVisible
+              ? `$${metrics.monthlyRevenue.total.toLocaleString('es-AR')}`
+              : '****'
+          }
           icon={
             <Wallet size={16} className="text-brand-main transition-colors" />
           }
-          trendText={getTrendText(metrics.monthlyRevenue.trend || 0, 'vs último mes')}
-          trendIcon={<TrendingUp size={12} className={metrics.monthlyRevenue.trend && metrics.monthlyRevenue.trend < 0 ? 'rotate-180 transform' : ''} />}
+          trendText={getTrendText(
+            metrics.monthlyRevenue.trend || 0,
+            'vs último mes'
+          )}
+          trendIcon={
+            <TrendingUp
+              size={12}
+              className={
+                metrics.monthlyRevenue.trend && metrics.monthlyRevenue.trend < 0
+                  ? 'rotate-180 transform'
+                  : ''
+              }
+            />
+          }
           trendColor={getTrendColor(metrics.monthlyRevenue.trend || 0)}
           action={
             <button
               onClick={() => setIsRevenueVisible(!isRevenueVisible)}
               className="text-text-muted hover:text-text-main transition-colors ml-2"
-              title={isRevenueVisible ? "Ocultar ingresos" : "Mostrar ingresos"}
+              title={isRevenueVisible ? 'Ocultar ingresos' : 'Mostrar ingresos'}
             >
               {isRevenueVisible ? <EyeOff size={14} /> : <Eye size={14} />}
             </button>
@@ -126,7 +167,7 @@ export default function DashboardPage() {
           icon={
             <Calendar size={16} className="text-brand-main transition-colors" />
           }
-          trendText={currentTime ? currentTime : "Calculando..."}
+          trendText={currentTime ? currentTime : 'Calculando...'}
           trendIcon={<Clock size={12} />}
           trendColor="text-text-muted"
         />
@@ -134,7 +175,9 @@ export default function DashboardPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 relative flex flex-col h-full">
-          <div className={`flex-1 h-full ${!isRevenueVisible ? 'filter blur-md select-none transition-all duration-300 opacity-50 pointer-events-none' : 'transition-all duration-300'}`}>
+          <div
+            className={`flex-1 h-full ${!isRevenueVisible ? 'filter blur-md select-none transition-all duration-300 opacity-50 pointer-events-none' : 'transition-all duration-300'}`}
+          >
             <RevenueChart data={metrics.revenueTrajectory || []} />
           </div>
           {!isRevenueVisible && (

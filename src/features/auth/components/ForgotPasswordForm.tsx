@@ -57,7 +57,8 @@ export function ForgotPasswordForm() {
       {!isSubmitted ? (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           <p className="text-sm text-text-main text-center mb-4 transition-colors">
-            Ingresa tu dirección de email y te enviaremos las instrucciones para restablecer tu contraseña.
+            Ingresa tu dirección de email y te enviaremos las instrucciones para
+            restablecer tu contraseña.
           </p>
 
           <InputField
@@ -66,7 +67,9 @@ export function ForgotPasswordForm() {
             placeholder="admin@ejemplo.com"
             registration={register('email')}
             error={errors.email?.message}
-            icon={<Mail className="text-text-muted transition-colors" size={16} />}
+            icon={
+              <Mail className="text-text-muted transition-colors" size={16} />
+            }
             className="gap-2! [&_label]:text-[10px] [&_label]:font-bold [&_label]:tracking-wider [&_label]:uppercase [&_input]:bg-sidebar"
           />
 
@@ -90,7 +93,8 @@ export function ForgotPasswordForm() {
             <Mail size={32} />
           </div>
           <p className="text-sm text-text-main text-center transition-colors">
-            Hemos enviado un enlace de recuperación a tu correo electrónico. Por favor, revisa tu bandeja de entrada o la carpeta de spam.
+            Hemos enviado un enlace de recuperación a tu correo electrónico. Por
+            favor, revisa tu bandeja de entrada o la carpeta de spam.
           </p>
           <button
             onClick={() => setIsSubmitted(false)}

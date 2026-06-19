@@ -28,7 +28,10 @@ export function TableSkeleton() {
 
         {/* Table Rows */}
         {[1, 2, 3, 4, 5, 6].map((row) => (
-          <div key={row} className="flex items-center px-6 py-4 border-b border-border-primary/50">
+          <div
+            key={row}
+            className="flex items-center px-6 py-4 border-b border-border-primary/50"
+          >
             <div className="w-1/4 flex items-center gap-3">
               <div className="h-10 w-10 bg-border-primary/30 rounded-full"></div>
               <div className="flex flex-col gap-2">
@@ -37,14 +40,14 @@ export function TableSkeleton() {
               </div>
             </div>
             <div className="w-1/4">
-               <div className="h-4 w-20 bg-border-primary/50 rounded"></div>
+              <div className="h-4 w-20 bg-border-primary/50 rounded"></div>
             </div>
             <div className="w-1/4">
-               <div className="h-6 w-16 bg-border-primary/40 rounded-full"></div>
+              <div className="h-6 w-16 bg-border-primary/40 rounded-full"></div>
             </div>
             <div className="w-1/4 flex justify-end gap-2">
-               <div className="h-8 w-8 bg-border-primary/30 rounded"></div>
-               <div className="h-8 w-8 bg-border-primary/30 rounded"></div>
+              <div className="h-8 w-8 bg-border-primary/30 rounded"></div>
+              <div className="h-8 w-8 bg-border-primary/30 rounded"></div>
             </div>
           </div>
         ))}

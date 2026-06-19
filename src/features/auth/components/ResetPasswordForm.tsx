@@ -9,13 +9,15 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { useResetPassword } from '@/features/auth/hooks/useAuth';
 import { toast } from 'react-hot-toast';
 
-const resetPasswordSchema = z.object({
-  newPassword: z.string().min(6, 'Debe tener al menos 6 caracteres'),
-  confirmPassword: z.string()
-}).refine((data) => data.newPassword === data.confirmPassword, {
-  message: "Las contraseñas no coinciden",
-  path: ["confirmPassword"],
-});
+const resetPasswordSchema = z
+  .object({
+    newPassword: z.string().min(6, 'Debe tener al menos 6 caracteres'),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: 'Las contraseñas no coinciden',
+    path: ['confirmPassword'],
+  });
 
 type ResetPasswordValues = z.infer<typeof resetPasswordSchema>;
 
@@ -23,7 +25,7 @@ export function ResetPasswordForm() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const token = searchParams.get('token');
-  
+
   const { mutate: resetPassword, isPending } = useResetPassword();
 
   const {
@@ -34,8 +36,8 @@ export function ResetPasswordForm() {
     resolver: zodResolver(resetPasswordSchema),
     defaultValues: {
       newPassword: '',
-      confirmPassword: ''
-    }
+      confirmPassword: '',
+    },
   });
 
   const onSubmit = (data: ResetPasswordValues) => {
@@ -44,21 +46,28 @@ export function ResetPasswordForm() {
       return;
     }
 
-    resetPassword({ token, newPassword: data.newPassword }, {
-      onSuccess: (response) => {
-        toast.success(response.message);
-        router.push('/login');
-      },
-      onError: (error: any) => {
-        toast.error(error.response?.data?.message || 'El enlace es inválido o ha expirado');
+    resetPassword(
+      { token, newPassword: data.newPassword },
+      {
+        onSuccess: (response) => {
+          toast.success(response.message);
+          router.push('/login');
+        },
+        onError: (error: any) => {
+          toast.error(
+            error.response?.data?.message ||
+              'El enlace es inválido o ha expirado'
+          );
+        },
       }
-    });
+    );
   };
 
   if (!token) {
     return (
       <div className="bg-red-500/10 border border-red-500/20 text-red-500 p-4 rounded-lg text-center text-sm">
-        Enlace inválido o expirado. Por favor, solicita uno nuevo desde la pantalla de login.
+        Enlace inválido o expirado. Por favor, solicita uno nuevo desde la
+        pantalla de login.
       </div>
     );
   }

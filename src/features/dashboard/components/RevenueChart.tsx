@@ -109,8 +109,12 @@ export function RevenueChart({ data }: RevenueChartProps) {
   return (
     <div className="bg-surface border border-border-primary rounded-xl p-6 h-full flex flex-col">
       <div className="mb-4">
-        <h3 className="text-lg font-bold text-text-main">Trayectoria de Ingresos</h3>
-        <p className="text-sm text-text-muted">Evolución de recaudación en los últimos 12 meses</p>
+        <h3 className="text-lg font-bold text-text-main">
+          Trayectoria de Ingresos
+        </h3>
+        <p className="text-sm text-text-muted">
+          Evolución de recaudación en los últimos 12 meses
+        </p>
       </div>
       <div className="h-[300px] w-full mt-4">
         <ReactECharts

@@ -18,7 +18,13 @@ export default function ResetPasswordPage() {
       </div>
 
       <div className="w-full bg-surface border-t-4 border-t-brand-main border border-border-primary rounded-xl p-6 shadow-xl dark:shadow-2xl transition-colors">
-        <Suspense fallback={<div className="text-center text-sm text-text-muted">Cargando...</div>}>
+        <Suspense
+          fallback={
+            <div className="text-center text-sm text-text-muted">
+              Cargando...
+            </div>
+          }
+        >
           <ResetPasswordForm />
         </Suspense>
       </div>

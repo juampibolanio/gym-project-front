@@ -130,7 +130,9 @@ export function MembersDirectory() {
                       status={member.state as any}
                       phoneNumber={member.phoneNumber || ''}
                       observations={member.observations || ''}
-                      birthdate={new Date(member.birthDate).toLocaleDateString()}
+                      birthdate={new Date(
+                        member.birthDate
+                      ).toLocaleDateString()}
                     />
                   ))
                 : !isLoading && (

@@ -31,11 +31,16 @@ export function DashboardSkeleton() {
             <div className="h-4 w-72 bg-border-primary/30 rounded"></div>
           </div>
           <div className="flex-1 mt-4 flex items-end justify-between opacity-30 relative overflow-hidden">
-             <div className="absolute bottom-0 left-0 right-0 h-[200px] bg-gradient-to-t from-brand-main/20 to-transparent rounded-t-full blur-xl"></div>
-             
-             <div className="absolute inset-0 flex flex-col justify-between py-4">
-                {[1,2,3,4].map(i => <div key={i} className="w-full border-t border-dashed border-border-primary"></div>)}
-             </div>
+            <div className="absolute bottom-0 left-0 right-0 h-[200px] bg-gradient-to-t from-brand-main/20 to-transparent rounded-t-full blur-xl"></div>
+
+            <div className="absolute inset-0 flex flex-col justify-between py-4">
+              {[1, 2, 3, 4].map((i) => (
+                <div
+                  key={i}
+                  className="w-full border-t border-dashed border-border-primary"
+                ></div>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -46,7 +51,10 @@ export function DashboardSkeleton() {
           </div>
           <div className="flex-1 p-0 flex flex-col">
             {[1, 2, 3, 4, 5].map((item) => (
-              <div key={item} className="flex items-center justify-between p-4 border-b border-border-primary/50">
+              <div
+                key={item}
+                className="flex items-center justify-between p-4 border-b border-border-primary/50"
+              >
                 <div className="flex items-center gap-3">
                   <div className="h-10 w-10 bg-border-primary/40 rounded-full"></div>
                   <div className="flex flex-col gap-2">

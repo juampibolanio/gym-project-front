@@ -24,7 +24,12 @@ export function NewMemberForm() {
   const { data: plansData, isLoading: isLoadingPlans } = usePlans(1, 100);
   const plans = plansData?.data || [];
 
-  const [createdMember, setCreatedMember] = useState<{uuid: string, name: string, surname: string, planPrice: number} | null>(null);
+  const [createdMember, setCreatedMember] = useState<{
+    uuid: string;
+    name: string;
+    surname: string;
+    planPrice: number;
+  } | null>(null);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
 
   const {
@@ -41,9 +46,8 @@ export function NewMemberForm() {
       birthDate: '',
       observations: '',
       planUuid: '',
-    }
+    },
   });
-
 
   const onSubmit = (data: MemberFormValues) => {
     const payload = {
@@ -55,15 +59,15 @@ export function NewMemberForm() {
     createMemberMutation.mutate(payload as any, {
       onSuccess: (response: any) => {
         const member = response.data || response;
-        const plan = plans.find(p => p.uuid === data.planUuid);
+        const plan = plans.find((p) => p.uuid === data.planUuid);
         setCreatedMember({
-            uuid: member.uuid,
-            name: member.name,
-            surname: member.surname,
-            planPrice: plan ? Number(plan.price) : 0,
+          uuid: member.uuid,
+          name: member.name,
+          surname: member.surname,
+          planPrice: plan ? Number(plan.price) : 0,
         });
         setIsPaymentModalOpen(true);
-      }
+      },
     });
   };
 
@@ -82,12 +86,12 @@ export function NewMemberForm() {
     <>
       <div className="flex flex-col gap-6">
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
-
           <div className="border border-border-primary rounded-lg bg-surface flex flex-col p-6 gap-8 ">
-            
             <div className="flex flex-col gap-6">
-              <h2 className="text-[15px] font-bold text-text-main">Identidad y Contacto</h2>
-              
+              <h2 className="text-[15px] font-bold text-text-main">
+                Identidad y Contacto
+              </h2>
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <InputField
                   label="DNI"
@@ -141,26 +145,30 @@ export function NewMemberForm() {
             <hr className="border-border-primary" />
 
             <div className="flex flex-col gap-6">
-              <h2 className="text-[15px] font-bold text-text-main">Membresía</h2>
+              <h2 className="text-[15px] font-bold text-text-main">
+                Membresía
+              </h2>
               <SelectField
-                  label="Plan a asignar"
-                  disabled={isSubmitting || isLoadingPlans}
-                  registration={register("planUuid")}
-                  error={errors.planUuid?.message}
+                label="Plan a asignar"
+                disabled={isSubmitting || isLoadingPlans}
+                registration={register('planUuid')}
+                error={errors.planUuid?.message}
               >
-                  <option value="">Seleccione un plan</option>
-                  {plans.map((plan) => (
-                      <option key={plan.uuid} value={plan.uuid}>
-                          {plan.name} (${plan.price})
-                      </option>
-                  ))}
+                <option value="">Seleccione un plan</option>
+                {plans.map((plan) => (
+                  <option key={plan.uuid} value={plan.uuid}>
+                    {plan.name} (${plan.price})
+                  </option>
+                ))}
               </SelectField>
             </div>
 
             <hr className="border-border-primary" />
 
             <div className="flex flex-col gap-6">
-              <h2 className="text-[15px] font-bold text-text-main">Información Adicional</h2>
+              <h2 className="text-[15px] font-bold text-text-main">
+                Información Adicional
+              </h2>
 
               <TextareaField
                 label="Observaciones / Notas"
@@ -170,41 +178,43 @@ export function NewMemberForm() {
                 error={errors.observations?.message}
                 rows={4}
               />
-              
             </div>
 
             <div className="flex items-center justify-end gap-3 pt-4 border-t border-border-primary">
-              <Link 
+              <Link
                 href="/dashboard/miembros"
                 className="px-6 py-2.5 border border-border-primary bg-transparent text-text-muted hover:text-text-main hover:bg-surface-hover rounded-sm text-sm font-medium transition-colors"
               >
                 Descartar
               </Link>
-              <button 
-                type="submit" 
+              <button
+                type="submit"
                 disabled={isSubmitting}
                 className="flex items-center justify-center gap-2 px-6 py-2.5 bg-brand-main hover:bg-brand-hover text-white rounded-sm text-sm font-medium transition-colors  disabled:opacity-50"
               >
-                {isSubmitting ? "Guardando..." : "Guardar Registro"}
+                {isSubmitting ? 'Guardando...' : 'Guardar Registro'}
               </button>
             </div>
-
           </div>
         </form>
       </div>
 
       {createdMember && (
-          <Modal isOpen={isPaymentModalOpen} onClose={handleFinish} title="Registrar Pago">
-              <PaymentForm 
-                  memberName={createdMember.name} 
-                  memberSurname={createdMember.surname} 
-                  uuid={createdMember.uuid} 
-                  defaultAmount={createdMember.planPrice}
-                  isNewMember={true}
-                  onSuccess={handleFinish} 
-                  onCancel={handleFinish} 
-              />
-          </Modal>
+        <Modal
+          isOpen={isPaymentModalOpen}
+          onClose={handleFinish}
+          title="Registrar Pago"
+        >
+          <PaymentForm
+            memberName={createdMember.name}
+            memberSurname={createdMember.surname}
+            uuid={createdMember.uuid}
+            defaultAmount={createdMember.planPrice}
+            isNewMember={true}
+            onSuccess={handleFinish}
+            onCancel={handleFinish}
+          />
+        </Modal>
       )}
     </>
   );

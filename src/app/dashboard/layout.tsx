@@ -77,12 +77,14 @@ export default function DashboardLayout({
   return (
     <AuthGuard>
       <div className="min-h-screen bg-background text-text-main flex flex-col md:flex-row transition-colors overflow-hidden">
-        <div 
-          className={`fixed inset-0 bg-black/50 z-40 md:hidden transition-opacity duration-300 ${isSidebarOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`} 
-          onClick={() => setIsSidebarOpen(false)} 
+        <div
+          className={`fixed inset-0 bg-black/50 z-40 md:hidden transition-opacity duration-300 ${isSidebarOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
+          onClick={() => setIsSidebarOpen(false)}
         />
 
-        <aside className={`w-65 bg-sidebar border-r border-border-primary flex flex-col justify-between shrink-0 transition-transform duration-300 ease-in-out fixed inset-y-0 left-0 z-50 md:relative md:translate-x-0 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+        <aside
+          className={`w-65 bg-sidebar border-r border-border-primary flex flex-col justify-between shrink-0 transition-transform duration-300 ease-in-out fixed inset-y-0 left-0 z-50 md:relative md:translate-x-0 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}
+        >
           <div className="flex flex-col">
             <div className="h-20 flex items-center justify-between px-8 border-b border-border-primary">
               <div className="flex flex-col justify-center">
@@ -96,7 +98,10 @@ export default function DashboardLayout({
                   ADMIN TERMINAL
                 </span>
               </div>
-              <button className="md:hidden text-text-muted hover:text-text-main" onClick={() => setIsSidebarOpen(false)}>
+              <button
+                className="md:hidden text-text-muted hover:text-text-main"
+                onClick={() => setIsSidebarOpen(false)}
+              >
                 <X size={24} />
               </button>
             </div>
@@ -169,13 +174,13 @@ export default function DashboardLayout({
 
         <main className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
           <header className="h-20 border-b border-border-primary bg-background flex items-center px-4 md:px-8 gap-4 transition-colors shrink-0">
-            <button 
-              className="md:hidden text-text-muted hover:text-text-main p-2" 
+            <button
+              className="md:hidden text-text-muted hover:text-text-main p-2"
               onClick={() => setIsSidebarOpen(true)}
             >
               <Menu size={24} />
             </button>
-            
+
             <div className="flex-1 flex items-center">
               <Suspense fallback={<div className="w-full max-w-md" />}>
                 <div className="w-full max-w-xs md:max-w-md">
