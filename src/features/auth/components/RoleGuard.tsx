@@ -1,14 +1,10 @@
 'use client';
 
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useRole } from '../hooks/useRole';
-import { useEffect } from 'react';
+import { RoleGuardProps } from '../interfaces/role-guard.interface';
 import { Loader2 } from 'lucide-react';
-
-interface RoleGuardProps {
-  allowedRoles: string[];
-  children: React.ReactNode;
-}
 
 export function RoleGuard({ allowedRoles, children }: RoleGuardProps) {
   const { role } = useRole();
@@ -24,7 +20,7 @@ export function RoleGuard({ allowedRoles, children }: RoleGuardProps) {
     return (
       <div className="h-64 flex flex-col items-center justify-center">
         <Loader2 className="animate-spin text-brand-main mb-4" />
-        <p>Verificando permisos...</p>
+        <p>Verificando información...</p>
       </div>
     );
   }

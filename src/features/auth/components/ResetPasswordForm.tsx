@@ -1,25 +1,13 @@
 'use client';
 
-import { Lock, Save, Loader2 } from 'lucide-react';
-import { InputField } from '@/common/components/ui/InputField';
 import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { useResetPassword } from '@/features/auth/hooks/useAuth';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useResetPassword } from '../hooks/useAuth';
+import { InputField } from '@/common/components/ui/InputField';
 import { toast } from 'react-hot-toast';
-
-const resetPasswordSchema = z
-  .object({
-    newPassword: z.string().min(6, 'Debe tener al menos 6 caracteres'),
-    confirmPassword: z.string(),
-  })
-  .refine((data) => data.newPassword === data.confirmPassword, {
-    message: 'Las contraseñas no coinciden',
-    path: ['confirmPassword'],
-  });
-
-type ResetPasswordValues = z.infer<typeof resetPasswordSchema>;
+import { Lock, Save, Loader2 } from 'lucide-react';
+import { resetPasswordSchema, ResetPasswordValues } from '../schemas/reset-password.schema';
 
 export function ResetPasswordForm() {
   const searchParams = useSearchParams();
@@ -67,7 +55,7 @@ export function ResetPasswordForm() {
     return (
       <div className="bg-red-500/10 border border-red-500/20 text-red-500 p-4 rounded-lg text-center text-sm">
         Enlace inválido o expirado. Por favor, solicita uno nuevo desde la
-        pantalla de login.
+        pantalla de inicio de sesión.
       </div>
     );
   }
@@ -103,7 +91,7 @@ export function ResetPasswordForm() {
           <Loader2 size={16} className="animate-spin" />
         ) : (
           <>
-            <Save size={16} /> Guardar y Entrar
+            <Save size={16} /> Guardar e iniciar sesión
           </>
         )}
       </button>

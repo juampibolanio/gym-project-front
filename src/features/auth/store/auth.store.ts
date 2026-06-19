@@ -1,15 +1,6 @@
 import { create } from 'zustand';
-import { AuthResponse } from '../interfaces/auth.interface';
 import { persist } from 'zustand/middleware';
-
-interface AuthState {
-  token: string | null;
-  user: AuthResponse['user'] | null;
-  domain: string | null;
-
-  setLogin: (data: AuthResponse, domain: string) => void;
-  setLogout: () => void;
-}
+import { AuthState } from '../interfaces/auth-state.interface';
 
 export const useAuthStore = create<AuthState>()(
   persist(
