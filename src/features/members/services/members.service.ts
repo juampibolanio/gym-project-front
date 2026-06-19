@@ -5,8 +5,9 @@ import { CreateMemberPayload, Member, UpdateMemberPayload } from "../interfaces/
 export class MembersService {
     private static readonly ENDPOINT = '/members';
 
-    static async getAll(page: number = 1, limit: number = 10): Promise<PaginatedResult<Member>> {
-        return await httpClient.get<PaginatedResult<Member>>(`${this.ENDPOINT}?page=${page}&limit=${limit}`);
+    static async getAll(page: number = 1, limit: number = 10, term?: string): Promise<PaginatedResult<Member>> {
+        const query = term ? `?page=${page}&limit=${limit}&term=${term}` : `?page=${page}&limit=${limit}`;
+        return await httpClient.get<PaginatedResult<Member>>(`${this.ENDPOINT}${query}`);
     }
 
     static async getById(id: string): Promise<Member> {

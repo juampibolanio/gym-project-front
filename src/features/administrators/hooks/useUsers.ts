@@ -3,10 +3,10 @@ import { UsersService } from "../services/users.service";
 import { ChangePasswordPayload, CreateUserPayload, UpdateUserPayload } from "../interfaces/user.interface";
 import toast from "react-hot-toast";
 
-export const useUsers = (page: number = 1, limit: number = 10) => {
+export const useUsers = (page: number = 1, limit: number = 10, term?: string) => {
     return useQuery({
-        queryKey: ['users', { page, limit }],
-        queryFn: () => UsersService.getAll(page, limit),
+        queryKey: ['users', { page, limit, term }],
+        queryFn: () => UsersService.getAll(page, limit, term),
         staleTime: 1000 * 10,
     });
 };

@@ -1,15 +1,25 @@
 'use client';
 import { MemberList } from "@/features/members/components/MemberList";
 import { ChevronRight, ChevronLeft, Loader2 } from "lucide-react";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useMembers } from "../hook/useMembers";
+import { useSearchParams } from "next/navigation";
 
 export function MembersDirectory() {
   const [filter, setFilter] = useState<'Todos' | 'ACTIVE' | 'INACTIVE' | 'SUSPENDED'>('Todos');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
-  const { data: response, isLoading } = useMembers(currentPage, itemsPerPage);
+  const searchParams = useSearchParams();
+  const q = searchParams.get('q') || undefined;
+
+  const prevQRef = useRef(q);
+  if (prevQRef.current !== q) {
+    prevQRef.current = q;
+    setCurrentPage(1);
+  }
+
+  const { data: response, isLoading } = useMembers(currentPage, itemsPerPage, q);
 
   const members = response?.data || [];
   const meta = response?.meta;
@@ -37,25 +47,25 @@ export function MembersDirectory() {
           <div className="flex bg-surface border border-border-primary rounded-lg p-1">
             <button 
               onClick={() => { setFilter('Todos'); setCurrentPage(1); }}
-              className={`px-4 py-1.5 text-[10px] font-bold rounded transition-colors tracking-wider uppercase ${filter === 'Todos' ? 'bg-brand-main text-white ' : 'text-text-muted hover:text-text-main'}`}
+              className={`px-4 py-1.5 text-[10px] font-bold rounded transition-colors tracking-wider uppercase cursor-pointer ${filter === 'Todos' ? 'bg-brand-main text-white ' : 'text-text-muted hover:text-text-main'}`}
             >
               Todos
             </button>
             <button 
               onClick={() => { setFilter('ACTIVE'); setCurrentPage(1); }}
-              className={`px-4 py-1.5 text-[10px] font-bold rounded transition-colors tracking-wider uppercase ${filter === 'ACTIVE' ? 'bg-brand-main text-white ' : 'text-text-muted hover:text-text-main'}`}
+              className={`px-4 py-1.5 text-[10px] font-bold rounded transition-colors tracking-wider uppercase cursor-pointer ${filter === 'ACTIVE' ? 'bg-brand-main text-white ' : 'text-text-muted hover:text-text-main'}`}
             >
               Activo
             </button>
             <button 
               onClick={() => { setFilter('INACTIVE'); setCurrentPage(1); }}
-              className={`px-4 py-1.5 text-[10px] font-bold rounded transition-colors tracking-wider uppercase ${filter === 'INACTIVE' ? 'bg-brand-main text-white ' : 'text-text-muted hover:text-text-main'}`}
+              className={`px-4 py-1.5 text-[10px] font-bold rounded transition-colors tracking-wider uppercase cursor-pointer ${filter === 'INACTIVE' ? 'bg-brand-main text-white ' : 'text-text-muted hover:text-text-main'}`}
             >
               Inactivo
             </button>
             <button 
               onClick={() => { setFilter('SUSPENDED'); setCurrentPage(1); }}
-              className={`px-4 py-1.5 text-[10px] font-bold rounded transition-colors tracking-wider uppercase ${filter === 'SUSPENDED' ? 'bg-brand-main text-white ' : 'text-text-muted hover:text-text-main'}`}
+              className={`px-4 py-1.5 text-[10px] font-bold rounded transition-colors tracking-wider uppercase cursor-pointer ${filter === 'SUSPENDED' ? 'bg-brand-main text-white ' : 'text-text-muted hover:text-text-main'}`}
             >
               Suspendido
             </button>

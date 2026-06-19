@@ -50,7 +50,7 @@ export default function RegisterPaymentButton({ memberName, memberSurname, uuid 
             <button
                 type="button"
                 onClick={() => setIsOpen(true)}
-                className="w-full py-2.5 bg-brand-main hover:bg-brand-hover text-white font-medium text-sm transition-colors rounded-sm  flex items-center justify-center gap-2"
+                className="w-full py-2.5 bg-brand-main hover:bg-brand-hover text-white font-medium text-sm transition-colors rounded-sm flex items-center justify-center gap-2 cursor-pointer"
             >
                 <CreditCard size={20} />
                 <span>Registrar nuevo pago</span>

@@ -1,6 +1,6 @@
 'use client';
 
-import { LayoutDashboard, Users, ClipboardList, Settings, Search, Shield, LogOut } from 'lucide-react';
+import { LayoutDashboard, Users, ClipboardList, Settings, Shield, LogOut } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { ThemeToggle } from '@/common/components/layout/ThemeToggle';
@@ -12,17 +12,14 @@ import { Modal } from '@/common/components/ui/Modal';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 
-const SEARCH_CONFIG: Record<string, { placeholder: string }> = {
-  '/dashboard/miembros': {
-    placeholder: 'Buscar miembros, IDs o planes...',
-  },
-  '/dashboard/administradores': {
-    placeholder: 'Buscar administradores, rol o estado...',
-  },
-};
+
+
+import { GlobalSearchInput } from '@/common/components/layout/GlobalSearchInput';
+import { Suspense } from 'react';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+
   const pathname = usePathname();
   const router = useRouter();
   const setLogout = useAuthStore((state) => state.setLogout);
@@ -122,16 +119,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
           <header className="h-20 border-b border-border-primary bg-background flex items-center px-8 transition-colors">
 
-            {(pathname === '/dashboard/miembros' || pathname === '/dashboard/administradores') && (
-              <div className="flex items-center gap-3 bg-surface border border-border-primary rounded-md px-4 py-2 w-96 focus-within:border-brand-main transition-colors">
-                <Search size={16} className="text-text-muted" />
-                <input
-                  type="text"
-                  placeholder={SEARCH_CONFIG[pathname]?.placeholder || "Buscar..."}
-                  className="bg-transparent border-none outline-none text-sm text-text-main w-full placeholder:text-text-muted"
-                />
-              </div>
-            )}
+            <Suspense fallback={<div className="w-96" />}>
+              <GlobalSearchInput />
+            </Suspense>
 
             <div className="flex items-center gap-6 ml-auto">
               <ThemeToggle />

@@ -4,13 +4,23 @@ import { ChevronRight, ChevronLeft, Loader2, AlertCircle } from 'lucide-react';
 import { useUsers } from '../hooks/useUsers'; 
 import { useAuthStore } from '@/features/auth/store/auth.store'; 
 import { AdminRow } from './AdminRow';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
+import { useSearchParams } from 'next/navigation';
 
 export function AdminTable() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
   
-  const { data, isLoading, isError } = useUsers(currentPage, itemsPerPage);
+  const searchParams = useSearchParams();
+  const q = searchParams.get('q') || undefined;
+  
+  const prevQRef = useRef(q);
+  if (prevQRef.current !== q) {
+    prevQRef.current = q;
+    setCurrentPage(1);
+  }
+
+  const { data, isLoading, isError } = useUsers(currentPage, itemsPerPage, q);
   
   const currentUserUuid = useAuthStore((state) => state.user?.uuid);
 

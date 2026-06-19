@@ -5,8 +5,9 @@ import { httpClient } from "@/core/api/axios.adapter";
 export class UsersService {
     private static readonly ENDPOINT = '/users';
 
-    static async getAll(page: number = 1, limit: number = 10): Promise<PaginatedResult<User>> {
-        return await httpClient.get<PaginatedResult<User>>(`${this.ENDPOINT}?page=${page}&limit=${limit}`);
+    static async getAll(page: number = 1, limit: number = 10, term?: string): Promise<PaginatedResult<User>> {
+        const query = term ? `?page=${page}&limit=${limit}&term=${term}` : `?page=${page}&limit=${limit}`;
+        return await httpClient.get<PaginatedResult<User>>(`${this.ENDPOINT}${query}`);
     }
 
     static async getById(id: string): Promise<User> {

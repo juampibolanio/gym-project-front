@@ -3,10 +3,10 @@ import { MembersService } from "../services/members.service";
 import { CreateMemberPayload, UpdateMemberPayload } from "../interfaces/members.interface";
 import toast from "react-hot-toast";
 
-export const useMembers = (page: number = 1, limit: number = 10) => {
+export const useMembers = (page: number = 1, limit: number = 10, term?: string) => {
     return useQuery({
-        queryKey: ['members', { page, limit }],
-        queryFn: () => MembersService.getAll(page, limit),
+        queryKey: ['members', { page, limit, term }],
+        queryFn: () => MembersService.getAll(page, limit, term),
         staleTime: 1000 * 10,
     });
 };
