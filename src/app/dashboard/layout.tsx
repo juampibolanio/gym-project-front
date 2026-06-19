@@ -7,6 +7,8 @@ import {
   Settings,
   Shield,
   LogOut,
+  Menu,
+  X,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -27,6 +29,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const pathname = usePathname();
   const router = useRouter();
@@ -73,20 +76,29 @@ export default function DashboardLayout({
 
   return (
     <AuthGuard>
-      <div className="min-h-screen bg-background text-text-main flex flex-col md:flex-row transition-colors">
-        <aside className="w-65 bg-sidebar border-r border-border-primary flex flex-col justify-between shrink-0 transition-colors">
-          <div className="flex flex-col">
-            <div className="h-20 flex flex-col justify-center px-8 border-b border-border-primary">
-              {isLoading && (
-                <div className="h-4 w-24 bg-surface-hover animate-pulse rounded mb-1" />
-              )}
+      <div className="min-h-screen bg-background text-text-main flex flex-col md:flex-row transition-colors overflow-hidden">
+        <div 
+          className={`fixed inset-0 bg-black/50 z-40 md:hidden transition-opacity duration-300 ${isSidebarOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`} 
+          onClick={() => setIsSidebarOpen(false)} 
+        />
 
-              <span className="font-bold text-xl text-text-main tracking-wide">
-                {gymData?.name}
-              </span>
-              <span className="text-[9px] text-text-muted font-bold tracking-widest mt-1">
-                ADMIN TERMINAL
-              </span>
+        <aside className={`w-65 bg-sidebar border-r border-border-primary flex flex-col justify-between shrink-0 transition-transform duration-300 ease-in-out fixed inset-y-0 left-0 z-50 md:relative md:translate-x-0 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+          <div className="flex flex-col">
+            <div className="h-20 flex items-center justify-between px-8 border-b border-border-primary">
+              <div className="flex flex-col justify-center">
+                {isLoading && (
+                  <div className="h-4 w-24 bg-surface-hover animate-pulse rounded mb-1" />
+                )}
+                <span className="font-bold text-xl text-text-main tracking-wide">
+                  {gymData?.name}
+                </span>
+                <span className="text-[9px] text-text-muted font-bold tracking-widest mt-1">
+                  ADMIN TERMINAL
+                </span>
+              </div>
+              <button className="md:hidden text-text-muted hover:text-text-main" onClick={() => setIsSidebarOpen(false)}>
+                <X size={24} />
+              </button>
             </div>
 
             <nav className="flex flex-col mt-6 space-y-1">
@@ -99,6 +111,7 @@ export default function DashboardLayout({
                   <Link
                     key={item.href}
                     href={item.href}
+                    onClick={() => setIsSidebarOpen(false)}
                     className={`flex items-center gap-4 px-8 py-3 transition-colors border-l-2 ${
                       isActive
                         ? 'bg-brand-surface border-brand-main text-text-main'
@@ -154,18 +167,29 @@ export default function DashboardLayout({
           </div>
         </Modal>
 
-        <main className="flex-1 flex flex-col min-w-0">
-          <header className="h-20 border-b border-border-primary bg-background flex items-center px-8 transition-colors">
-            <Suspense fallback={<div className="w-96" />}>
-              <GlobalSearchInput />
-            </Suspense>
+        <main className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
+          <header className="h-20 border-b border-border-primary bg-background flex items-center px-4 md:px-8 gap-4 transition-colors shrink-0">
+            <button 
+              className="md:hidden text-text-muted hover:text-text-main p-2" 
+              onClick={() => setIsSidebarOpen(true)}
+            >
+              <Menu size={24} />
+            </button>
+            
+            <div className="flex-1 flex items-center">
+              <Suspense fallback={<div className="w-full max-w-md" />}>
+                <div className="w-full max-w-xs md:max-w-md">
+                  <GlobalSearchInput />
+                </div>
+              </Suspense>
+            </div>
 
-            <div className="flex items-center gap-6 ml-auto">
+            <div className="flex items-center shrink-0">
               <ThemeToggle />
             </div>
           </header>
 
-          <div className="flex-1 p-8 overflow-auto">{children}</div>
+          <div className="flex-1 p-4 md:p-8 overflow-y-auto">{children}</div>
         </main>
       </div>
     </AuthGuard>

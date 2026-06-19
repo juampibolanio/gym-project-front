@@ -42,8 +42,8 @@ export function GlobalSearchInput() {
   }
 
   return (
-    <div className="flex items-center gap-3 bg-surface border border-border-primary rounded-md px-4 py-2 w-96 focus-within:border-brand-main transition-colors">
-      <Search size={16} className="text-text-muted" />
+    <div className="flex items-center gap-3 bg-surface border border-border-primary rounded-md px-4 py-2 w-full focus-within:border-brand-main transition-colors">
+      <Search size={16} className="text-text-muted shrink-0" />
       <input
         type="text"
         placeholder={SEARCH_CONFIG[pathname]?.placeholder || 'Buscar...'}
