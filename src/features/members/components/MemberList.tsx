@@ -1,7 +1,8 @@
 'use client';
 import * as React from 'react';
-import { MoreHorizontal, Edit, Trash2, Eye } from 'lucide-react';
+import { MoreHorizontal, Edit, Trash2, Eye, AlertTriangle, Loader2 } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
+import { Modal } from '@/common/components/ui/Modal';
 import Link from 'next/link';
 
 import { useDeleteMember } from '@/features/members/hook/useMembers';
@@ -26,6 +27,7 @@ export function MemberList({
   birthdate,
 }: MemberListProps) {
   const [showDropdown, setShowDropdown] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const deleteMemberMutation = useDeleteMember();
   
@@ -127,18 +129,52 @@ export function MemberList({
             </Link>
             <button 
               onClick={() => {
-                if (window.confirm(`¿Estás seguro de que querés eliminar a ${name}?`)) {
-                  deleteMemberMutation.mutate(uuid);
-                }
+                setShowDropdown(false);
+                setIsDeleteModalOpen(true);
               }}
-              disabled={deleteMemberMutation.isPending}
-              className="w-full flex items-center gap-2 px-3 py-2 text-xs text-danger-main hover:bg-danger-main/10 transition-colors disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
+              className="w-full flex items-center gap-2 px-3 py-2 text-xs text-danger-main hover:bg-danger-main/10 transition-colors cursor-pointer"
             >
-              <Trash2 size={14} /> {deleteMemberMutation.isPending ? 'Eliminando...' : 'Eliminar'}
+              <Trash2 size={14} /> Eliminar
             </button>
           </div>
         )}
       </div>
+
+      <Modal 
+          isOpen={isDeleteModalOpen} 
+          onClose={() => setIsDeleteModalOpen(false)}
+          title="Eliminar Miembro"
+      >
+          <div className="flex flex-col gap-4">
+              <div className="flex items-center gap-3 text-danger-main bg-danger-surface p-3 rounded border border-danger-main">
+                  <AlertTriangle size={24} className="shrink-0" />
+                  <p className="text-sm">Esta acción no se puede deshacer. Se eliminarán permanentemente todos los datos de este miembro.</p>
+              </div>
+              
+              <p className="text-text-main">¿Estás seguro de que deseas eliminar a <strong>{name}</strong>?</p>
+
+              <div className="flex justify-end gap-3 mt-4">
+                  <button 
+                      onClick={() => setIsDeleteModalOpen(false)}
+                      disabled={deleteMemberMutation.isPending}
+                      className="px-4 py-2 text-sm font-medium text-text-main border border-border-primary hover:bg-surface-hover transition-colors rounded cursor-pointer"
+                  >
+                      Cancelar
+                  </button>
+                  <button 
+                      onClick={() => {
+                          deleteMemberMutation.mutate(uuid, {
+                              onSuccess: () => setIsDeleteModalOpen(false)
+                          });
+                      }}
+                      disabled={deleteMemberMutation.isPending}
+                      className="px-4 py-2 text-sm font-medium text-white bg-danger-main hover:bg-danger-hover transition-colors rounded flex items-center gap-2 cursor-pointer"
+                  >
+                      {deleteMemberMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Sí, eliminar miembro'}
+                  </button>
+              </div>
+          </div>
+      </Modal>
 
     </div>
   );
