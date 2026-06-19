@@ -77,7 +77,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </div>
 
           <div className="px-6 pb-6 flex flex-col gap-4">
-            <button onClick={handleLogout} className="w-full py-2.5 bg-brand-main hover:bg-brand-hover text-white font-medium text-sm transition-colors rounded-sm shadow-sm dark:shadow-none cursor-pointer">
+            <button onClick={handleLogout} className="w-full py-2.5 bg-surface border border-border-primary text-text-main hover:bg-surface-hover font-medium text-sm transition-colors rounded-sm shadow-sm dark:shadow-none cursor-pointer">
               Cerrar sesión
             </button>
           </div>

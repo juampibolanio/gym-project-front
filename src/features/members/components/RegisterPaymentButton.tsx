@@ -97,7 +97,7 @@ export default function RegisterPaymentButton({ memberName, memberSurname, uuid 
                                             className="w-full bg-[#121214] border border-zinc-800 p-3 pl-8 text-white text-sm focus:outline-none focus:border-[#2A5D44] transition-colors"
                                         />
                                     </div>
-                                    {errors.amount && <span className="text-red-500 text-xs">{errors.amount.message}</span>}
+                                    {errors.amount && <span className="text-danger-main text-xs">{errors.amount.message}</span>}
                                 </div>
 
                                 <div className="flex flex-col gap-2">
@@ -107,7 +107,7 @@ export default function RegisterPaymentButton({ memberName, memberSurname, uuid 
                                         {...register("date")}
                                         className="w-full bg-[#121214] border border-zinc-800 p-3 text-white text-sm focus:outline-none focus:border-[#2A5D44] transition-colors"
                                     />
-                                    {errors.date && <span className="text-red-500 text-xs">{errors.date.message}</span>}
+                                    {errors.date && <span className="text-danger-main text-xs">{errors.date.message}</span>}
                                 </div>
                             </div>
 
@@ -121,7 +121,7 @@ export default function RegisterPaymentButton({ memberName, memberSurname, uuid 
                                     <option value="cash">Efectivo</option>
                                     <option value="transfer">Transferencia bancaria</option>
                                 </select>
-                                {errors.method && <span className="text-red-500 text-xs">{errors.method.message}</span>}
+                                {errors.method && <span className="text-danger-main text-xs">{errors.method.message}</span>}
                             </div>
 
                             <div className="flex flex-col gap-2">
@@ -131,7 +131,7 @@ export default function RegisterPaymentButton({ memberName, memberSurname, uuid 
                                     placeholder="Detalles adicionales del pago..."
                                     className="w-full bg-[#121214] border border-zinc-800 p-3 text-white text-sm focus:outline-none focus:border-[#2A5D44] transition-colors min-h-20 resize-none"
                                 />
-                                {errors.notes && <span className="text-red-500 text-xs">{errors.notes.message}</span>}
+                                {errors.notes && <span className="text-danger-main text-xs">{errors.notes.message}</span>}
                             </div>
 
                             <div className="flex justify-end gap-3 mt-4 pt-4 border-t border-zinc-800">

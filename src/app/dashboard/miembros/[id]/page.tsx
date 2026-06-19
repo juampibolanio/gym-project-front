@@ -1,46 +1,57 @@
-import Link from "next/link";
-import { ArrowLeft, Award, CreditCard, Filter, Pencil, User } from "lucide-react";
-import RegisterPaymentButton from "@/features/members/components/RegisterPaymentButton";
+'use client';
 
-export default async function MemberDetailPage({
+import Link from "next/link";
+import { ArrowLeft, Award, CreditCard, Filter, Pencil, User, Loader2 } from "lucide-react";
+import RegisterPaymentButton from "@/features/members/components/RegisterPaymentButton";
+import { useMember } from "@/features/members/hook/useMembers";
+import { use } from "react";
+
+export default function MemberDetailPage({
     params,
 }: {
     params: Promise<{ id: string }>
 }) {
-    const { id } = await params;
+    const { id } = use(params);
+    const { data: member, isLoading, isError } = useMember(id);
 
-    const member = {
-        id: id,
-        name: "Manuel",
-        surname: "Vazquez",
-        email: "manuel.vazquez@example.com",
-        avatarUrl: `https://i.pravatar.cc/150?u=${id}`,
-        status: "active",
-        plan: "Pase Libre",
-        phoneNumber: "+1 555-123-4567",
-        startDate: "2026-05-15",
-        endDate: "2026-06-15",
-        paymentHistory: [
-            { id: "payment-1", date: "2026-05-15", amount: 500, method: "Tarjeta de crédito" },
-            { id: "payment-2", date: "2026-04-15", amount: 500, method: "Tarjeta de crédito" },
-            { id: "payment-3", date: "2026-03-15", amount: 500, method: "Tarjeta de crédito" },
-            { id: "payment-4", date: "2026-02-15", amount: 500, method: "Tarjeta de crédito" },
-            { id: "payment-5", date: "2026-01-15", amount: 500, method: "Tarjeta de crédito" },
-        ]
+    if (isLoading) {
+        return (
+            <div className="flex flex-col items-center justify-center h-64 w-full bg-surface border border-border-primary rounded-lg">
+                <Loader2 className="w-8 h-8 text-brand-main animate-spin mb-4" />
+                <p className="text-text-muted text-sm">Cargando perfil del miembro...</p>
+            </div>
+        );
+    }
+
+    if (isError || !member) {
+        return (
+            <div className="flex flex-col items-center justify-center h-64 w-full bg-surface border border-danger-main/20 rounded-lg">
+                <p className="text-text-main text-sm">Error al cargar el perfil o el miembro no existe.</p>
+                <Link href="/dashboard/miembros" className="mt-4 text-brand-main hover:underline text-sm">
+                    Volver a la lista
+                </Link>
+            </div>
+        );
+    }
+
+    const planName = "Pase Libre (Próximamente)";
+    const paymentHistory: { id: string; date: string; amount: number; method: string }[] = [];
+
+    const statusTranslations: Record<string, string> = {
+        'ACTIVE': 'ACTIVO',
+        'INACTIVE': 'INACTIVO',
+        'SUSPENDED': 'SUSPENDIDO'
     };
 
-    const endDate = new Date(member.endDate);
-    const startDate = new Date(member.startDate);
-    const today = new Date();
+    const statusStyles: Record<string, string> = {
+        'ACTIVE': 'border-success-main/30 bg-success-surface text-success-main',
+        'INACTIVE': 'border-border-primary bg-surface-hover text-text-muted',
+        'SUSPENDED': 'border-warning-main/30 bg-warning-surface text-warning-main'
+    };
 
-    const remainingTimeMs = endDate.getTime() - today.getTime();
-    const remainingDays = Math.max(0, Math.ceil(remainingTimeMs / (1000 * 60 * 60 * 24)));
-
-    const totalPlanDurationMs = endDate.getTime() - startDate.getTime();
-    let remainingPercentage = 0;
-    if (totalPlanDurationMs > 0) {
-        remainingPercentage = Math.max(0, Math.min(100, (remainingTimeMs / totalPlanDurationMs) * 100));
-    }
+    const memberState = member.state || 'INACTIVE';
+    const displayStatus = statusTranslations[memberState] || memberState;
+    const safeStatusStyles = statusStyles[memberState] || statusStyles['INACTIVE'];
 
     return (
         <section>
@@ -52,7 +63,7 @@ export default async function MemberDetailPage({
             <div className="flex justify-between items-center border-b-2 border-border-primary pb-4 mb-6">
                 <div className="flex flex-col gap-2">
                     <h1 className="text-3xl text-text-main font-bold">{member.name} {member.surname}</h1>
-                    <p className="text-sm text-text-muted">ID: {member.id}</p>
+                    <p className="text-sm text-text-muted">ID/DNI: {member.dni}</p>
                 </div>
             </div>
 
@@ -61,8 +72,8 @@ export default async function MemberDetailPage({
                 <div className="lg:col-span-1 bg-surface border border-border-primary shadow-sm dark:shadow-none rounded-lg p-6 flex flex-col transition-colors">
                     <div className="flex justify-between items-center mb-4">
                         <span className="text-sm font-bold text-text-main">Perfil del Miembro</span>
-                        <span className="px-2.5 py-1 rounded-md border border-success-main/30 bg-success-surface text-success-main text-[10px] font-bold tracking-widest uppercase">
-                            ACTIVO
+                        <span className={`px-2.5 py-1 rounded-md border text-[10px] font-bold tracking-widest uppercase ${safeStatusStyles}`}>
+                            {displayStatus}
                         </span>
                     </div>
 
@@ -71,23 +82,25 @@ export default async function MemberDetailPage({
                             <User size={40} className="text-text-muted" />
                         </div>
                         <h2 className="text-xl font-bold text-text-main">{member.name} {member.surname}</h2>
-                        <p className="text-sm text-text-muted mt-1">Miembro desde: 12 ene, 2022</p>
+                        <p className="text-sm text-text-muted mt-1">Nacimiento: {new Date(member.birthDate).toLocaleDateString('es-ES')}</p>
                     </div>
 
                     <div className="flex flex-col gap-6 border-t border-border-primary pt-6">
                         <div className="flex flex-col gap-1">
-                            <span className="text-xs text-text-muted font-bold uppercase tracking-wider">Email</span>
-                            <span className="text-sm text-text-main">{member.email}</span>
-                        </div>
-                        <div className="flex flex-col gap-1">
                             <span className="text-xs text-text-muted font-bold uppercase tracking-wider">Teléfono</span>
-                            <span className="text-sm text-text-main">{member.phoneNumber}</span>
+                            <span className="text-sm text-text-main">{member.phoneNumber || '-'}</span>
                         </div>
+                        {member.observations && (
+                            <div className="flex flex-col gap-1">
+                                <span className="text-xs text-text-muted font-bold uppercase tracking-wider">Observaciones</span>
+                                <span className="text-sm text-text-main">{member.observations}</span>
+                            </div>
+                        )}
                     </div>
 
                     <div className="flex flex-col gap-3 mt-8 pt-6 border-t border-border-primary">
-                        <RegisterPaymentButton memberName={member.name} memberSurname={member.surname} uuid={member.id} />
-                        <Link href={`/dashboard/miembros/${member.id}/editar`} className="w-full py-2.5 bg-transparent border border-border-primary hover:bg-surface-hover text-text-main font-medium text-sm transition-colors rounded-sm shadow-sm dark:shadow-none flex items-center justify-center gap-2">
+                        <RegisterPaymentButton memberName={member.name} memberSurname={member.surname} uuid={member.uuid} />
+                        <Link href={`/dashboard/miembros/${member.uuid}/editar`} className="w-full py-2.5 bg-transparent border border-border-primary hover:bg-surface-hover text-text-main font-medium text-sm transition-colors rounded-sm shadow-sm dark:shadow-none flex items-center justify-center gap-2">
                             <Pencil size={16} /> Editar datos
                         </Link>
                     </div>
@@ -99,8 +112,8 @@ export default async function MemberDetailPage({
                         <div className="flex flex-col gap-1">
                             <span className="text-xs text-text-muted font-bold uppercase tracking-wider">Plan Actual</span>
                             <div className="flex items-center gap-2 mt-1">
-                                <h3 className="text-2xl font-bold text-text-main">{member.plan}</h3>
-                                <Award size={20} className="text-success-main" />
+                                <h3 className="text-2xl font-bold text-text-main">{planName}</h3>
+                                <Award size={20} className="text-text-muted" />
                             </div>
                         </div>
                     </div>
@@ -109,22 +122,22 @@ export default async function MemberDetailPage({
                         <div className="bg-surface border border-border-primary shadow-sm dark:shadow-none rounded-lg p-6 flex flex-col justify-center gap-4 transition-colors">
                             <div className="flex justify-between items-end">
                                 <span className="text-xs text-text-muted font-bold uppercase tracking-wider">Tiempo Restante</span>
-                                <span className="text-sm text-text-main font-bold">{remainingDays} {remainingDays === 1 ? 'Día' : 'Días'}</span>
+                                <span className="text-sm text-text-main font-bold">-</span>
                             </div>
                             <div className="w-full bg-border-primary h-2 rounded-full overflow-hidden">
-                                <div className="bg-success-main h-full rounded-full" style={{ width: `${remainingPercentage}%` }}></div>
+                                <div className="bg-text-muted h-full rounded-full" style={{ width: `0%` }}></div>
                             </div>
                         </div>
 
                         <div className="bg-surface border border-border-primary shadow-sm dark:shadow-none rounded-lg p-6 flex flex-col justify-center gap-2 transition-colors">
                             <span className="text-xs text-text-muted font-bold uppercase tracking-wider">Próximo Vencimiento</span>
-                            <span className="text-xl font-bold text-text-main">{new Date(member.endDate).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                            <span className="text-xl font-bold text-text-main">-</span>
                         </div>
                     </div>
 
                     <div className="bg-surface border border-border-primary shadow-sm dark:shadow-none rounded-lg p-6 overflow-hidden flex flex-col transition-colors">
                         <div className="flex justify-between items-center mb-6">
-                            <h3 className="text-sm font-bold text-text-main uppercase tracking-wider">Historial de Pagos</h3>
+                            <h3 className="text-sm font-bold text-text-main uppercase tracking-wider">Historial de Pagos (Próximamente)</h3>
                             <Filter size={18} className="text-text-muted cursor-pointer hover:text-text-main transition-colors" />
                         </div>
 
@@ -140,7 +153,7 @@ export default async function MemberDetailPage({
                                     </tr>
                                 </thead>
                                 <tbody className="text-sm text-text-main">
-                                    {member.paymentHistory.map((payment) => (
+                                    {paymentHistory.map((payment) => (
                                         <tr key={payment.id} className="border-b border-border-primary hover:bg-surface-hover transition-colors">
                                             <td className="py-4">{new Date(payment.date).toLocaleDateString('es-ES', { year: 'numeric', month: 'short', day: 'numeric' })}</td>
                                             <td className="py-4">{payment.id}</td>
@@ -156,6 +169,13 @@ export default async function MemberDetailPage({
                                             </td>
                                         </tr>
                                     ))}
+                                    {paymentHistory.length === 0 && (
+                                        <tr>
+                                            <td colSpan={5} className="py-8 text-center text-text-muted">
+                                                No hay pagos registrados aún.
+                                            </td>
+                                        </tr>
+                                    )}
                                 </tbody>
                             </table>
                         </div>
@@ -163,5 +183,5 @@ export default async function MemberDetailPage({
                 </div>
             </div>
         </section >
-    )
+    );
 }
