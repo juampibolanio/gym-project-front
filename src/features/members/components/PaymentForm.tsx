@@ -5,6 +5,9 @@ import { paymentSchema } from "@/features/members/schemas/payment.schema";
 import { useSubscribeAndPay } from "../hook/useMembers";
 import { usePlans } from "@/features/plans/hooks/usePlans";
 import { useEffect } from "react";
+import { InputField } from "@/common/components/ui/InputField";
+import { SelectField } from "@/common/components/ui/SelectField";
+import { TextareaField } from "@/common/components/ui/TextareaField";
 
 type PaymentFormValues = z.infer<typeof paymentSchema>;
 
@@ -72,68 +75,55 @@ export function PaymentForm({ memberName, memberSurname, uuid, onSuccess, onCanc
             <p className="text-sm text-text-muted -mt-4 mb-2">Registre un nuevo pago para el miembro</p>
 
             <div className="flex flex-col gap-2">
-                <label className="text-sm text-text-muted font-medium">Miembro seleccionado</label>
-                <input
+                <InputField
+                    label="Miembro seleccionado"
                     type="text"
                     disabled
                     value={`${memberName} ${memberSurname}`}
-                    className="w-full bg-surface-hover border border-border-primary rounded-md p-3 text-text-muted text-sm focus:outline-none cursor-not-allowed"
+                    registration={register("planUuid") /* Dummy to satisfy TS, though we don't really register this input */}
                 />
             </div>
 
-            <div className="flex flex-col gap-2">
-                <label className="text-sm text-text-muted font-medium">Plan a asignar</label>
-                <select
-                    {...register("planUuid")}
-                    className={`w-full bg-background border ${errors.planUuid ? 'border-danger-main' : 'border-border-primary'} rounded-md p-3 text-text-main text-sm focus:outline-none focus:border-brand-main transition-colors cursor-pointer`}
-                >
-                    <option value="">Seleccione un plan</option>
-                    {plans.map((plan) => (
-                        <option key={plan.uuid} value={plan.uuid}>
-                            {plan.name} ({plan.durationDays} días)
-                        </option>
-                    ))}
-                </select>
-                {errors.planUuid && <span className="text-danger-main text-xs">{errors.planUuid.message}</span>}
-            </div>
+            <SelectField
+                label="Plan a asignar"
+                registration={register("planUuid")}
+                error={errors.planUuid?.message}
+            >
+                <option value="">Seleccione un plan</option>
+                {plans.map((plan) => (
+                    <option key={plan.uuid} value={plan.uuid}>
+                        {plan.name} ({plan.durationDays} días)
+                    </option>
+                ))}
+            </SelectField>
 
             <div className="grid grid-cols-2 gap-4">
-                <div className="flex flex-col gap-2">
-                    <label className="text-sm text-text-muted font-medium">Monto a cobrar</label>
-                    <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted">$</span>
-                        <input
-                            type="number"
-                            {...register("amount")}
-                            placeholder="0.00"
-                            className={`w-full bg-background border ${errors.amount ? 'border-danger-main' : 'border-border-primary'} rounded-md p-3 pl-8 text-text-main text-sm focus:outline-none focus:border-brand-main transition-colors`}
-                        />
-                    </div>
-                    {errors.amount && <span className="text-danger-main text-xs">{errors.amount.message}</span>}
-                </div>
-
-                <div className="flex flex-col gap-2">
-                    <label className="text-sm text-text-muted font-medium">Método de pago</label>
-                    <select
-                        {...register("method")}
-                        className={`w-full bg-background border ${errors.method ? 'border-danger-main' : 'border-border-primary'} rounded-md p-3 text-text-main text-sm focus:outline-none focus:border-brand-main transition-colors cursor-pointer`}
-                    >
-                        <option value="CASH">Efectivo</option>
-                        <option value="BANK_TRANSFER">Transferencia bancaria</option>
-                    </select>
-                    {errors.method && <span className="text-danger-main text-xs">{errors.method.message}</span>}
-                </div>
-            </div>
-
-            <div className="flex flex-col gap-2">
-                <label className="text-sm text-text-muted font-medium">Notas / Observaciones</label>
-                <textarea
-                    {...register("notes")}
-                    placeholder="Detalles adicionales del pago..."
-                    className={`w-full bg-background border ${errors.notes ? 'border-danger-main' : 'border-border-primary'} rounded-md p-3 text-text-main text-sm focus:outline-none focus:border-brand-main transition-colors min-h-[80px] resize-none`}
+                <InputField
+                    label="Monto a cobrar"
+                    type="number"
+                    placeholder="0.00"
+                    registration={register("amount")}
+                    error={errors.amount?.message}
+                    icon={<span className="text-text-muted">$</span>}
                 />
-                {errors.notes && <span className="text-danger-main text-xs">{errors.notes.message}</span>}
+
+                <SelectField
+                    label="Método de pago"
+                    registration={register("method")}
+                    error={errors.method?.message}
+                >
+                    <option value="CASH">Efectivo</option>
+                    <option value="BANK_TRANSFER">Transferencia bancaria</option>
+                </SelectField>
             </div>
+
+            <TextareaField
+                label="Notas / Observaciones"
+                placeholder="Detalles adicionales del pago..."
+                registration={register("notes")}
+                error={errors.notes?.message}
+                rows={3}
+            />
 
             <div className="flex justify-end gap-3 mt-2">
                 <button

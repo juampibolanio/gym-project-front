@@ -8,6 +8,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCreatePlan } from "@/features/plans/hooks/usePlans";
 import { Loader2 } from "lucide-react";
+import { InputField } from "@/common/components/ui/InputField";
+import { TextareaField } from "@/common/components/ui/TextareaField";
 
 type PlanFormValues = z.infer<typeof planSchema>;
 
@@ -42,36 +44,29 @@ export function NewPlanForm() {
                     <h2 className="text-[15px] font-bold text-text-main">Información general</h2>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="flex flex-col gap-2">
-                            <label className="text-sm font-medium text-text-main">Nombre del Plan</label>
-                            <input 
-                                {...register("name")} 
-                                disabled={isPending}
-                                placeholder="Ej: Pase Libre Mensual"
-                                className={`w-full px-4 py-2.5 bg-background border ${errors.name ? 'border-danger-main' : 'border-border-primary'} rounded-md text-sm text-text-main focus:outline-none focus:border-brand-main focus:ring-1 focus:ring-brand-main transition-colors disabled:opacity-70 disabled:cursor-not-allowed`} 
-                            />
-                            {errors.name && <span className="text-danger-main text-xs">{errors.name.message}</span>}
-                        </div>
+                        <InputField
+                            label="Nombre del Plan"
+                            type="text"
+                            placeholder="Ej: Pase Libre Mensual"
+                            disabled={isPending}
+                            registration={register("name")}
+                            error={errors.name?.message}
+                        />
 
-                        <div className="flex flex-col gap-2">
-                            <label className="text-sm font-medium text-text-main">Precio</label>
-                            <div className="relative">
-                                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted">$</span>
-                                <input 
-                                    type="text" 
-                                    disabled={isPending}
-                                    {...register("price", {
-                                        onChange: (e) => {
-                                            const rawValue = e.target.value.replace(/\D/g, '');
-                                            e.target.value = rawValue ? new Intl.NumberFormat('es-AR').format(Number(rawValue)) : '';
-                                        }
-                                    })} 
-                                    placeholder="0.00"
-                                    className={`w-full px-4 py-2.5 pl-8 bg-background border ${errors.price ? 'border-danger-main' : 'border-border-primary'} rounded-md text-sm text-text-main focus:outline-none focus:border-brand-main focus:ring-1 focus:ring-brand-main transition-colors disabled:opacity-70 disabled:cursor-not-allowed`} 
-                                />
-                            </div>
-                            {errors.price && <span className="text-danger-main text-xs">{errors.price.message}</span>}
-                        </div>
+                        <InputField
+                            label="Precio"
+                            type="text"
+                            placeholder="0.00"
+                            disabled={isPending}
+                            registration={register("price", {
+                                onChange: (e) => {
+                                    const rawValue = e.target.value.replace(/\D/g, '');
+                                    e.target.value = rawValue ? new Intl.NumberFormat('es-AR').format(Number(rawValue)) : '';
+                                }
+                            })}
+                            error={errors.price?.message}
+                            icon={<span className="text-text-muted">$</span>}
+                        />
                     </div>
                 </div>
 
@@ -81,30 +76,26 @@ export function NewPlanForm() {
                     <h2 className="text-[15px] font-bold text-text-main">Especificaciones del plan</h2>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="flex flex-col gap-2">
-                            <label className="text-sm font-medium text-text-main">Duración (Días)</label>
-                            <input 
-                                type="number" 
-                                disabled={isPending}
-                                {...register("durationDays")} 
-                                placeholder="Ej: 30"
-                                className={`w-full px-4 py-2.5 bg-background border ${errors.durationDays ? 'border-danger-main' : 'border-border-primary'} rounded-md text-sm text-text-main focus:outline-none focus:border-brand-main focus:ring-1 focus:ring-brand-main transition-colors disabled:opacity-70 disabled:cursor-not-allowed`} 
-                            />
-                            {errors.durationDays && <span className="text-danger-main text-xs">{errors.durationDays.message}</span>}
-                        </div>
+                        <InputField
+                            label="Duración (Días)"
+                            type="number"
+                            placeholder="Ej: 30"
+                            disabled={isPending}
+                            registration={register("durationDays")}
+                            error={errors.durationDays?.message}
+                        />
                     </div>
 
                     <div className="flex flex-col gap-2">
-                        <label className="text-sm font-medium text-text-main">Beneficios del plan (Opcional)</label>
-                        <p className="text-xs text-text-muted mb-1">Escribe un beneficio por línea para mostrarlos en la lista.</p>
-                        <textarea 
-                            disabled={isPending}
-                            {...register("description")} 
+                        <TextareaField
+                            label="Beneficios del plan (Opcional)"
                             placeholder="Acceso a sala de musculación&#10;Clases grupales incluidas&#10;Duchas y vestuarios"
+                            disabled={isPending}
+                            registration={register("description")}
+                            error={errors.description?.message}
                             rows={4}
-                            className={`w-full px-4 py-2.5 bg-background border ${errors.description ? 'border-danger-main' : 'border-border-primary'} rounded-md text-sm text-text-main focus:outline-none focus:border-brand-main focus:ring-1 focus:ring-brand-main transition-colors disabled:opacity-70 disabled:cursor-not-allowed resize-none`} 
                         />
-                        {errors.description && <span className="text-danger-main text-xs">{errors.description.message}</span>}
+                        <p className="text-xs text-text-muted mt-1">Escribe un beneficio por línea para mostrarlos en la lista.</p>
                     </div>
                 </div>
 

@@ -59,7 +59,6 @@ export function EditMemberForm({ id }: { id: string }) {
       phoneNumber: data.phoneNumber || undefined,
       observations: data.observations || undefined,
     };
-
     updateMemberMutation.mutate(
       { id, payload: payload as any },
       {
@@ -86,7 +85,6 @@ export function EditMemberForm({ id }: { id: string }) {
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
 
         <div className="border border-border-primary rounded-lg bg-surface flex flex-col p-6 gap-8 ">
-          
           <div className="flex flex-col gap-6">
             <h2 className="text-[15px] font-bold text-text-main">Identidad y Contacto</h2>
             
@@ -141,10 +139,8 @@ export function EditMemberForm({ id }: { id: string }) {
           </div>
 
           <hr className="border-border-primary" />
-
           <div className="flex flex-col gap-6">
             <h2 className="text-[15px] font-bold text-text-main">Membresía y Estado</h2>
-            
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="flex flex-col gap-1.5">
                 <SelectField
@@ -169,9 +165,7 @@ export function EditMemberForm({ id }: { id: string }) {
               disabled={isSubmitting}
               rows={4}
             />
-            
           </div>
-
           <div className="flex items-center justify-end gap-3 pt-4 border-t border-border-primary">
             <Link 
               href={`/dashboard/miembros/${id}`}

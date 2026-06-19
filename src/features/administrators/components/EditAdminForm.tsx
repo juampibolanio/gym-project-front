@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import { Mail, Loader2, CreditCard, ShieldCheck } from 'lucide-react';
+import { InputField } from '@/common/components/ui/InputField';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
@@ -62,62 +63,42 @@ export function EditAdminForm({ id }: { id: string }) {
             <h2 className="text-[15px] font-bold text-text-main">Identidad y Contacto</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-text-muted tracking-wide">Nombre</label>
-                <input 
-                  type="text" 
-                  disabled={isPending}
-                  {...register('name')}
-                  className={`w-full bg-background border ${errors.name ? 'border-danger-main' : 'border-border-primary'} rounded px-3 py-2.5 text-sm text-text-main focus:outline-none focus:border-brand-main transition-colors`}
-                />
-                {errors.name && <p className="text-xs text-danger-main">{errors.name.message}</p>}
-              </div>
+              <InputField
+                label="Nombre"
+                type="text"
+                disabled={isPending}
+                registration={register('name')}
+                error={errors.name?.message}
+              />
 
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-text-muted tracking-wide">Apellido</label>
-                <input 
-                  type="text" 
-                  disabled={isPending}
-                  {...register('surname')}
-                  className={`w-full bg-background border ${errors.surname ? 'border-danger-main' : 'border-border-primary'} rounded px-3 py-2.5 text-sm text-text-main focus:outline-none focus:border-brand-main transition-colors`}
-                />
-                {errors.surname && <p className="text-xs text-danger-main">{errors.surname.message}</p>}
-              </div>
+              <InputField
+                label="Apellido"
+                type="text"
+                disabled={isPending}
+                registration={register('surname')}
+                error={errors.surname?.message}
+              />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-text-muted tracking-wide">DNI / Documento</label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <CreditCard size={14} className="text-text-muted" />
-                  </div>
-                  <input 
-                    type="text" 
-                    disabled={isPending}
-                    placeholder="12345678"
-                    {...register('dni')}
-                    className={`w-full bg-background border ${errors.dni ? 'border-danger-main' : 'border-border-primary'} rounded pl-9 pr-3 py-2.5 text-sm text-text-main placeholder:text-text-muted focus:outline-none focus:border-brand-main transition-colors`}
-                  />
-                </div>
-                {errors.dni && <p className="text-xs text-danger-main">{errors.dni.message}</p>}
-              </div>
+              <InputField
+                label="DNI / Documento"
+                type="text"
+                placeholder="12345678"
+                disabled={isPending}
+                registration={register('dni')}
+                error={errors.dni?.message}
+                icon={<CreditCard size={14} className="text-text-muted" />}
+              />
               
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-text-muted tracking-wide">Email</label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Mail size={14} className="text-text-muted" />
-                  </div>
-                  <input 
-                    type="email" 
-                    disabled={isPending}
-                    {...register('email')}
-                    className={`w-full bg-background border ${errors.email ? 'border-danger-main' : 'border-border-primary'} rounded pl-9 pr-3 py-2.5 text-sm text-text-main focus:outline-none focus:border-brand-main transition-colors`}
-                  />
-                </div>
-                {errors.email && <p className="text-xs text-danger-main">{errors.email.message}</p>}
-              </div>
+              <InputField
+                label="Email"
+                type="email"
+                disabled={isPending}
+                registration={register('email')}
+                error={errors.email?.message}
+                icon={<Mail size={14} className="text-text-muted" />}
+              />
             </div>
           </div>
 

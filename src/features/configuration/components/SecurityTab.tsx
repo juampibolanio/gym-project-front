@@ -9,6 +9,7 @@ import { configSecuritySchema } from '@/features/configuration/schemas/config.sc
 import { useAuthStore } from '@/features/auth/store/auth.store';
 import { useChangePassword } from '@/features/administrators/hooks/useUsers';
 import { toast } from 'react-hot-toast'; 
+import { InputField } from '@/common/components/ui/InputField';
 
 type SecurityFormValues = z.infer<typeof configSecuritySchema>;
 
@@ -61,61 +62,52 @@ export function SecurityTab() {
         <p className="text-sm text-text-muted mb-6">Gestiona tus credenciales y aumenta la seguridad de tu sistema.</p>
         
         <div className="max-w-md flex flex-col gap-5">
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-text-main">Contraseña Actual</label>
-            <div className="relative">
-              <input 
-                type={showCurrentPass ? "text" : "password"} 
-                placeholder="••••••••"
-                disabled={isPending}
-                {...register('currentPassword')}
-                className={`w-full px-4 py-2.5 bg-background border ${errors.currentPassword ? 'border-danger-main' : 'border-border-primary'} rounded-md text-sm text-text-main focus:outline-none focus:border-brand-main focus:ring-1 focus:ring-brand-main transition-colors`}
-              />
+          <InputField
+            label="Contraseña Actual"
+            type={showCurrentPass ? "text" : "password"}
+            placeholder="••••••••"
+            disabled={isPending}
+            registration={register('currentPassword')}
+            error={errors.currentPassword?.message}
+            rightElement={
               <button 
                 type="button"
                 disabled={isPending}
                 onClick={() => setShowCurrentPass(!showCurrentPass)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-main disabled:opacity-50"
+                className="text-text-muted hover:text-text-main disabled:opacity-50"
               >
                 {showCurrentPass ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
-            </div>
-            {errors.currentPassword && <p className="text-xs text-danger-main">{errors.currentPassword.message}</p>}
-          </div>
+            }
+          />
           
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-text-main">Nueva Contraseña</label>
-            <div className="relative">
-              <input 
-                type={showNewPass ? "text" : "password"}
-                placeholder="••••••••"
-                disabled={isPending}
-                {...register('newPassword')}
-                className={`w-full px-4 py-2.5 bg-background border ${errors.newPassword ? 'border-danger-main' : 'border-border-primary'} rounded-md text-sm text-text-main focus:outline-none focus:border-brand-main focus:ring-1 focus:ring-brand-main transition-colors`}
-              />
+          <InputField
+            label="Nueva Contraseña"
+            type={showNewPass ? "text" : "password"}
+            placeholder="••••••••"
+            disabled={isPending}
+            registration={register('newPassword')}
+            error={errors.newPassword?.message}
+            rightElement={
               <button 
                 type="button"
                 disabled={isPending}
                 onClick={() => setShowNewPass(!showNewPass)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-main disabled:opacity-50"
+                className="text-text-muted hover:text-text-main disabled:opacity-50"
               >
                 {showNewPass ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
-            </div>
-            {errors.newPassword && <p className="text-xs text-danger-main">{errors.newPassword.message}</p>}
-          </div>
+            }
+          />
           
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-text-main">Confirmar Nueva Contraseña</label>
-            <input 
-              type="password" 
-              placeholder="••••••••"
-              disabled={isPending}
-              {...register('confirmNewPassword')}
-              className={`w-full px-4 py-2.5 bg-background border ${errors.confirmNewPassword ? 'border-danger-main' : 'border-border-primary'} rounded-md text-sm text-text-main focus:outline-none focus:border-brand-main focus:ring-1 focus:ring-brand-main transition-colors`}
-            />
-            {errors.confirmNewPassword && <p className="text-xs text-danger-main">{errors.confirmNewPassword.message}</p>}
-          </div>
+          <InputField
+            label="Confirmar Nueva Contraseña"
+            type="password"
+            placeholder="••••••••"
+            disabled={isPending}
+            registration={register('confirmNewPassword')}
+            error={errors.confirmNewPassword?.message}
+          />
           
           <button 
             type="submit"

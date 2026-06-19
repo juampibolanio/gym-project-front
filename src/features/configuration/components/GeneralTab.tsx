@@ -11,6 +11,7 @@ import { useAuthStore } from '@/features/auth/store/auth.store';
 import { useGym, useUpdateGym } from '@/features/gyms/hooks/useGyms';
 import toast from 'react-hot-toast';
 import { GeneralTabSkeleton } from './GeneralTabSkeleton';
+import { InputField } from '@/common/components/ui/InputField';
 
 type GeneralFormValues = z.infer<typeof configGeneralSchema>;
 
@@ -77,38 +78,30 @@ export function GeneralTab() {
         </p>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-text-main">Nombre del Gimnasio</label>
-            <input 
-              type="text" 
-              disabled={!isAdmin || isProcessing}
-              {...register('nombreGimnasio')}
-              className={`w-full px-4 py-2.5 bg-background border ${errors.nombreGimnasio ? 'border-danger-main' : 'border-border-primary'} rounded-md text-sm text-text-main focus:outline-none focus:border-brand-main focus:ring-1 focus:ring-brand-main transition-colors disabled:opacity-70 disabled:cursor-not-allowed`}
-            />
-            {errors.nombreGimnasio && <p className="text-xs text-danger-main">{errors.nombreGimnasio.message}</p>}
-          </div>
+          <InputField
+            label="Nombre del Gimnasio"
+            type="text"
+            disabled={!isAdmin || isProcessing}
+            registration={register('nombreGimnasio')}
+            error={errors.nombreGimnasio?.message}
+          />
 
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-text-main">Teléfono de Contacto</label>
-            <input 
-              type="text" 
-              disabled={!isAdmin || isProcessing}
-              {...register('telefono')}
-              className={`w-full px-4 py-2.5 bg-background border ${errors.telefono ? 'border-danger-main' : 'border-border-primary'} rounded-md text-sm text-text-main focus:outline-none focus:border-brand-main transition-colors disabled:opacity-70 disabled:cursor-not-allowed`}
-            />
-            {errors.telefono && <p className="text-xs text-danger-main">{errors.telefono.message}</p>}
-          </div>
+          <InputField
+            label="Teléfono de Contacto"
+            type="text"
+            disabled={!isAdmin || isProcessing}
+            registration={register('telefono')}
+            error={errors.telefono?.message}
+          />
 
-          <div className="flex flex-col gap-2 md:col-span-2">
-            <label className="text-sm font-medium text-text-main">Dirección</label>
-            <input 
-              type="text" 
-              disabled={!isAdmin || isProcessing}
-              {...register('direccion')}
-              className={`w-full px-4 py-2.5 bg-background border ${errors.direccion ? 'border-danger-main' : 'border-border-primary'} rounded-md text-sm text-text-main focus:outline-none focus:border-brand-main transition-colors disabled:opacity-70 disabled:cursor-not-allowed`}
-            />
-            {errors.direccion && <p className="text-xs text-danger-main">{errors.direccion.message}</p>}
-          </div>
+          <InputField
+            label="Dirección"
+            type="text"
+            disabled={!isAdmin || isProcessing}
+            registration={register('direccion')}
+            error={errors.direccion?.message}
+            className="md:col-span-2"
+          />
         </div>
         
         {isAdmin && (

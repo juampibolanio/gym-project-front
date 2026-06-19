@@ -1,5 +1,6 @@
 'use client';
 import { Mail, Lock, EyeOff, Eye, Loader2 } from 'lucide-react';
+import { InputField } from '@/common/components/ui/InputField';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -36,52 +37,42 @@ export function LoginForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-      <div className="space-y-2">
-        <label className="text-[10px] font-bold text-text-muted tracking-wider transition-colors">
-          DIRECCIÓN EMAIL
-        </label>
-        <div className="relative flex items-center">
-          <Mail className="absolute left-3 text-text-muted transition-colors" size={16} />
-          <input
-            type="email"
-            placeholder="admin@chacugym.com"
-            disabled={isPending}
-            {...register('email')}
-            className={`w-full bg-sidebar border ${errors.email ? 'border-danger-main' : 'border-border-primary'} rounded-lg py-2.5 pl-10 pr-4 text-sm text-text-main placeholder-text-muted focus:outline-none focus:border-brand-main transition-colors`}
-          />
-        </div>
-        {errors.email && <p className="text-danger-main text-xs mt-1 font-medium">{errors.email.message}</p>}
-      </div>
+      <InputField
+        label="DIRECCIÓN EMAIL"
+        type="email"
+        placeholder="admin@chacugym.com"
+        disabled={isPending}
+        registration={register('email')}
+        error={errors.email?.message}
+        icon={<Mail className="text-text-muted transition-colors" size={16} />}
+        className="gap-2! [&_label]:text-[10px] [&_label]:font-bold [&_label]:tracking-wider [&_label]:uppercase [&_input]:bg-sidebar"
+      />
 
-      <div className="space-y-2">
-        <div className="flex justify-between items-center">
-          <label className="text-[10px] font-bold text-text-muted tracking-wider transition-colors">
-            CONTRASEÑA
-          </label>
+      <InputField
+        label="CONTRASEÑA"
+        type={showPassword ? "text" : "password"}
+        placeholder="••••••••"
+        disabled={isPending}
+        registration={register('password')}
+        error={errors.password?.message}
+        icon={<Lock className="text-text-muted transition-colors" size={16} />}
+        labelRightElement={
           <Link href="/forgot-password" className="text-[10px] font-bold text-text-muted hover:text-text-main transition-colors">
             Has olvidado la contraseña?
           </Link>
-        </div>
-        <div className="relative flex items-center">
-          <Lock className="absolute left-3 text-text-muted transition-colors" size={16} />
-          <input
-            type={showPassword ? "text" : "password"}
-            placeholder="••••••••"
-            disabled={isPending} 
-            {...register('password')}
-            className={`w-full bg-sidebar border ${errors.password ? 'border-danger-main' : 'border-border-primary'} rounded-lg py-2.5 pl-10 pr-10 text-sm text-text-main placeholder-text-muted focus:outline-none focus:border-brand-main transition-colors`}
-          />
+        }
+        rightElement={
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
             disabled={isPending}
-            className="absolute right-3 text-text-muted hover:text-text-main transition-colors focus:outline-none"
+            className="text-text-muted hover:text-text-main transition-colors focus:outline-none"
           >
             {showPassword ? <Eye size={16} /> : <EyeOff size={16} />}
           </button>
-        </div>
-        {errors.password && <p className="text-danger-main text-xs mt-1 font-medium">{errors.password.message}</p>}
-      </div>
+        }
+        className="gap-2! [&_label]:text-[10px] [&_label]:font-bold [&_label]:tracking-wider [&_label]:uppercase [&_input]:bg-sidebar"
+      />
 
       <button
         type="submit"

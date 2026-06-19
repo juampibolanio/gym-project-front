@@ -1,5 +1,6 @@
 'use client';
 import { Mail, Send } from 'lucide-react';
+import { InputField } from '@/common/components/ui/InputField';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -32,21 +33,15 @@ export function ForgotPasswordForm() {
               Ingresa tu dirección de email y te enviaremos las instrucciones para restablecer tu contraseña.
             </p>
 
-            <div className="space-y-2">
-              <label className="text-[10px] font-bold text-text-muted tracking-wider transition-colors">
-                DIRECCIÓN EMAIL
-              </label>
-              <div className="relative flex items-center">
-                <Mail className="absolute left-3 text-text-muted transition-colors" size={16} />
-                <input 
-                  type="email"
-                  placeholder="admin@chacugym.com"
-                  {...register('email')} 
-                  className={`w-full bg-sidebar border ${errors.email ? 'border-danger-main' : 'border-border-primary'} rounded-lg py-2.5 pl-10 pr-4 text-sm text-text-main placeholder-text-muted focus:outline-none focus:border-brand-main transition-colors`}
-                />
-              </div>
-              {errors.email && <p className="text-danger-main text-xs mt-1 font-medium">{errors.email.message}</p>}
-            </div>
+            <InputField
+              label="DIRECCIÓN EMAIL"
+              type="email"
+              placeholder="admin@chacugym.com"
+              registration={register('email')}
+              error={errors.email?.message}
+              icon={<Mail className="text-text-muted transition-colors" size={16} />}
+              className="gap-2! [&_label]:text-[10px] [&_label]:font-bold [&_label]:tracking-wider [&_label]:uppercase [&_input]:bg-sidebar"
+            />
 
             <button 
               type="submit"

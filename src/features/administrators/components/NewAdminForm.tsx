@@ -4,12 +4,11 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { userSchema } from '@/features/administrators/schemas/user.schema';
+
+import { createUserSchema, CreateUserFormValues } from '@/features/administrators/schemas/user.schema';
 import { useCreateUser } from '../hooks/useUsers';
 import { Loader2 } from 'lucide-react';
-
-type CreateAdminFormValues = z.infer<typeof userSchema>;
+import { InputField } from '@/common/components/ui/InputField';
 
 export function NewAdminForm() {
   const router = useRouter();
@@ -20,17 +19,18 @@ export function NewAdminForm() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<CreateAdminFormValues>({
-    resolver: zodResolver(userSchema),
+  } = useForm<CreateUserFormValues>({
+    resolver: zodResolver(createUserSchema),
     defaultValues: {
       dni: '',
       name: '',
       surname: '',
       email: '',
+      password: '',
     }
   });
 
-  const onSubmit = (data: CreateAdminFormValues) => {
+  const onSubmit = (data: CreateUserFormValues) => {
     mutate(data, {
       onSuccess: () => {
         router.push('/dashboard/administradores');
@@ -49,49 +49,45 @@ export function NewAdminForm() {
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-text-muted tracking-wide">DNI</label>
-                <input 
-                  type="text" 
-                  disabled={isPending}
-                  {...register('dni')}
-                  className={`w-full bg-background border ${errors.dni ? 'border-danger-main' : 'border-border-primary'} rounded px-3 py-2.5 text-sm text-text-main focus:outline-none focus:border-brand-main transition-colors`}
-                />
-                {errors.dni && <p className="text-xs text-danger-main">{errors.dni.message}</p>}
-              </div>
+              <InputField
+                label="DNI"
+                type="text"
+                disabled={isPending}
+                registration={register('dni')}
+                error={errors.dni?.message}
+              />
 
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-text-muted tracking-wide">Nombre</label>
-                <input 
-                  type="text" 
-                  disabled={isPending}
-                  {...register('name')}
-                  className={`w-full bg-background border ${errors.name ? 'border-danger-main' : 'border-border-primary'} rounded px-3 py-2.5 text-sm text-text-main focus:outline-none focus:border-brand-main transition-colors`}
-                />
-                {errors.name && <p className="text-xs text-danger-main">{errors.name.message}</p>}
-              </div>
+              <InputField
+                label="Nombre"
+                type="text"
+                disabled={isPending}
+                registration={register('name')}
+                error={errors.name?.message}
+              />
 
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-text-muted tracking-wide">Apellido</label>
-                <input 
-                  type="text" 
-                  disabled={isPending}
-                  {...register('surname')}
-                  className={`w-full bg-background border ${errors.surname ? 'border-danger-main' : 'border-border-primary'} rounded px-3 py-2.5 text-sm text-text-main focus:outline-none focus:border-brand-main transition-colors`}
-                />
-                {errors.surname && <p className="text-xs text-danger-main">{errors.surname.message}</p>}
-              </div>
+              <InputField
+                label="Apellido"
+                type="text"
+                disabled={isPending}
+                registration={register('surname')}
+                error={errors.surname?.message}
+              />
 
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-text-muted tracking-wide">Correo electrónico</label>
-                <input 
-                  type="email" 
-                  disabled={isPending}
-                  {...register('email')}
-                  className={`w-full bg-background border ${errors.email ? 'border-danger-main' : 'border-border-primary'} rounded px-3 py-2.5 text-sm text-text-main focus:outline-none focus:border-brand-main transition-colors`}
-                />
-                {errors.email && <p className="text-xs text-danger-main">{errors.email.message}</p>}
-              </div>
+              <InputField
+                label="Correo electrónico"
+                type="email"
+                disabled={isPending}
+                registration={register('email')}
+                error={errors.email?.message}
+              />
+
+              <InputField
+                label="Contraseña"
+                type="password"
+                disabled={isPending}
+                registration={register('password')}
+                error={errors.password?.message}
+              />
             </div>
           </div>
 

@@ -22,5 +22,10 @@ export const userSchema = z.object({
     .email("Debe ser un email válido (ejemplo@correo.com)")
     .max(100, "El email no puede superar los 100 caracteres"),
 });
+export const createUserSchema = userSchema.extend({
+  password: z.string()
+    .min(6, "La contraseña debe tener al menos 6 caracteres"),
+});
 
 export type UserFormValues = z.infer<typeof userSchema>;
+export type CreateUserFormValues = z.infer<typeof createUserSchema>;
