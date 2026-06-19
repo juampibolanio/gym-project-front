@@ -79,14 +79,14 @@ export function AdminTable() {
           <button 
             onClick={handlePrevPage}
             disabled={currentPage === 1 || isLoading}
-            className="p-1 text-text-muted hover:text-text-main disabled:opacity-50 disabled:hover:text-text-muted transition-colors"
+            className="p-1 text-text-muted hover:text-text-main disabled:opacity-50 disabled:hover:text-text-muted transition-colors cursor-pointer disabled:cursor-not-allowed"
           >
             <ChevronLeft size={18} />
           </button>
           <button 
             onClick={handleNextPage}
             disabled={currentPage >= totalPages || isLoading}
-            className="p-1 text-text-muted hover:text-text-main disabled:opacity-50 disabled:hover:text-text-muted transition-colors"
+            className="p-1 text-text-muted hover:text-text-main disabled:opacity-50 disabled:hover:text-text-muted transition-colors cursor-pointer disabled:cursor-not-allowed"
           >
             <ChevronRight size={18} />
           </button>

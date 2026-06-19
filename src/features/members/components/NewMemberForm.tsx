@@ -1,6 +1,6 @@
 'use client';
 
-import { Phone, ChevronDown, IdCard } from 'lucide-react';
+import { Phone, IdCard } from 'lucide-react';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -52,7 +52,7 @@ export function NewMemberForm() {
     <div className="flex flex-col gap-6">
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
 
-        <div className="border border-border-primary rounded-lg bg-surface flex flex-col p-6 gap-8 shadow-sm dark:shadow-none">
+        <div className="border border-border-primary rounded-lg bg-surface flex flex-col p-6 gap-8 ">
           
           <div className="flex flex-col gap-6">
             <h2 className="text-[15px] font-bold text-text-main">Identidad y Contacto</h2>
@@ -131,28 +131,7 @@ export function NewMemberForm() {
           <hr className="border-border-primary" />
 
           <div className="flex flex-col gap-6">
-            <h2 className="text-[15px] font-bold text-text-main">Membresía y Estado</h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-text-muted tracking-wide">Estado</label>
-                <div className="relative">
-                  <select 
-                    {...register('state')}
-                    disabled={isSubmitting}
-                    className={`w-full bg-background border ${errors.state ? 'border-danger-main' : 'border-border-primary'} rounded px-3 py-2.5 text-sm text-text-main appearance-none focus:outline-none focus:border-brand-main transition-colors disabled:opacity-50`}
-                  >
-                    <option value="ACTIVE">Activo</option>
-                    <option value="INACTIVE">Inactivo</option>
-                    <option value="SUSPENDED">Suspendido</option>
-                  </select>
-                  <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                    <ChevronDown size={14} className="text-text-muted" />
-                  </div>
-                </div>
-                {errors.state && <p className="text-xs text-danger-main">{errors.state.message}</p>}
-              </div>
-            </div>
+            <h2 className="text-[15px] font-bold text-text-main">Información Adicional</h2>
 
             <div className="flex flex-col gap-1.5">
               <div className="flex justify-between items-center">
@@ -181,7 +160,7 @@ export function NewMemberForm() {
             <button 
               type="submit" 
               disabled={isSubmitting}
-              className="flex items-center justify-center gap-2 px-6 py-2.5 bg-brand-main hover:bg-brand-hover text-white rounded-sm text-sm font-medium transition-colors shadow-sm disabled:opacity-50"
+              className="flex items-center justify-center gap-2 px-6 py-2.5 bg-brand-main hover:bg-brand-hover text-white rounded-sm text-sm font-medium transition-colors  disabled:opacity-50"
             >
               {isSubmitting ? "Guardando..." : "Guardar Registro"}
             </button>

@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { userSchema } from '@/features/administrators/schemas/user.schema';
-import { useCreateUser } from '../hooks/useUsers'; // Ajusta la ruta si es necesario
+import { useCreateUser } from '../hooks/useUsers';
 import { Loader2 } from 'lucide-react';
 
 type CreateAdminFormValues = z.infer<typeof userSchema>;
@@ -42,7 +42,7 @@ export function NewAdminForm() {
     <div className="flex flex-col gap-6">
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
 
-        <div className="border border-border-primary rounded-lg bg-surface flex flex-col p-6 gap-8 shadow-sm dark:shadow-none">
+        <div className="border border-border-primary rounded-lg bg-surface flex flex-col p-6 gap-8 ">
           
           <div className="flex flex-col gap-6">
             <h2 className="text-[15px] font-bold text-text-main">Datos del usuario</h2>
@@ -55,9 +55,9 @@ export function NewAdminForm() {
                   type="text" 
                   disabled={isPending}
                   {...register('dni')}
-                  className={`w-full bg-background border ${errors.dni ? 'border-red-500' : 'border-border-primary'} rounded px-3 py-2.5 text-sm text-text-main focus:outline-none focus:border-brand-main transition-colors`}
+                  className={`w-full bg-background border ${errors.dni ? 'border-danger-main' : 'border-border-primary'} rounded px-3 py-2.5 text-sm text-text-main focus:outline-none focus:border-brand-main transition-colors`}
                 />
-                {errors.dni && <p className="text-xs text-red-500">{errors.dni.message}</p>}
+                {errors.dni && <p className="text-xs text-danger-main">{errors.dni.message}</p>}
               </div>
 
               <div className="flex flex-col gap-1.5">
@@ -66,9 +66,9 @@ export function NewAdminForm() {
                   type="text" 
                   disabled={isPending}
                   {...register('name')}
-                  className={`w-full bg-background border ${errors.name ? 'border-red-500' : 'border-border-primary'} rounded px-3 py-2.5 text-sm text-text-main focus:outline-none focus:border-brand-main transition-colors`}
+                  className={`w-full bg-background border ${errors.name ? 'border-danger-main' : 'border-border-primary'} rounded px-3 py-2.5 text-sm text-text-main focus:outline-none focus:border-brand-main transition-colors`}
                 />
-                {errors.name && <p className="text-xs text-red-500">{errors.name.message}</p>}
+                {errors.name && <p className="text-xs text-danger-main">{errors.name.message}</p>}
               </div>
 
               <div className="flex flex-col gap-1.5">
@@ -77,9 +77,9 @@ export function NewAdminForm() {
                   type="text" 
                   disabled={isPending}
                   {...register('surname')}
-                  className={`w-full bg-background border ${errors.surname ? 'border-red-500' : 'border-border-primary'} rounded px-3 py-2.5 text-sm text-text-main focus:outline-none focus:border-brand-main transition-colors`}
+                  className={`w-full bg-background border ${errors.surname ? 'border-danger-main' : 'border-border-primary'} rounded px-3 py-2.5 text-sm text-text-main focus:outline-none focus:border-brand-main transition-colors`}
                 />
-                {errors.surname && <p className="text-xs text-red-500">{errors.surname.message}</p>}
+                {errors.surname && <p className="text-xs text-danger-main">{errors.surname.message}</p>}
               </div>
 
               <div className="flex flex-col gap-1.5">
@@ -88,9 +88,9 @@ export function NewAdminForm() {
                   type="email" 
                   disabled={isPending}
                   {...register('email')}
-                  className={`w-full bg-background border ${errors.email ? 'border-red-500' : 'border-border-primary'} rounded px-3 py-2.5 text-sm text-text-main focus:outline-none focus:border-brand-main transition-colors`}
+                  className={`w-full bg-background border ${errors.email ? 'border-danger-main' : 'border-border-primary'} rounded px-3 py-2.5 text-sm text-text-main focus:outline-none focus:border-brand-main transition-colors`}
                 />
-                {errors.email && <p className="text-xs text-red-500">{errors.email.message}</p>}
+                {errors.email && <p className="text-xs text-danger-main">{errors.email.message}</p>}
               </div>
             </div>
           </div>
@@ -105,7 +105,7 @@ export function NewAdminForm() {
             <button 
               type="submit" 
               disabled={isPending}
-              className="px-6 py-2.5 flex items-center justify-center gap-2 bg-brand-main hover:bg-brand-hover text-white rounded-sm text-sm font-medium transition-colors shadow-sm disabled:opacity-50 cursor-pointer"
+              className="px-6 py-2.5 flex items-center justify-center gap-2 bg-brand-main hover:bg-brand-hover text-white rounded-sm text-sm font-medium transition-colors  disabled:opacity-50 cursor-pointer"
             >
               {isPending ? (
                 <>

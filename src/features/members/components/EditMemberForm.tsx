@@ -82,7 +82,7 @@ export function EditMemberForm({ id }: { id: string }) {
     <div className="flex flex-col gap-6">
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
 
-        <div className="border border-border-primary rounded-lg bg-surface flex flex-col p-6 gap-8 shadow-sm dark:shadow-none">
+        <div className="border border-border-primary rounded-lg bg-surface flex flex-col p-6 gap-8 ">
           
           <div className="flex flex-col gap-6">
             <h2 className="text-[15px] font-bold text-text-main">Identidad y Contacto</h2>
@@ -212,7 +212,7 @@ export function EditMemberForm({ id }: { id: string }) {
             <button 
               type="submit" 
               disabled={isSubmitting}
-              className="flex items-center justify-center gap-2 px-6 py-2.5 bg-brand-main hover:bg-brand-hover text-white rounded-sm text-sm font-medium transition-colors shadow-sm disabled:opacity-50"
+              className="flex items-center justify-center gap-2 px-6 py-2.5 bg-brand-main hover:bg-brand-hover text-white rounded-sm text-sm font-medium transition-colors  disabled:opacity-50"
             >
               {isSubmitting ? "Guardando..." : "Guardar Cambios"}
             </button>

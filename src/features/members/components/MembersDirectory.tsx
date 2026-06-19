@@ -37,25 +37,25 @@ export function MembersDirectory() {
           <div className="flex bg-surface border border-border-primary rounded-lg p-1">
             <button 
               onClick={() => { setFilter('Todos'); setCurrentPage(1); }}
-              className={`px-4 py-1.5 text-[10px] font-bold rounded transition-colors tracking-wider uppercase ${filter === 'Todos' ? 'bg-brand-main text-white shadow-sm dark:shadow-none' : 'text-text-muted hover:text-text-main'}`}
+              className={`px-4 py-1.5 text-[10px] font-bold rounded transition-colors tracking-wider uppercase ${filter === 'Todos' ? 'bg-brand-main text-white ' : 'text-text-muted hover:text-text-main'}`}
             >
               Todos
             </button>
             <button 
               onClick={() => { setFilter('ACTIVE'); setCurrentPage(1); }}
-              className={`px-4 py-1.5 text-[10px] font-bold rounded transition-colors tracking-wider uppercase ${filter === 'ACTIVE' ? 'bg-brand-main text-white shadow-sm dark:shadow-none' : 'text-text-muted hover:text-text-main'}`}
+              className={`px-4 py-1.5 text-[10px] font-bold rounded transition-colors tracking-wider uppercase ${filter === 'ACTIVE' ? 'bg-brand-main text-white ' : 'text-text-muted hover:text-text-main'}`}
             >
               Activo
             </button>
             <button 
               onClick={() => { setFilter('INACTIVE'); setCurrentPage(1); }}
-              className={`px-4 py-1.5 text-[10px] font-bold rounded transition-colors tracking-wider uppercase ${filter === 'INACTIVE' ? 'bg-brand-main text-white shadow-sm dark:shadow-none' : 'text-text-muted hover:text-text-main'}`}
+              className={`px-4 py-1.5 text-[10px] font-bold rounded transition-colors tracking-wider uppercase ${filter === 'INACTIVE' ? 'bg-brand-main text-white ' : 'text-text-muted hover:text-text-main'}`}
             >
               Inactivo
             </button>
             <button 
               onClick={() => { setFilter('SUSPENDED'); setCurrentPage(1); }}
-              className={`px-4 py-1.5 text-[10px] font-bold rounded transition-colors tracking-wider uppercase ${filter === 'SUSPENDED' ? 'bg-brand-main text-white shadow-sm dark:shadow-none' : 'text-text-muted hover:text-text-main'}`}
+              className={`px-4 py-1.5 text-[10px] font-bold rounded transition-colors tracking-wider uppercase ${filter === 'SUSPENDED' ? 'bg-brand-main text-white ' : 'text-text-muted hover:text-text-main'}`}
             >
               Suspendido
             </button>
@@ -111,14 +111,14 @@ export function MembersDirectory() {
             <button 
               onClick={handlePrevPage}
               disabled={currentPage === 1 || isLoading}
-              className="p-1 text-text-muted hover:text-text-main disabled:opacity-50 disabled:hover:text-text-muted transition-colors"
+              className="p-1 text-text-muted hover:text-text-main disabled:opacity-50 disabled:hover:text-text-muted transition-colors cursor-pointer disabled:cursor-not-allowed"
             >
               <ChevronLeft size={18} />
             </button>
             <button 
               onClick={handleNextPage}
               disabled={currentPage >= totalPages || isLoading}
-              className="p-1 text-text-muted hover:text-text-main disabled:opacity-50 disabled:hover:text-text-muted transition-colors"
+              className="p-1 text-text-muted hover:text-text-main disabled:opacity-50 disabled:hover:text-text-muted transition-colors cursor-pointer disabled:cursor-not-allowed"
             >
               <ChevronRight size={18} />
             </button>

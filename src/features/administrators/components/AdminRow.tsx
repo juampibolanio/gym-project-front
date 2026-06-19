@@ -87,7 +87,7 @@ export function AdminRow({ admin, isCurrentUser }: AdminRowProps) {
                             {isCurrentUser ? (
                                 <button
                                     disabled
-                                    className="w-full flex items-center gap-2 px-3 py-2 text-xs text-zinc-500 bg-zinc-500/5 cursor-not-allowed"
+                                    className="w-full flex items-center gap-2 px-3 py-2 text-xs text-text-muted bg-surface-hover cursor-not-allowed"
                                     title="No puedes eliminar tu propia cuenta"
                                 >
                                     <ShieldAlert size={14} /> Eliminar
@@ -95,7 +95,7 @@ export function AdminRow({ admin, isCurrentUser }: AdminRowProps) {
                             ) : (
                                 <button
                                     onClick={() => setIsModalOpen(true)}
-                                    className="w-full flex items-center gap-2 px-3 py-2 text-xs text-red-500 hover:bg-red-500/10 transition-colors"
+                                    className="w-full flex items-center gap-2 px-3 py-2 text-xs text-danger-main hover:bg-danger-surface transition-colors"
                                 >
                                     <Trash2 size={14} /> Eliminar
                                 </button>
@@ -114,14 +114,14 @@ export function AdminRow({ admin, isCurrentUser }: AdminRowProps) {
                         <button
                             onClick={() => setIsModalOpen(false)}
                             disabled={isDeleting}
-                            className="px-4 py-2 text-sm font-medium text-text-main border border-zinc-700 hover:bg-zinc-800 transition-colors rounded"
+                            className="px-4 py-2 text-sm font-medium text-text-main border border-border-primary hover:bg-surface-hover transition-colors rounded"
                         >
                             Cancelar
                         </button>
                         <button
                             onClick={handleDelete}
                             disabled={isDeleting}
-                            className="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 transition-colors rounded flex items-center gap-2"
+                            className="px-4 py-2 text-sm font-medium text-white bg-danger-main hover:bg-danger-hover transition-colors rounded flex items-center gap-2"
                         >
                             {isDeleting ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Eliminar usuario'}
                         </button>
