@@ -1,47 +1,56 @@
 'use client';
 
-import { Phone, Mail, ChevronDown } from 'lucide-react';
+import { Phone, CheckCircle, ChevronDown, IdCard } from 'lucide-react';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { createMemberSchema } from '@/features/members/schemas/createMember.schema';
-import { createMemberAction } from '@/app/dashboard/miembros/nuevo/actions';
+import { useCreateMember } from '@/features/members/hook/useMembers';
+import { useRouter } from 'next/navigation';
 
 type MemberFormValues = z.infer<typeof createMemberSchema>;
 
 export function NewMemberForm() {
+  const router = useRouter();
+  const createMemberMutation = useCreateMember();
+
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<MemberFormValues>({
     resolver: zodResolver(createMemberSchema),
     defaultValues: {
-      primerNombre: '',
-      apellido: '',
-
-      telefono: '',
-      email: '',
-      fechaActivacion: '',
-      plan: '',
-      notas: '',
+      dni: '',
+      name: '',
+      surname: '',
+      phoneNumber: '',
+      birthDate: '',
+      state: 'ACTIVE',
+      observations: '',
     }
   });
 
-  const onSubmit = async (data: MemberFormValues) => {
-    const result = await createMemberAction(data);
-    if (result.success) {
-      console.log("Miembro creado:", data);
-    } else {
-      console.error("Error al crear miembro");
-    }
+  const onSubmit = (data: MemberFormValues) => {
+    const payload = {
+      ...data,
+      phoneNumber: data.phoneNumber || undefined,
+      observations: data.observations || undefined,
+    };
+
+    createMemberMutation.mutate(payload as any, {
+      onSuccess: () => {
+        router.push('/dashboard/miembros');
+      }
+    });
   };
+
+  const isSubmitting = createMemberMutation.isPending;
 
   return (
     <div className="flex flex-col gap-6">
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
-
 
         <div className="border border-border-primary rounded-lg bg-surface flex flex-col p-6 gap-8 shadow-sm dark:shadow-none">
           
@@ -49,57 +58,72 @@ export function NewMemberForm() {
             <h2 className="text-[15px] font-bold text-text-main">Identidad y Contacto</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="flex flex-col gap-1.5 md:col-span-2">
+                <label className="text-xs font-semibold text-text-muted tracking-wide">DNI</label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <IdCard size={14} className="text-text-muted" />
+                  </div>
+                  <input 
+                    type="text" 
+                    placeholder="12345678"
+                    {...register('dni')}
+                    disabled={isSubmitting}
+                    className={`w-full bg-background border ${errors.dni ? 'border-danger-main' : 'border-border-primary'} rounded pl-9 pr-3 py-2.5 text-sm text-text-main focus:outline-none focus:border-brand-main transition-colors disabled:opacity-50`}
+                  />
+                </div>
+                {errors.dni && <p className="text-xs text-danger-main">{errors.dni.message}</p>}
+              </div>
+
               <div className="flex flex-col gap-1.5">
                 <label className="text-xs font-semibold text-text-muted tracking-wide">Primer Nombre</label>
                 <input 
                   type="text" 
-                  {...register('primerNombre')}
-                  className={`w-full bg-background border ${errors.primerNombre ? 'border-red-500' : 'border-border-primary'} rounded px-3 py-2.5 text-sm text-text-main focus:outline-none focus:border-brand-main transition-colors`}
+                  {...register('name')}
+                  disabled={isSubmitting}
+                  className={`w-full bg-background border ${errors.name ? 'border-danger-main' : 'border-border-primary'} rounded px-3 py-2.5 text-sm text-text-main focus:outline-none focus:border-brand-main transition-colors disabled:opacity-50`}
                 />
-                {errors.primerNombre && <p className="text-xs text-red-500">{errors.primerNombre.message}</p>}
+                {errors.name && <p className="text-xs text-danger-main">{errors.name.message}</p>}
               </div>
               <div className="flex flex-col gap-1.5">
                 <label className="text-xs font-semibold text-text-muted tracking-wide">Apellido</label>
                 <input 
                   type="text" 
-                  {...register('apellido')}
-                  className={`w-full bg-background border ${errors.apellido ? 'border-red-500' : 'border-border-primary'} rounded px-3 py-2.5 text-sm text-text-main focus:outline-none focus:border-brand-main transition-colors`}
+                  {...register('surname')}
+                  disabled={isSubmitting}
+                  className={`w-full bg-background border ${errors.surname ? 'border-danger-main' : 'border-border-primary'} rounded px-3 py-2.5 text-sm text-text-main focus:outline-none focus:border-brand-main transition-colors disabled:opacity-50`}
                 />
-                {errors.apellido && <p className="text-xs text-red-500">{errors.apellido.message}</p>}
+                {errors.surname && <p className="text-xs text-danger-main">{errors.surname.message}</p>}
               </div>
-
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-text-muted tracking-wide">Teléfono</label>
+                <label className="text-xs font-semibold text-text-muted tracking-wide">Fecha de Nacimiento</label>
+                <input 
+                  type="date" 
+                  {...register('birthDate')}
+                  disabled={isSubmitting}
+                  className={`w-full bg-background border ${errors.birthDate ? 'border-danger-main' : 'border-border-primary'} rounded px-3 py-2.5 text-sm text-text-main focus:outline-none focus:border-brand-main transition-colors disabled:opacity-50`}
+                />
+                {errors.birthDate && <p className="text-xs text-danger-main">{errors.birthDate.message}</p>}
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-semibold text-text-muted tracking-wide">Teléfono (Opcional)</label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <Phone size={14} className="text-text-muted" />
                   </div>
                   <input 
                     type="tel" 
-                    placeholder="(555) 000-0000"
-                    {...register('telefono')}
-                    className={`w-full bg-background border ${errors.telefono ? 'border-red-500' : 'border-border-primary'} rounded pl-9 pr-3 py-2.5 text-sm text-text-main placeholder:text-text-muted focus:outline-none focus:border-brand-main transition-colors`}
+                    placeholder="+5491123456789"
+                    {...register('phoneNumber')}
+                    disabled={isSubmitting}
+                    className={`w-full bg-background border ${errors.phoneNumber ? 'border-danger-main' : 'border-border-primary'} rounded pl-9 pr-3 py-2.5 text-sm text-text-main placeholder:text-text-muted focus:outline-none focus:border-brand-main transition-colors disabled:opacity-50`}
                   />
                 </div>
-                {errors.telefono && <p className="text-xs text-red-500">{errors.telefono.message}</p>}
-              </div>
-              
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-text-muted tracking-wide">Email</label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Mail size={14} className="text-text-muted" />
-                  </div>
-                  <input 
-                    type="email" 
-                    {...register('email')}
-                    className={`w-full bg-background border ${errors.email ? 'border-red-500' : 'border-border-primary'} rounded pl-9 pr-3 py-2 text-sm text-text-main focus:outline-none focus:border-brand-main transition-colors`}
-                  />
-                </div>
-                {errors.email && <p className="text-xs text-red-500">{errors.email.message}</p>}
+                {errors.phoneNumber && <p className="text-xs text-danger-main">{errors.phoneNumber.message}</p>}
               </div>
             </div>
           </div>
@@ -107,53 +131,42 @@ export function NewMemberForm() {
           <hr className="border-border-primary" />
 
           <div className="flex flex-col gap-6">
-            <h2 className="text-[15px] font-bold text-text-main">Especificaciones del plan</h2>
+            <h2 className="text-[15px] font-bold text-text-main">Membresía y Estado</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-text-muted tracking-wide">Fecha de activación</label>
-                <div className="relative">
-                  <input 
-                    type="date" 
-                    {...register('fechaActivacion')}
-                    className={`w-full bg-background border ${errors.fechaActivacion ? 'border-red-500' : 'border-border-primary'} rounded px-3 py-2.5 text-sm text-text-main placeholder:text-text-muted focus:outline-none focus:border-brand-main transition-colors`}
-                  />
-                </div>
-                {errors.fechaActivacion && <p className="text-xs text-red-500">{errors.fechaActivacion.message}</p>}
-              </div>
-
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-text-muted tracking-wide">Asignación del plan</label>
+                <label className="text-xs font-semibold text-text-muted tracking-wide">Estado</label>
                 <div className="relative">
                   <select 
-                    {...register('plan')}
-                    className={`w-full bg-background border ${errors.plan ? 'border-red-500' : 'border-border-primary'} rounded px-3 py-2.5 text-sm text-text-muted appearance-none focus:outline-none focus:border-brand-main transition-colors`}
+                    {...register('state')}
+                    disabled={isSubmitting}
+                    className={`w-full bg-background border ${errors.state ? 'border-danger-main' : 'border-border-primary'} rounded px-3 py-2.5 text-sm text-text-main appearance-none focus:outline-none focus:border-brand-main transition-colors disabled:opacity-50`}
                   >
-                    <option value="" disabled>Seleccionar plan</option>
-                    <option value="premium">Premium</option>
-                    <option value="regular">Regular</option>
-                    <option value="basico">Básico</option>
+                    <option value="ACTIVE">Activo</option>
+                    <option value="INACTIVE">Inactivo</option>
+                    <option value="SUSPENDED">Suspendido</option>
                   </select>
                   <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                     <ChevronDown size={14} className="text-text-muted" />
                   </div>
                 </div>
-                {errors.plan && <p className="text-xs text-red-500">{errors.plan.message}</p>}
+                {errors.state && <p className="text-xs text-danger-main">{errors.state.message}</p>}
               </div>
             </div>
 
             <div className="flex flex-col gap-1.5">
               <div className="flex justify-between items-center">
-                <label className="text-xs font-semibold text-text-muted tracking-wide">Anulaciones / Notas</label>
+                <label className="text-xs font-semibold text-text-muted tracking-wide">Observaciones / Notas</label>
                 <span className="text-[9px] font-bold tracking-widest text-text-muted uppercase">Opcional</span>
               </div>
               <textarea 
                 rows={4}
-                {...register('notas')}
+                {...register('observations')}
+                disabled={isSubmitting}
                 placeholder="Excepciones físicas, condición. Datos relevantes"
-                className={`w-full bg-background border ${errors.notas ? 'border-red-500' : 'border-border-primary'} rounded px-3 py-2.5 text-sm text-text-main placeholder:text-text-muted focus:outline-none focus:border-brand-main transition-colors resize-none`}
+                className={`w-full bg-background border ${errors.observations ? 'border-danger-main' : 'border-border-primary'} rounded px-3 py-2.5 text-sm text-text-main placeholder:text-text-muted focus:outline-none focus:border-brand-main transition-colors resize-none disabled:opacity-50`}
               ></textarea>
-              {errors.notas && <p className="text-xs text-red-500">{errors.notas.message}</p>}
+              {errors.observations && <p className="text-xs text-danger-main">{errors.observations.message}</p>}
             </div>
             
           </div>
