@@ -30,7 +30,11 @@ export const useCreateMember = () => {
         },
         onError: (error: any) => {
             const message = error.response?.data?.message || 'Ocurrió un error al crear el miembro';
-            toast.error(message);
+            if (Array.isArray(message)) {
+                message.forEach((msg: string) => toast.error(msg));
+            } else {
+                toast.error(message);
+            }
         },
     });
 };
@@ -41,13 +45,18 @@ export const useUpdateMember = () => {
     return useMutation({
         mutationFn: ({ id, payload }: { id: string, payload: UpdateMemberPayload}) => 
             MembersService.update(id, payload),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['members'] })
+        onSuccess: (_, variables) => {
+            queryClient.invalidateQueries({ queryKey: ['members'] });
+            queryClient.invalidateQueries({ queryKey: ['member', variables.id] });
             toast.success('Miembro actualizado con éxito');
         },
         onError: (error: any) => {
             const message = error.response?.data?.message || 'No se pudo actualizar el miembro';
-            toast.error(message);
+            if (Array.isArray(message)) {
+                message.forEach((msg: string) => toast.error(msg));
+            } else {
+                toast.error(message);
+            }
         },
     });
 };
