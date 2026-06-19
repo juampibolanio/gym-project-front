@@ -1,7 +1,7 @@
 'use client';
 
 import Link from "next/link";
-import { ArrowLeft, Award, CreditCard, Filter, Pencil, User, Loader2 } from "lucide-react";
+import { ArrowLeft, Award, CreditCard, Pencil, User, Loader2 } from "lucide-react";
 import RegisterPaymentButton from "@/features/members/components/RegisterPaymentButton";
 import { useMember } from "@/features/members/hook/useMembers";
 import { use } from "react";
@@ -162,7 +162,6 @@ export default function MemberDetailPage({
                     <div className="bg-surface border border-border-primary  rounded-lg p-6 overflow-hidden flex flex-col transition-colors">
                         <div className="flex justify-between items-center mb-6">
                             <h3 className="text-sm font-bold text-text-main uppercase tracking-wider">Historial de Pagos</h3>
-                            <Filter size={18} className="text-text-muted cursor-pointer hover:text-text-main transition-colors" />
                         </div>
 
                         <div className="overflow-x-auto">
@@ -173,6 +172,7 @@ export default function MemberDetailPage({
                                         <th className="pb-3 pt-3 text-xs font-bold text-text-muted uppercase tracking-wider">ID de Factura</th>
                                         <th className="pb-3 pt-3 text-xs font-bold text-text-muted uppercase tracking-wider">Monto</th>
                                         <th className="pb-3 pt-3 text-xs font-bold text-text-muted uppercase tracking-wider">Método</th>
+                                        <th className="pb-3 pt-3 text-xs font-bold text-text-muted uppercase tracking-wider">Notas</th>
                                         <th className="pb-3 pt-3 text-xs font-bold text-text-muted uppercase tracking-wider text-right">Estado</th>
                                     </tr>
                                 </thead>
@@ -188,6 +188,13 @@ export default function MemberDetailPage({
                                                     <span>{paymentMethods[payment.paymentMethod] || payment.paymentMethod}</span>
                                                 </div>
                                             </td>
+                                            <td className="py-4 max-w-[200px] truncate" title={payment.notes || ''}>
+                                                {payment.notes ? (
+                                                    <span className="text-sm text-text-muted">{payment.notes}</span>
+                                                ) : (
+                                                    <span className="text-text-muted">-</span>
+                                                )}
+                                            </td>
                                             <td className="py-4 text-right">
                                                 <span className="px-2.5 py-1 rounded-md border border-success-main/30 bg-success-surface text-success-main text-[10px] font-bold tracking-widest uppercase">Pagado</span>
                                             </td>
@@ -195,7 +202,7 @@ export default function MemberDetailPage({
                                     ))}
                                     {paymentHistory.length === 0 && (
                                         <tr>
-                                            <td colSpan={5} className="py-8 text-center text-text-muted">
+                                            <td colSpan={6} className="py-8 text-center text-text-muted">
                                                 No hay pagos registrados aún.
                                             </td>
                                         </tr>

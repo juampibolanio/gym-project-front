@@ -14,6 +14,7 @@ export interface Payment {
     date: string;
     paymentMethod: 'CASH' | 'BANK_TRANSFER';
     amountPaid: number | string;
+    notes?: string;
 }
 
 export interface Member {
@@ -45,4 +46,5 @@ export interface SubscribeAndPayPayload {
     planUuid: string;
     paymentMethod: 'CASH' | 'BANK_TRANSFER';
     amountPaid: number;
+    notes?: string;
 }

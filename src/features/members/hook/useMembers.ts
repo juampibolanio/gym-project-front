@@ -3,10 +3,10 @@ import { MembersService } from "../services/members.service";
 import { CreateMemberPayload, UpdateMemberPayload } from "../interfaces/members.interface";
 import toast from "react-hot-toast";
 
-export const useMembers = (page: number = 1, limit: number = 10, term?: string) => {
+export const useMembers = (page: number = 1, limit: number = 10, term?: string, state?: string) => {
     return useQuery({
-        queryKey: ['members', { page, limit, term }],
-        queryFn: () => MembersService.getAll(page, limit, term),
+        queryKey: ['members', { page, limit, term, state }],
+        queryFn: () => MembersService.getAll(page, limit, term, state),
         staleTime: 1000 * 10,
     });
 };
@@ -81,7 +81,7 @@ export const useSubscribeAndPay = () => {
     mutationFn: ({ id, payload }: { id: string; payload: import('../interfaces/members.interface').SubscribeAndPayPayload }) => MembersService.subscribeAndPay(id, payload),
     onSuccess: (_, { id }) => {
       queryClient.invalidateQueries({ queryKey: ['members'] });
-      queryClient.invalidateQueries({ queryKey: ['members', id] });
+      queryClient.invalidateQueries({ queryKey: ['member', id] });
       toast.success('Suscripción y pago registrados correctamente');
     },
     onError: (error: any) => {
