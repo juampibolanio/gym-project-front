@@ -43,7 +43,7 @@ export function AdminRow({ admin, isCurrentUser }: AdminRowProps) {
 
     return (
         <>
-            <div className="grid grid-cols-[2fr_1fr_1fr_2fr_100px] items-center px-5 py-4 border-b border-border-primary hover:bg-surface-hover transition-colors last:border-b-0 last:rounded-b-lg">
+            <div className="grid grid-cols-[2fr_1fr_2fr_100px] items-center px-5 py-4 border-b border-border-primary hover:bg-surface-hover transition-colors last:border-b-0 last:rounded-b-lg">
 
                 <div>
                     <div className="flex items-center gap-3">
