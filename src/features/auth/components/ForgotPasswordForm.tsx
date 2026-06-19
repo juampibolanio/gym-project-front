@@ -40,17 +40,17 @@ export function ForgotPasswordForm() {
                 <Mail className="absolute left-3 text-text-muted transition-colors" size={16} />
                 <input 
                   type="email"
-                  placeholder="admin@gymsystem.com"
+                  placeholder="admin@chacugym.com"
                   {...register('email')} 
-                  className={`w-full bg-sidebar border ${errors.email ? 'border-red-500' : 'border-border-primary'} rounded-lg py-2.5 pl-10 pr-4 text-sm text-text-main placeholder-text-muted focus:outline-none focus:border-brand-main transition-colors`}
+                  className={`w-full bg-sidebar border ${errors.email ? 'border-danger-main' : 'border-border-primary'} rounded-lg py-2.5 pl-10 pr-4 text-sm text-text-main placeholder-text-muted focus:outline-none focus:border-brand-main transition-colors`}
                 />
               </div>
-              {errors.email && <p className="text-red-500 text-xs mt-1 font-medium">{errors.email.message}</p>}
+              {errors.email && <p className="text-danger-main text-xs mt-1 font-medium">{errors.email.message}</p>}
             </div>
 
             <button 
               type="submit"
-              className="w-full bg-brand-main hover:bg-brand-hover text-white font-medium text-sm py-2.5 rounded-lg transition-colors flex items-center justify-center gap-2 mt-2 shadow-md dark:shadow-none"
+              className="w-full bg-brand-main hover:bg-brand-hover text-white font-medium text-sm py-2.5 rounded-lg transition-colors flex items-center justify-center gap-2 mt-2 shadow-md "
             >
               <Send size={16} /> Enviar Instrucciones
             </button>

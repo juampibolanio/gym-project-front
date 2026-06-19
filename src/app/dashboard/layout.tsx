@@ -1,6 +1,6 @@
 'use client';
 
-import { Bell, LayoutDashboard, Users, ClipboardList, Settings, Search, Shield } from 'lucide-react';
+import { LayoutDashboard, Users, ClipboardList, Settings, Search, Shield, LogOut } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { ThemeToggle } from '@/common/components/layout/ThemeToggle';
@@ -82,9 +82,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             </nav>
           </div>
 
-          <div className="px-6 pb-6 flex flex-col gap-4">
-            <button onClick={() => setIsLogoutModalOpen(true)} className="w-full py-2.5 bg-surface border border-border-primary text-text-main hover:bg-surface-hover font-medium text-sm transition-colors rounded-sm shadow-sm dark:shadow-none cursor-pointer">
-              Cerrar sesión
+          <div className="flex flex-col mt-auto mb-6 space-y-1">
+            <button 
+              onClick={() => setIsLogoutModalOpen(true)} 
+              className="flex items-center gap-4 px-8 py-3 transition-colors border-l-2 border-transparent text-text-muted hover:bg-danger-surface hover:text-danger-main hover:border-danger-main cursor-pointer w-full text-left"
+            >
+              <LogOut size={18} />
+              <span className="font-medium text-sm">Cerrar sesión</span>
             </button>
           </div>
         </aside>
@@ -131,9 +135,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
             <div className="flex items-center gap-6 ml-auto">
               <ThemeToggle />
-              <button className="text-text-muted hover:text-text-main transition-colors">
-                <Bell size={18} />
-              </button>
             </div>
           </header>
 

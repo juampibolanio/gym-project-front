@@ -44,13 +44,13 @@ export function LoginForm() {
           <Mail className="absolute left-3 text-text-muted transition-colors" size={16} />
           <input
             type="email"
-            placeholder="admin@gymsystem.com"
+            placeholder="admin@chacugym.com"
             disabled={isPending}
             {...register('email')}
-            className={`w-full bg-sidebar border ${errors.email ? 'border-red-500' : 'border-border-primary'} rounded-lg py-2.5 pl-10 pr-4 text-sm text-text-main placeholder-text-muted focus:outline-none focus:border-brand-main transition-colors`}
+            className={`w-full bg-sidebar border ${errors.email ? 'border-danger-main' : 'border-border-primary'} rounded-lg py-2.5 pl-10 pr-4 text-sm text-text-main placeholder-text-muted focus:outline-none focus:border-brand-main transition-colors`}
           />
         </div>
-        {errors.email && <p className="text-red-500 text-xs mt-1 font-medium">{errors.email.message}</p>}
+        {errors.email && <p className="text-danger-main text-xs mt-1 font-medium">{errors.email.message}</p>}
       </div>
 
       <div className="space-y-2">
@@ -69,7 +69,7 @@ export function LoginForm() {
             placeholder="••••••••"
             disabled={isPending} 
             {...register('password')}
-            className={`w-full bg-sidebar border ${errors.password ? 'border-red-500' : 'border-border-primary'} rounded-lg py-2.5 pl-10 pr-10 text-sm text-text-main placeholder-text-muted focus:outline-none focus:border-brand-main transition-colors`}
+            className={`w-full bg-sidebar border ${errors.password ? 'border-danger-main' : 'border-border-primary'} rounded-lg py-2.5 pl-10 pr-10 text-sm text-text-main placeholder-text-muted focus:outline-none focus:border-brand-main transition-colors`}
           />
           <button
             type="button"
@@ -80,13 +80,13 @@ export function LoginForm() {
             {showPassword ? <Eye size={16} /> : <EyeOff size={16} />}
           </button>
         </div>
-        {errors.password && <p className="text-red-500 text-xs mt-1 font-medium">{errors.password.message}</p>}
+        {errors.password && <p className="text-danger-main text-xs mt-1 font-medium">{errors.password.message}</p>}
       </div>
 
       <button
         type="submit"
         disabled={isPending}
-        className="w-full bg-brand-main hover:bg-brand-hover disabled:bg-brand-main/50 text-white font-medium text-sm py-2.5 rounded-lg transition-colors flex items-center justify-center gap-2 mt-2 shadow-md dark:shadow-none cursor-pointer"
+        className="w-full bg-brand-main hover:bg-brand-hover disabled:bg-brand-main/50 text-white font-medium text-sm py-2.5 rounded-lg transition-colors flex items-center justify-center gap-2 mt-2 shadow-md  cursor-pointer"
       >
         {isPending ? (
           <>

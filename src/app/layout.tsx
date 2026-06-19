@@ -13,14 +13,14 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://gymsystem-pro.vercel.app"),
   title: {
-    template: "%s | GymSystem",
-    default: "GymSystem - Terminal de Administradores",
+    template: "%s | ChacuGym",
+    default: "ChacuGym - Terminal de Administradores",
   },
   description: "Terminal de gestión y administración para centros de entrenamiento.",
   openGraph: {
-    title: "GymSystem - Terminal de Administradores",
+    title: "ChacuGym - Terminal de Administradores",
     description: "Plataforma integral de gestión para tu gimnasio.",
-    siteName: "GymSystem",
+    siteName: "ChacuGym",
     locale: "es_AR",
     type: "website",
   },
@@ -36,7 +36,34 @@ export default function RootLayout({
       <body className={`${inter.variable} min-h-screen`}>
         <TanStackQueryProvider>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <Toaster position="top-right" reverseOrder={false}/>
+            <Toaster 
+              position="top-center" 
+              reverseOrder={false}
+              toastOptions={{
+                style: {
+                  background: 'var(--surface)',
+                  color: 'var(--text-main)',
+                  border: '1px solid var(--border-primary)',
+                  borderRadius: '100px',
+                  padding: '12px 24px',
+                  fontSize: '14px',
+                  fontWeight: '500',
+                  boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
+                },
+                success: {
+                  iconTheme: {
+                    primary: 'var(--success-main)',
+                    secondary: 'var(--surface)',
+                  },
+                },
+                error: {
+                  iconTheme: {
+                    primary: 'var(--danger-main)',
+                    secondary: 'var(--surface)',
+                  },
+                },
+              }}
+            />
             {children}
           </ThemeProvider>
         </TanStackQueryProvider>

@@ -44,10 +44,10 @@ export function RegisterForm() {
                                 type="text"
                                 placeholder="Jane Doe"
                                 {...register('nombreCompleto')}
-                                className={`w-full bg-sidebar border ${errors.nombreCompleto ? 'border-red-500' : 'border-border-primary'} rounded-lg py-2.5 pl-10 pr-4 text-sm text-text-main placeholder-text-muted focus:outline-none focus:border-brand-main transition-colors`}
+                                className={`w-full bg-sidebar border ${errors.nombreCompleto ? 'border-danger-main' : 'border-border-primary'} rounded-lg py-2.5 pl-10 pr-4 text-sm text-text-main placeholder-text-muted focus:outline-none focus:border-brand-main transition-colors`}
                             />
                         </div>
-                        {errors.nombreCompleto && <p className="text-red-500 text-xs mt-1 font-medium">{errors.nombreCompleto.message}</p>}
+                        {errors.nombreCompleto && <p className="text-danger-main text-xs mt-1 font-medium">{errors.nombreCompleto.message}</p>}
                     </div>
 
                     <div className="space-y-2">
@@ -60,10 +60,10 @@ export function RegisterForm() {
                                 type="email"
                                 placeholder="admin@gymname.com"
                                 {...register('email')}
-                                className={`w-full bg-sidebar border ${errors.email ? 'border-red-500' : 'border-border-primary'} rounded-lg py-2.5 pl-10 pr-4 text-sm text-text-main placeholder-text-muted focus:outline-none focus:border-brand-main transition-colors`}
+                                className={`w-full bg-sidebar border ${errors.email ? 'border-danger-main' : 'border-border-primary'} rounded-lg py-2.5 pl-10 pr-4 text-sm text-text-main placeholder-text-muted focus:outline-none focus:border-brand-main transition-colors`}
                             />
                         </div>
-                        {errors.email && <p className="text-red-500 text-xs mt-1 font-medium">{errors.email.message}</p>}
+                        {errors.email && <p className="text-danger-main text-xs mt-1 font-medium">{errors.email.message}</p>}
                     </div>
 
                     <div className="space-y-2">
@@ -76,10 +76,10 @@ export function RegisterForm() {
                                 type="text"
                                 placeholder="Iron Works Arena"
                                 {...register('nombreGimnasio')}
-                                className={`w-full bg-sidebar border ${errors.nombreGimnasio ? 'border-red-500' : 'border-border-primary'} rounded-lg py-2.5 pl-10 pr-4 text-sm text-text-main placeholder-text-muted focus:outline-none focus:border-brand-main transition-colors`}
+                                className={`w-full bg-sidebar border ${errors.nombreGimnasio ? 'border-danger-main' : 'border-border-primary'} rounded-lg py-2.5 pl-10 pr-4 text-sm text-text-main placeholder-text-muted focus:outline-none focus:border-brand-main transition-colors`}
                             />
                         </div>
-                        {errors.nombreGimnasio && <p className="text-red-500 text-xs mt-1 font-medium">{errors.nombreGimnasio.message}</p>}
+                        {errors.nombreGimnasio && <p className="text-danger-main text-xs mt-1 font-medium">{errors.nombreGimnasio.message}</p>}
                     </div>
 
                     <div className="space-y-2">
@@ -92,7 +92,7 @@ export function RegisterForm() {
                                 type={showPassword ? "text" : "password"}
                                 placeholder="••••••••"
                                 {...register('password')}
-                                className={`w-full bg-sidebar border ${errors.password ? 'border-red-500' : 'border-border-primary'} rounded-lg py-2.5 pl-10 pr-10 text-sm text-text-main placeholder-text-muted focus:outline-none focus:border-brand-main transition-colors`}
+                                className={`w-full bg-sidebar border ${errors.password ? 'border-danger-main' : 'border-border-primary'} rounded-lg py-2.5 pl-10 pr-10 text-sm text-text-main placeholder-text-muted focus:outline-none focus:border-brand-main transition-colors`}
                             />
                             <button 
                                 type="button"
@@ -102,7 +102,7 @@ export function RegisterForm() {
                                 {showPassword ? <Eye size={16} /> : <EyeOff size={16} />}
                             </button>
                         </div>
-                        {errors.password && <p className="text-red-500 text-xs mt-1 font-medium">{errors.password.message}</p>}
+                        {errors.password && <p className="text-danger-main text-xs mt-1 font-medium">{errors.password.message}</p>}
                     </div>
 
                     <div className="space-y-2">
@@ -115,15 +115,15 @@ export function RegisterForm() {
                                 type={showPassword ? "text" : "password"}
                                 placeholder="••••••••"
                                 {...register('confirmPassword')}
-                                className={`w-full bg-sidebar border ${errors.confirmPassword ? 'border-red-500' : 'border-border-primary'} rounded-lg py-2.5 pl-10 pr-10 text-sm text-text-main placeholder-text-muted focus:outline-none focus:border-brand-main transition-colors`}
+                                className={`w-full bg-sidebar border ${errors.confirmPassword ? 'border-danger-main' : 'border-border-primary'} rounded-lg py-2.5 pl-10 pr-10 text-sm text-text-main placeholder-text-muted focus:outline-none focus:border-brand-main transition-colors`}
                             />
                         </div>
-                        {errors.confirmPassword && <p className="text-red-500 text-xs mt-1 font-medium">{errors.confirmPassword.message}</p>}
+                        {errors.confirmPassword && <p className="text-danger-main text-xs mt-1 font-medium">{errors.confirmPassword.message}</p>}
                     </div>
 
                     <button 
                         type="submit"
-                        className="w-full bg-brand-main hover:bg-brand-hover text-white font-medium text-sm py-2.5 rounded-lg transition-colors flex items-center justify-center gap-2 mt-4 shadow-md dark:shadow-none"
+                        className="w-full bg-brand-main hover:bg-brand-hover text-white font-medium text-sm py-2.5 rounded-lg transition-colors flex items-center justify-center gap-2 mt-4 shadow-md "
                     >
                         Crear Cuenta <span className="text-lg leading-none">→</span>
                     </button>
