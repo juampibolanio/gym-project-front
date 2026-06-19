@@ -10,6 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { editMemberSchema } from '@/features/members/schemas/editMember.schema';
 import { useUpdateMember, useMember } from '@/features/members/hook/useMembers';
+import { usePlans } from '@/features/plans/hooks/usePlans';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
@@ -17,14 +18,16 @@ type EditMemberFormValues = z.infer<typeof editMemberSchema>;
 
 export function EditMemberForm({ id }: { id: string }) {
   const router = useRouter();
-  
   const { data: member, isLoading } = useMember(id);
+  const { data: plansData, isLoading: isLoadingPlans } = usePlans(1, 100);
+  const plans = plansData?.data || [];
   const updateMemberMutation = useUpdateMember();
 
   const {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors },
   } = useForm<EditMemberFormValues>({
     resolver: zodResolver(editMemberSchema),
@@ -34,8 +37,8 @@ export function EditMemberForm({ id }: { id: string }) {
       surname: '',
       phoneNumber: '',
       birthDate: '',
-      state: 'ACTIVE',
       observations: '',
+      planUuid: '',
     }
   });
 
@@ -47,11 +50,19 @@ export function EditMemberForm({ id }: { id: string }) {
         surname: member.surname,
         phoneNumber: member.phoneNumber || '',
         birthDate: member.birthDate ? new Date(member.birthDate).toISOString().split('T')[0] : '',
-        state: member.state as 'ACTIVE' | 'INACTIVE' | 'SUSPENDED',
         observations: member.observations || '',
+        planUuid: member.subscriptions?.find(sub => sub.status === 'ACTIVE')?.planUuid || member.subscriptions?.[0]?.planUuid || '',
       });
     }
   }, [member, reset]);
+
+  const activeSubsCount = member?.subscriptions?.filter(sub => sub.status === 'ACTIVE').length || 0;
+  const canStackMore = activeSubsCount < 3;
+  
+  const watchPlanUuid = watch('planUuid');
+  const currentActiveSub = member?.subscriptions?.find(sub => sub.status === 'ACTIVE') || member?.subscriptions?.[0];
+  const originalPlanUuid = currentActiveSub?.planUuid;
+  const currentEndDate = currentActiveSub?.endDate;
 
   const onSubmit = (data: EditMemberFormValues) => {
     const payload = {
@@ -59,6 +70,11 @@ export function EditMemberForm({ id }: { id: string }) {
       phoneNumber: data.phoneNumber || undefined,
       observations: data.observations || undefined,
     };
+    
+    if (payload.planUuid === originalPlanUuid) {
+      delete (payload as any).planUuid;
+    }
+
     updateMemberMutation.mutate(
       { id, payload: payload as any },
       {
@@ -140,21 +156,31 @@ export function EditMemberForm({ id }: { id: string }) {
 
           <hr className="border-border-primary" />
           <div className="flex flex-col gap-6">
-            <h2 className="text-[15px] font-bold text-text-main">Membresía y Estado</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="flex flex-col gap-1.5">
+            <h2 className="text-[15px] font-bold text-text-main">Membresía</h2>
+            <div className="flex flex-col gap-1.5">
                 <SelectField
-                  label="Estado Manual"
-                  registration={register('state')}
-                  error={errors.state?.message}
-                  disabled={isSubmitting}
+                  label="Plan asignado"
+                  registration={register('planUuid')}
+                  error={errors.planUuid?.message}
+                  disabled={isSubmitting || isLoadingPlans || !canStackMore}
                 >
-                  <option value="ACTIVE">Activo</option>
-                  <option value="INACTIVE">Inactivo</option>
-                  <option value="SUSPENDED">Suspendido</option>
+                  <option value="">Seleccione un plan</option>
+                  {plans.map((plan) => (
+                      <option key={plan.uuid} value={plan.uuid}>
+                          {plan.name} (${plan.price})
+                      </option>
+                  ))}
                 </SelectField>
-                <p className="text-[10px] text-text-muted mt-0.5">Sobrescribe el estado automático de pagos.</p>
-              </div>
+                {!canStackMore && (
+                  <p className="text-[11px] text-danger-main mt-0.5 font-medium">
+                    Límite máximo alcanzado (3 planes programados).
+                  </p>
+                )}
+                {canStackMore && watchPlanUuid && originalPlanUuid && watchPlanUuid !== originalPlanUuid && currentEndDate && new Date(currentEndDate) > new Date() && (
+                  <p className="text-[11px] text-orange-400 mt-0.5">
+                    El nuevo plan entrará en vigencia al finalizar el actual ({new Date(currentEndDate).toLocaleDateString('es-AR')}).
+                  </p>
+                )}
             </div>
 
             <TextareaField
