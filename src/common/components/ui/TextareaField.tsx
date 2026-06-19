@@ -14,7 +14,7 @@ export function TextareaField({ label, registration, error, className = "", ...p
             <textarea
                 {...registration}
                 {...props}
-                className={`w-full bg-background border ${error ? 'border-danger-main' : 'border-border-primary'} rounded px-3 py-2.5 text-sm text-text-main focus:outline-none focus:border-brand-main transition-colors disabled:opacity-50 min-h-[100px] resize-y`}
+                className={`w-full bg-background border ${error ? 'border-danger-main' : 'border-border-primary'} rounded px-3 py-2.5 text-sm text-text-main focus:outline-none focus:border-brand-main transition-colors disabled:opacity-50 min-h-25 resize-y`}
             />
             {error && <p className="text-xs text-danger-main">{error}</p>}
         </div>

@@ -1,7 +1,6 @@
 import { LoginForm } from '@/features/auth/components/LoginForm';
 import { Dumbbell, ShieldAlert } from 'lucide-react';
 
-
 export default function LoginPage() {
   return (
     <div className="w-full max-w-100 flex flex-col items-center">

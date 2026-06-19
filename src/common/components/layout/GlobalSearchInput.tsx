@@ -19,8 +19,6 @@ export function GlobalSearchInput() {
   const [searchTerm, setSearchTerm] = useState(initialQ);
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
-
-
   useEffect(() => {
     const currentQ = searchParams.get('q') || '';
     if (debouncedSearchTerm !== currentQ) {

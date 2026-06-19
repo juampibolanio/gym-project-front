@@ -11,9 +11,6 @@ import { useGym } from '@/features/gyms/hooks/useGyms';
 import { Modal } from '@/common/components/ui/Modal';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-
-
-
 import { GlobalSearchInput } from '@/common/components/layout/GlobalSearchInput';
 import { Suspense } from 'react';
 
