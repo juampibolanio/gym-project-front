@@ -73,7 +73,7 @@ export function AdminRow({ admin, isCurrentUser }: AdminRowProps) {
                 <div className="relative flex justify-center" ref={dropdownRef}>
                     <button
                         onClick={() => setShowDropdown(!showDropdown)}
-                        className="p-1 rounded hover:bg-surface transition-colors"
+                        className="p-1 rounded hover:bg-surface transition-colors cursor-pointer"
                     >
                         <MoreHorizontal className="text-text-muted hover:text-text-main transition-colors" />
                     </button>
@@ -95,7 +95,7 @@ export function AdminRow({ admin, isCurrentUser }: AdminRowProps) {
                             ) : (
                                 <button
                                     onClick={() => setIsModalOpen(true)}
-                                    className="w-full flex items-center gap-2 px-3 py-2 text-xs text-danger-main hover:bg-danger-surface transition-colors"
+                                    className="w-full flex items-center gap-2 px-3 py-2 text-xs text-danger-main hover:bg-danger-surface transition-colors cursor-pointer"
                                 >
                                     <Trash2 size={14} /> Eliminar
                                 </button>
@@ -114,14 +114,14 @@ export function AdminRow({ admin, isCurrentUser }: AdminRowProps) {
                         <button
                             onClick={() => setIsModalOpen(false)}
                             disabled={isDeleting}
-                            className="px-4 py-2 text-sm font-medium text-text-main border border-border-primary hover:bg-surface-hover transition-colors rounded"
+                            className="px-4 py-2 text-sm font-medium text-text-main border border-border-primary hover:bg-surface-hover transition-colors rounded cursor-pointer disabled:cursor-not-allowed"
                         >
                             Cancelar
                         </button>
                         <button
                             onClick={handleDelete}
                             disabled={isDeleting}
-                            className="px-4 py-2 text-sm font-medium text-white bg-danger-main hover:bg-danger-hover transition-colors rounded flex items-center gap-2"
+                            className="px-4 py-2 text-sm font-medium text-white bg-danger-main hover:bg-danger-hover transition-colors rounded flex items-center gap-2 cursor-pointer disabled:cursor-not-allowed"
                         >
                             {isDeleting ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Eliminar usuario'}
                         </button>

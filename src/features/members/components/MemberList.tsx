@@ -112,7 +112,7 @@ export function MemberList({
       <div className="relative" ref={dropdownRef}>
         <button 
           onClick={() => setShowDropdown(!showDropdown)}
-          className="p-1 rounded hover:bg-surface transition-colors"
+          className="p-1 rounded hover:bg-surface transition-colors cursor-pointer"
         >
           <MoreHorizontal className="text-text-muted hover:text-text-main transition-colors" />
         </button>
@@ -132,7 +132,7 @@ export function MemberList({
                 }
               }}
               disabled={deleteMemberMutation.isPending}
-              className="w-full flex items-center gap-2 px-3 py-2 text-xs text-danger-main hover:bg-danger-main/10 transition-colors disabled:opacity-50"
+              className="w-full flex items-center gap-2 px-3 py-2 text-xs text-danger-main hover:bg-danger-main/10 transition-colors disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
             >
               <Trash2 size={14} /> {deleteMemberMutation.isPending ? 'Eliminando...' : 'Eliminar'}
             </button>
