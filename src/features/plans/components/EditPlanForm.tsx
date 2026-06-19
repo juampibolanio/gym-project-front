@@ -64,25 +64,25 @@ export function EditPlanForm({ id }: { id: string }) {
 
     return (
         <>
-            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8 w-full max-w-3xl border-l-4 border-zinc-700 p-6 border bg-background relative">
+            <form onSubmit={handleSubmit(onSubmit)} className="border border-border-primary rounded-lg bg-surface flex flex-col p-6 gap-8 shadow-sm dark:shadow-none relative">
                 
                 <div className="flex flex-col gap-6">
                     <h2 className="text-[15px] font-bold text-text-main">Información general</h2>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="flex flex-col gap-1.5">
-                            <label className="text-xs font-semibold text-text-muted tracking-wide">Nombre del Plan</label>
+                        <div className="flex flex-col gap-2">
+                            <label className="text-sm font-medium text-text-main">Nombre del Plan</label>
                             <input 
                                 {...register("name")} 
                                 disabled={isProcessing}
                                 placeholder="Ej: Pase Libre"
-                                className={`w-full bg-[#121214] border ${errors.name ? 'border-red-500' : 'border-zinc-700'} p-3 text-white text-sm focus:outline-none focus:border-[#2A5D44] transition-colors placeholder:text-zinc-600`} 
+                                className={`w-full px-4 py-2.5 bg-background border ${errors.name ? 'border-red-500' : 'border-border-primary'} rounded-md text-sm text-text-main focus:outline-none focus:border-brand-main focus:ring-1 focus:ring-brand-main transition-colors disabled:opacity-70 disabled:cursor-not-allowed`} 
                             />
-                            {errors.name && <span className="text-red-500 text-xs mt-1">{errors.name.message}</span>}
+                            {errors.name && <span className="text-red-500 text-xs">{errors.name.message}</span>}
                         </div>
 
-                        <div className="flex flex-col gap-1.5">
-                            <label className="text-xs font-semibold text-text-muted tracking-wide">Precio</label>
+                        <div className="flex flex-col gap-2">
+                            <label className="text-sm font-medium text-text-main">Precio</label>
                             <div className="relative">
                                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted">$</span>
                                 <input 
@@ -91,10 +91,10 @@ export function EditPlanForm({ id }: { id: string }) {
                                     disabled={isProcessing}
                                     {...register("price")} 
                                     placeholder="0.00"
-                                    className={`w-full bg-[#121214] border ${errors.price ? 'border-red-500' : 'border-zinc-700'} p-3 pl-8 text-white text-sm focus:outline-none focus:border-[#2A5D44] transition-colors placeholder:text-zinc-600`} 
+                                    className={`w-full px-4 py-2.5 pl-8 bg-background border ${errors.price ? 'border-red-500' : 'border-border-primary'} rounded-md text-sm text-text-main focus:outline-none focus:border-brand-main focus:ring-1 focus:ring-brand-main transition-colors disabled:opacity-70 disabled:cursor-not-allowed`} 
                                 />
                             </div>
-                            {errors.price && <span className="text-red-500 text-xs mt-1">{errors.price.message}</span>}
+                            {errors.price && <span className="text-red-500 text-xs">{errors.price.message}</span>}
                         </div>
                     </div>
                 </div>
@@ -106,52 +106,52 @@ export function EditPlanForm({ id }: { id: string }) {
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="flex flex-col gap-2">
-                            <label className="text-sm text-zinc-400 font-medium">Duración (Días)</label>
+                            <label className="text-sm font-medium text-text-main">Duración (Días)</label>
                             <input 
                                 type="number" 
                                 disabled={isProcessing}
                                 {...register("durationDays")} 
                                 placeholder="Ej: 30"
-                                className={`w-full bg-[#121214] border ${errors.durationDays ? 'border-red-500' : 'border-zinc-700'} p-3 text-white text-sm focus:outline-none focus:border-[#2A5D44] transition-colors placeholder:text-zinc-600`} 
+                                className={`w-full px-4 py-2.5 bg-background border ${errors.durationDays ? 'border-red-500' : 'border-border-primary'} rounded-md text-sm text-text-main focus:outline-none focus:border-brand-main focus:ring-1 focus:ring-brand-main transition-colors disabled:opacity-70 disabled:cursor-not-allowed`} 
                             />
-                            {errors.durationDays && <span className="text-red-500 text-xs mt-1">{errors.durationDays.message}</span>}
+                            {errors.durationDays && <span className="text-red-500 text-xs">{errors.durationDays.message}</span>}
                         </div>
                     </div>
 
                     <div className="flex flex-col gap-2">
-                        <label className="text-sm text-zinc-400 font-medium">Beneficios del plan (Opcional)</label>
-                        <p className="text-xs text-zinc-500 mb-1">Escribe un beneficio por línea para mostrarlos en la lista.</p>
+                        <label className="text-sm font-medium text-text-main">Beneficios del plan (Opcional)</label>
+                        <p className="text-xs text-text-muted mb-1">Escribe un beneficio por línea para mostrarlos en la lista.</p>
                         <textarea 
                             disabled={isProcessing}
                             {...register("description")} 
                             placeholder="Acceso a sala de musculación&#10;Clases grupales incluidas"
                             rows={4}
-                            className={`w-full bg-[#121214] border ${errors.description ? 'border-red-500' : 'border-zinc-700'} p-3 text-white text-sm focus:outline-none focus:border-[#2A5D44] transition-colors placeholder:text-zinc-600 resize-none`} 
+                            className={`w-full px-4 py-2.5 bg-background border ${errors.description ? 'border-red-500' : 'border-border-primary'} rounded-md text-sm text-text-main focus:outline-none focus:border-brand-main focus:ring-1 focus:ring-brand-main transition-colors disabled:opacity-70 disabled:cursor-not-allowed resize-none`} 
                         />
-                        {errors.description && <span className="text-red-500 text-xs mt-1">{errors.description.message}</span>}
+                        {errors.description && <span className="text-red-500 text-xs">{errors.description.message}</span>}
                     </div>
                 </div>
 
-                <div className="flex flex-col md:flex-row gap-3 justify-between pt-4 border-t border-zinc-700">
+                <div className="flex flex-col md:flex-row gap-3 justify-between pt-4 border-t border-border-primary">
                     
                     <button 
                         type="button" 
                         onClick={() => setIsDeleteModalOpen(true)}
                         disabled={isProcessing}
-                        className="bg-transparent border border-red-500/50 text-red-500 text-sm font-medium py-2 px-4 flex items-center justify-center gap-2 hover:bg-red-500/10 transition-colors disabled:opacity-50 cursor-pointer"
+                        className="bg-transparent text-danger-main hover:bg-danger-main/10 text-sm font-medium py-2 px-4 rounded-sm flex items-center justify-center gap-2 transition-colors disabled:opacity-50 cursor-pointer"
                     >
                         <Trash2 size={16} />
                         Eliminar plan
                     </button>
 
-                    <div className="flex gap-3">
-                        <Link href="/dashboard/planes" className="bg-transparent border border-zinc-700 text-text-main text-sm font-medium py-2 px-4 cursor-pointer hover:bg-zinc-800 transition-colors flex items-center justify-center">
+                    <div className="flex items-center gap-3">
+                        <Link href="/dashboard/planes" className="px-4 py-2 border border-border-primary bg-transparent text-text-muted hover:text-text-main hover:bg-surface-hover rounded-sm text-xs font-bold transition-colors">
                             Descartar
                         </Link>
                         <button 
                             type="submit" 
                             disabled={isProcessing}
-                            className="bg-[#2A5D44] text-white text-sm font-medium py-2 px-4 flex items-center justify-center gap-2 cursor-pointer hover:bg-[#1e4431] transition-colors disabled:opacity-50"
+                            className="bg-brand-main hover:bg-brand-hover text-white flex items-center justify-center gap-2 px-6 py-2.5 rounded-sm font-medium text-sm transition-colors shadow-sm disabled:opacity-50 cursor-pointer"
                         >
                             {isUpdating ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Guardar cambios'}
                         </button>

@@ -205,14 +205,14 @@ export function EditMemberForm({ id }: { id: string }) {
           <div className="flex items-center justify-end gap-3 pt-4 border-t border-border-primary">
             <Link 
               href={`/dashboard/miembros/${id}`}
-              className="px-4 py-2 border border-border-primary bg-transparent text-text-muted hover:text-text-main hover:bg-surface-hover rounded text-xs font-bold transition-colors"
+              className="px-6 py-2.5 border border-border-primary bg-transparent text-text-muted hover:text-text-main hover:bg-surface-hover rounded-sm text-sm font-medium transition-colors"
             >
               Cancelar
             </Link>
             <button 
               type="submit" 
               disabled={isSubmitting}
-              className="px-4 py-2 bg-brand-main hover:bg-brand-hover text-white rounded text-xs font-bold transition-colors shadow-sm disabled:opacity-50"
+              className="flex items-center justify-center gap-2 px-6 py-2.5 bg-brand-main hover:bg-brand-hover text-white rounded-sm text-sm font-medium transition-colors shadow-sm disabled:opacity-50"
             >
               {isSubmitting ? "Guardando..." : "Guardar Cambios"}
             </button>

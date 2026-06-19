@@ -8,6 +8,9 @@ import { AuthGuard } from '@/features/auth/components/AuthGuard';
 import { useAuthStore } from '@/features/auth/store/auth.store';
 import { useRole } from '@/features/auth/hooks/useRole';
 import { useGym } from '@/features/gyms/hooks/useGyms';
+import { Modal } from '@/common/components/ui/Modal';
+import { useState } from 'react';
+import toast from 'react-hot-toast';
 
 const SEARCH_CONFIG: Record<string, { placeholder: string }> = {
   '/dashboard/miembros': {
@@ -19,6 +22,7 @@ const SEARCH_CONFIG: Record<string, { placeholder: string }> = {
 };
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
   const setLogout = useAuthStore((state) => state.setLogout);
@@ -27,7 +31,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const { data: gymData, isLoading } = useGym(gymDomain);
   
   const handleLogout = () => {
+    setIsLogoutModalOpen(false);
     setLogout();
+    toast.success('Sesión cerrada correctamente');
     router.replace('/login');
   };
 
@@ -77,11 +83,36 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </div>
 
           <div className="px-6 pb-6 flex flex-col gap-4">
-            <button onClick={handleLogout} className="w-full py-2.5 bg-surface border border-border-primary text-text-main hover:bg-surface-hover font-medium text-sm transition-colors rounded-sm shadow-sm dark:shadow-none cursor-pointer">
+            <button onClick={() => setIsLogoutModalOpen(true)} className="w-full py-2.5 bg-surface border border-border-primary text-text-main hover:bg-surface-hover font-medium text-sm transition-colors rounded-sm shadow-sm dark:shadow-none cursor-pointer">
               Cerrar sesión
             </button>
           </div>
         </aside>
+
+        <Modal 
+          isOpen={isLogoutModalOpen} 
+          onClose={() => setIsLogoutModalOpen(false)}
+          title="Cerrar sesión"
+        >
+          <div className="flex flex-col gap-4">
+            <p className="text-text-main">¿Estás seguro de que deseas cerrar sesión?</p>
+
+            <div className="flex justify-end gap-3 mt-4">
+              <button 
+                onClick={() => setIsLogoutModalOpen(false)}
+                className="px-4 py-2 text-sm font-medium text-text-main border border-border-primary hover:bg-surface-hover transition-colors rounded cursor-pointer"
+              >
+                Cancelar
+              </button>
+              <button 
+                onClick={handleLogout}
+                className="px-4 py-2 text-sm font-medium text-white bg-danger-main hover:bg-danger-hover transition-colors rounded cursor-pointer"
+              >
+                Sí, cerrar sesión
+              </button>
+            </div>
+          </div>
+        </Modal>
 
         <main className="flex-1 flex flex-col min-w-0">
 
