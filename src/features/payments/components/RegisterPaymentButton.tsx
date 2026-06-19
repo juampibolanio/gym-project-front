@@ -9,9 +9,10 @@ interface RegisterPaymentButtonProps {
     memberName: string;
     memberSurname: string;
     uuid: string;
+    defaultAmount: number;
 }
 
-export default function RegisterPaymentButton({ memberName, memberSurname, uuid }: RegisterPaymentButtonProps) {
+export default function RegisterPaymentButton({ memberName, memberSurname, uuid, defaultAmount }: RegisterPaymentButtonProps) {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
@@ -30,6 +31,7 @@ export default function RegisterPaymentButton({ memberName, memberSurname, uuid 
                     memberName={memberName} 
                     memberSurname={memberSurname} 
                     uuid={uuid} 
+                    defaultAmount={defaultAmount}
                     onSuccess={() => setIsOpen(false)} 
                     onCancel={() => setIsOpen(false)} 
                 />

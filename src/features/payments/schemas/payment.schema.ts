@@ -1,8 +1,15 @@
 import * as z from "zod";
 
 export const paymentSchema = z.object({
-    planUuid: z.string().min(1, "Debe seleccionar un plan"),
-    amount: z.coerce.number().min(0, "El monto debe ser positivo").max(10000000, "Monto excedido"),
+    amount: z.union([z.string(), z.number()])
+        .transform((val) => {
+            if (typeof val === 'string') {
+                return Number(val.replace(/\./g, '').replace(/,/g, ''));
+            }
+            return val;
+        })
+        .refine((val) => !isNaN(val) && val >= 0, { message: "El monto debe ser positivo" })
+        .refine((val) => val <= 10000000, { message: "Monto excedido" }),
     method: z.enum(["CASH", "BANK_TRANSFER"], {
         errorMap: () => ({ message: "Selecciona un método de pago válido" }),
     }),

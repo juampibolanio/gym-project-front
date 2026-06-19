@@ -1,11 +1,17 @@
-import { CreditCard } from "lucide-react";
-import { Payment } from "../interfaces/members.interface";
+import { CreditCard, ChevronLeft, ChevronRight } from "lucide-react";
+import { Payment } from "@/features/members/interfaces/members.interface";
+import { useState } from "react";
 
 interface PaymentHistoryTableProps {
     payments: Payment[];
 }
 
 export function PaymentHistoryTable({ payments }: PaymentHistoryTableProps) {
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 5;
+
+    const totalPages = Math.ceil(payments.length / itemsPerPage);
+    const paginatedPayments = payments.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
     const paymentMethods: Record<string, string> = {
         'CASH': 'Efectivo',
         'BANK_TRANSFER': 'Transferencia',
@@ -22,7 +28,6 @@ export function PaymentHistoryTable({ payments }: PaymentHistoryTableProps) {
                     <thead>
                         <tr className="border-b border-t border-border-primary">
                             <th className="pb-3 pt-3 text-xs font-bold text-text-muted uppercase tracking-wider">Fecha</th>
-                            <th className="pb-3 pt-3 text-xs font-bold text-text-muted uppercase tracking-wider">ID de Factura</th>
                             <th className="pb-3 pt-3 text-xs font-bold text-text-muted uppercase tracking-wider">Monto</th>
                             <th className="pb-3 pt-3 text-xs font-bold text-text-muted uppercase tracking-wider">Método</th>
                             <th className="pb-3 pt-3 text-xs font-bold text-text-muted uppercase tracking-wider">Notas</th>
@@ -30,10 +35,9 @@ export function PaymentHistoryTable({ payments }: PaymentHistoryTableProps) {
                         </tr>
                     </thead>
                     <tbody className="text-sm text-text-main">
-                        {payments.map((payment) => (
+                        {paginatedPayments.map((payment) => (
                             <tr key={payment.uuid} className="border-b border-border-primary hover:bg-surface-hover transition-colors">
                                 <td className="py-4">{new Date(payment.date).toLocaleDateString('es-ES', { year: 'numeric', month: 'short', day: 'numeric' })}</td>
-                                <td className="py-4">{payment.uuid.split('-')[0].toUpperCase()}</td>
                                 <td className="py-4 font-bold text-text-main">${Number(payment.amountPaid).toLocaleString('es-AR')}</td>
                                 <td className="py-4">
                                     <div className="flex items-center gap-2">
@@ -55,7 +59,7 @@ export function PaymentHistoryTable({ payments }: PaymentHistoryTableProps) {
                         ))}
                         {payments.length === 0 && (
                             <tr>
-                                <td colSpan={6} className="py-8 text-center text-text-muted">
+                                <td colSpan={5} className="py-8 text-center text-text-muted">
                                     No hay pagos registrados aún.
                                 </td>
                             </tr>
@@ -63,6 +67,30 @@ export function PaymentHistoryTable({ payments }: PaymentHistoryTableProps) {
                     </tbody>
                 </table>
             </div>
+
+            {totalPages > 1 && (
+                <div className="flex items-center justify-between mt-6 px-2">
+                    <span className="text-sm text-text-muted">
+                        Mostrando {(currentPage - 1) * itemsPerPage + 1} a {Math.min(currentPage * itemsPerPage, payments.length)} de {payments.length} pagos
+                    </span>
+                    <div className="flex gap-2">
+                        <button
+                            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                            disabled={currentPage === 1}
+                            className="p-1.5 rounded-md border border-border-primary text-text-main hover:bg-surface-hover disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                        >
+                            <ChevronLeft size={16} />
+                        </button>
+                        <button
+                            onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                            disabled={currentPage === totalPages}
+                            className="p-1.5 rounded-md border border-border-primary text-text-main hover:bg-surface-hover disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                        >
+                            <ChevronRight size={16} />
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

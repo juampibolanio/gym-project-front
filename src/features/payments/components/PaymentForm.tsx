@@ -1,10 +1,8 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { paymentSchema } from "@/features/members/schemas/payment.schema";
-import { useSubscribeAndPay } from "../hook/useMembers";
-import { usePlans } from "@/features/plans/hooks/usePlans";
-import { useEffect } from "react";
+import { paymentSchema } from "@/features/payments/schemas/payment.schema";
+import { useCreatePayment } from "../hooks/usePayments";
 import { InputField } from "@/common/components/ui/InputField";
 import { SelectField } from "@/common/components/ui/SelectField";
 import { TextareaField } from "@/common/components/ui/TextareaField";
@@ -15,53 +13,36 @@ interface PaymentFormProps {
     memberName: string;
     memberSurname: string;
     uuid: string;
+    defaultAmount: number;
     onSuccess: () => void;
     onCancel: () => void;
+    isNewMember?: boolean;
 }
 
-export function PaymentForm({ memberName, memberSurname, uuid, onSuccess, onCancel }: PaymentFormProps) {
-    const { mutate: subscribeAndPay, isPending } = useSubscribeAndPay();
-    const { data: plansData } = usePlans(1, 100);
-    const plans = plansData?.data || [];
+export function PaymentForm({ memberName, memberSurname, uuid, defaultAmount, onSuccess, onCancel, isNewMember }: PaymentFormProps) {
+    const { mutate: createPayment, isPending } = useCreatePayment();
 
     const {
         register,
         handleSubmit,
         reset,
-        watch,
-        setValue,
         formState: { errors },
     } = useForm<PaymentFormValues>({
         resolver: zodResolver(paymentSchema),
         defaultValues: {
-            planUuid: "",
-            amount: 0,
+            amount: defaultAmount || 0,
             method: "CASH",
             date: new Date().toISOString().split('T')[0],
             notes: "",
         }
     });
 
-    const selectedPlanUuid = watch("planUuid");
-
-    useEffect(() => {
-        if (selectedPlanUuid) {
-            const plan = plans.find(p => p.uuid === selectedPlanUuid);
-            if (plan) {
-                setValue("amount", Number(plan.price));
-            }
-        }
-    }, [selectedPlanUuid, plans, setValue]);
-
     const onSubmit = (data: PaymentFormValues) => {
-        subscribeAndPay({
-            id: uuid,
-            payload: {
-                planUuid: data.planUuid,
-                paymentMethod: data.method,
-                amountPaid: data.amount,
-                notes: data.notes || undefined,
-            }
+        createPayment({
+            memberUuid: uuid,
+            paymentMethod: data.method,
+            amountPaid: data.amount,
+            notes: data.notes || undefined,
         }, {
             onSuccess: () => {
                 reset();
@@ -74,35 +55,36 @@ export function PaymentForm({ memberName, memberSurname, uuid, onSuccess, onCanc
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5 mt-2">
             <p className="text-sm text-text-muted -mt-4 mb-2">Registre un nuevo pago para el miembro</p>
 
+            {isNewMember && (
+                <div className="bg-brand-main/10 border border-brand-main/20 p-3 rounded-md mb-2">
+                    <p className="text-xs text-brand-main font-medium">
+                        Si no registra el pago ahora, el miembro quedará activo pero sin pagos. 
+                        Tendrá 5 días para registrarlo desde la vista de detalle, o su estado pasará automáticamente a Inactivo.
+                    </p>
+                </div>
+            )}
+
             <div className="flex flex-col gap-2">
                 <InputField
                     label="Miembro seleccionado"
                     type="text"
                     disabled
                     value={`${memberName} ${memberSurname}`}
-                    registration={register("planUuid") /* Dummy to satisfy TS, though we don't really register this input */}
+
                 />
             </div>
-
-            <SelectField
-                label="Plan a asignar"
-                registration={register("planUuid")}
-                error={errors.planUuid?.message}
-            >
-                <option value="">Seleccione un plan</option>
-                {plans.map((plan) => (
-                    <option key={plan.uuid} value={plan.uuid}>
-                        {plan.name} ({plan.durationDays} días)
-                    </option>
-                ))}
-            </SelectField>
 
             <div className="grid grid-cols-2 gap-4">
                 <InputField
                     label="Monto a cobrar"
-                    type="number"
+                    type="text"
                     placeholder="0.00"
-                    registration={register("amount")}
+                    registration={register("amount", {
+                        onChange: (e) => {
+                            const rawValue = e.target.value.replace(/\D/g, '');
+                            e.target.value = rawValue ? new Intl.NumberFormat('es-AR').format(Number(rawValue)) : '';
+                        }
+                    })}
                     error={errors.amount?.message}
                     icon={<span className="text-text-muted">$</span>}
                 />
@@ -144,7 +126,6 @@ export function PaymentForm({ memberName, memberSurname, uuid, onSuccess, onCanc
                     {isPending ? 'Procesando...' : 'Confirmar Pago'}
                 </button>
             </div>
-
         </form>
     );
 }
