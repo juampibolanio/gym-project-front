@@ -129,7 +129,7 @@ export function EditAdminForm({ id }: { id: string }) {
                   <input
                     type="text"
                     disabled
-                    value="Administrador designado"
+                    value={currentUser.role}
                     className="w-full bg-background border border-border-primary rounded pl-9 pr-3 py-2.5 text-sm text-text-main cursor-not-allowed"
                   />
                 </div>

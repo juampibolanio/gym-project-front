@@ -4,10 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  createUserSchema,
-  CreateUserFormValues,
-} from '@/features/administrators/schemas/user.schema';
+import { UserFormValues, userSchema } from '@/features/administrators/schemas/user.schema';
 import { useCreateUser } from '../hooks/useUsers';
 import { InputField } from '@/common/components/ui/InputField';
 import { Loader2 } from 'lucide-react';
@@ -21,18 +18,17 @@ export function NewAdminForm() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<CreateUserFormValues>({
-    resolver: zodResolver(createUserSchema),
+  } = useForm<UserFormValues>({
+    resolver: zodResolver(userSchema),
     defaultValues: {
       dni: '',
       name: '',
       surname: '',
       email: '',
-      password: '',
     },
   });
 
-  const onSubmit = (data: CreateUserFormValues) => {
+  const onSubmit = (data: UserFormValues) => {
     mutate(data, {
       onSuccess: () => {
         router.push('/dashboard/administradores');
@@ -80,14 +76,6 @@ export function NewAdminForm() {
                 disabled={isPending}
                 registration={register('email')}
                 error={errors.email?.message}
-              />
-
-              <InputField
-                label="Contraseña"
-                type="password"
-                disabled={isPending}
-                registration={register('password')}
-                error={errors.password?.message}
               />
             </div>
           </div>

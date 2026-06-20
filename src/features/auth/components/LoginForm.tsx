@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Link from 'next/link';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useLogin } from '../hooks/useLogin';
+import { useLogin } from '../hooks/useAuth';
 import { LoginFormValues, loginSchema } from '../schemas/login.schema';
 import { InputField } from '@/common/components/ui/InputField';
 import { getSubdomain } from '@/common/utils/extract-subdomain';

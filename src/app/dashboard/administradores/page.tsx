@@ -1,6 +1,6 @@
+import Link from 'next/link';
 import { RoleGuard } from '@/features/auth/components/RoleGuard';
 import { AdminTable } from '../../../features/administrators/components/AdminTable';
-import Link from 'next/link';
 
 export default function AdministratorsPage() {
   return (
@@ -12,7 +12,7 @@ export default function AdministratorsPage() {
               Administradores
             </h1>
             <p className="text-sm text-text-muted mt-1">
-              Gestione a los administradores secundarios del sistema.
+              Gestione a los usuarios secundarios del sistema. Podrán administrar miembros y registrar pagos.
             </p>
           </div>
           <Link
