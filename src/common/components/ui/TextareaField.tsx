@@ -1,4 +1,4 @@
-import { TextareaFieldProps } from "@/common/interfaces/text-area-field.interface";
+import { TextareaFieldProps } from '@/common/interfaces/text-area-field.interface';
 
 export function TextareaField({
   label,

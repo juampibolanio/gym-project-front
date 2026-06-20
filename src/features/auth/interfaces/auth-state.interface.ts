@@ -1,4 +1,4 @@
-import { AuthResponse } from "./auth.interface";
+import { AuthResponse } from './auth.interface';
 
 export interface AuthState {
   token: string | null;

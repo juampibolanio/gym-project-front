@@ -5,7 +5,10 @@ import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useCreatePlan } from '@/features/plans/hooks/usePlans';
-import { PlanFormValues, planSchema } from '@/features/plans/schemas/plan.schema';
+import {
+  PlanFormValues,
+  planSchema,
+} from '@/features/plans/schemas/plan.schema';
 import { InputField } from '@/common/components/ui/InputField';
 import { TextareaField } from '@/common/components/ui/TextareaField';
 import { Loader2 } from 'lucide-react';

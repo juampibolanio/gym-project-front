@@ -1,4 +1,4 @@
-import { RenewalItemProps } from "../interfaces/metrics.interface";
+import { RenewalItemProps } from '../interfaces/metrics.interface';
 
 export function RenewalItem({
   initials,

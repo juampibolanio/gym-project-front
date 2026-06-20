@@ -6,7 +6,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useRole } from '@/features/auth/hooks/useRole';
 import { useAuthStore } from '@/features/auth/store/auth.store';
 import { useGym, useUpdateGym } from '@/features/gyms/hooks/useGyms';
-import { configGeneralSchema, GeneralFormValues } from '@/features/configuration/schemas/config.schema';
+import {
+  configGeneralSchema,
+  GeneralFormValues,
+} from '@/features/configuration/schemas/config.schema';
 import { InputField } from '@/common/components/ui/InputField';
 import { GeneralTabSkeleton } from './GeneralTabSkeleton';
 import toast from 'react-hot-toast';

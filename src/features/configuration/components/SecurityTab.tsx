@@ -5,7 +5,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useAuthStore } from '@/features/auth/store/auth.store';
 import { useChangePassword } from '@/features/administrators/hooks/useUsers';
-import { configSecuritySchema, SecurityFormValues } from '@/features/configuration/schemas/config.schema';
+import {
+  configSecuritySchema,
+  SecurityFormValues,
+} from '@/features/configuration/schemas/config.schema';
 import { InputField } from '@/common/components/ui/InputField';
 import { Save, Eye, EyeOff, Loader2 } from 'lucide-react';
 import { toast } from 'react-hot-toast';

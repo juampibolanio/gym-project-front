@@ -3,7 +3,11 @@
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { MemberListProps } from '../interfaces/members.interface';
-import { statusStyles, dotStyles, statusTranslations } from '../constants/member-styles-ui.constants';
+import {
+  statusStyles,
+  dotStyles,
+  statusTranslations,
+} from '../constants/member-styles-ui.constants';
 import { DeleteMemberButton } from './DeleteMemberButton';
 import { MoreHorizontal, Edit, Eye } from 'lucide-react';
 

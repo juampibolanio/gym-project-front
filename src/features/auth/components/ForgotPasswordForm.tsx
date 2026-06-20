@@ -57,7 +57,8 @@ export function ForgotPasswordForm() {
       {!isSubmitted ? (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           <p className="text-sm text-text-main text-center mb-4 transition-colors">
-            Ingresa tu dirección de email y te enviaremos un correo electrónico para reestablecer la contraseña.
+            Ingresa tu dirección de email y te enviaremos un correo electrónico
+            para reestablecer la contraseña.
           </p>
 
           <InputField

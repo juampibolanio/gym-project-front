@@ -6,7 +6,10 @@ import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useUser, useUpdateUser } from '../hooks/useUsers';
-import { EditAdminFormValues, userSchema } from '@/features/administrators/schemas/user.schema';
+import {
+  EditAdminFormValues,
+  userSchema,
+} from '@/features/administrators/schemas/user.schema';
 import { InputField } from '@/common/components/ui/InputField';
 import { FormSkeleton } from '@/common/components/ui/skeletons/FormSkeleton';
 import { Mail, Loader2, CreditCard, ShieldCheck } from 'lucide-react';

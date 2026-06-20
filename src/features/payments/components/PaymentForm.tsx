@@ -1,7 +1,10 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useCreatePayment } from '../hooks/usePayments';
-import { PaymentFormValues, paymentSchema } from '@/features/payments/schemas/payment.schema';
+import {
+  PaymentFormValues,
+  paymentSchema,
+} from '@/features/payments/schemas/payment.schema';
 import { PaymentFormProps } from '../interfaces/payments.interface';
 import { InputField } from '@/common/components/ui/InputField';
 import { SelectField } from '@/common/components/ui/SelectField';

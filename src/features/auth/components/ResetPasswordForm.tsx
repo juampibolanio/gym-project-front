@@ -7,7 +7,10 @@ import { useResetPassword } from '../hooks/useAuth';
 import { InputField } from '@/common/components/ui/InputField';
 import { toast } from 'react-hot-toast';
 import { Lock, Save, Loader2 } from 'lucide-react';
-import { resetPasswordSchema, ResetPasswordValues } from '../schemas/reset-password.schema';
+import {
+  resetPasswordSchema,
+  ResetPasswordValues,
+} from '../schemas/reset-password.schema';
 
 export function ResetPasswordForm() {
   const searchParams = useSearchParams();

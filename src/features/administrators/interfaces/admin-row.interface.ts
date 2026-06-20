@@ -1,4 +1,4 @@
-import { User } from "./user.interface";
+import { User } from './user.interface';
 
 export interface AdminRowProps {
   admin: User;

@@ -1,4 +1,4 @@
-import { SelectFieldProps } from "@/common/interfaces/select-field.interface";
+import { SelectFieldProps } from '@/common/interfaces/select-field.interface';
 
 export function SelectField({
   label,

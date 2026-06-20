@@ -1,4 +1,4 @@
-import { UseFormRegisterReturn } from "react-hook-form";
+import { UseFormRegisterReturn } from 'react-hook-form';
 
 export interface InputFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
