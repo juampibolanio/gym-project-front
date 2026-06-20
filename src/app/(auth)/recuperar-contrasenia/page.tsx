@@ -1,7 +1,6 @@
-import { ForgotPasswordForm } from '@/features/auth/components/ForgotPasswordForm';
-import { Dumbbell } from 'lucide-react';
 import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
+import { ForgotPasswordForm } from '@/features/auth/components/ForgotPasswordForm';
+import { Dumbbell, ArrowLeft } from 'lucide-react';
 
 export default function ForgotPasswordPage() {
   return (

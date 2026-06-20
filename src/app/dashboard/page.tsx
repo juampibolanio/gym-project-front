@@ -1,7 +1,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-
+import { MetricCard } from '@/features/dashboard/components/MetricCard';
+import { RenewalItem } from '@/features/dashboard/components/RenewalItem';
+import { useDashboardMetrics } from '@/features/dashboard/hooks/useDashboard';
+import { RevenueChart } from '@/features/dashboard/components/RevenueChart';
+import { DashboardSkeleton } from '@/common/components/ui/skeletons/DashboardSkeleton';
 import {
   Users,
   Wallet,
@@ -12,11 +16,7 @@ import {
   Eye,
   EyeOff,
 } from 'lucide-react';
-import { MetricCard } from '@/features/dashboard/components/MetricCard';
-import { RenewalItem } from '@/features/dashboard/components/RenewalItem';
-import { useDashboardMetrics } from '@/features/dashboard/hooks/useDashboard';
-import { DashboardSkeleton } from '@/common/components/ui/skeletons/DashboardSkeleton';
-import { RevenueChart } from '@/features/dashboard/components/RevenueChart';
+import { getTrendColor, getTrendText } from '@/features/dashboard/utils/trends-styles';
 
 export default function DashboardPage() {
   const { data: metrics, isLoading, isError } = useDashboardMetrics();
@@ -40,19 +40,6 @@ export default function DashboardPage() {
     }, 60000);
     return () => clearInterval(interval);
   }, []);
-
-  const getTrendColor = (trend: number, invert: boolean = false) => {
-    if (trend === 0) return 'text-text-muted';
-    if (invert) {
-      return trend > 0 ? 'text-danger-main' : 'text-success-main';
-    }
-    return trend > 0 ? 'text-success-main' : 'text-danger-main';
-  };
-
-  const getTrendText = (trend: number, suffix: string) => {
-    const sign = trend > 0 ? '+' : '';
-    return `${sign}${trend}% ${suffix}`;
-  };
 
   const todayStr = new Date().toLocaleDateString('es-ES', {
     day: '2-digit',

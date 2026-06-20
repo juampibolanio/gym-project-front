@@ -1,5 +1,16 @@
 'use client';
 
+import { Suspense, useState } from 'react';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
+import { useGym } from '@/features/gyms/hooks/useGyms';
+import { useRole } from '@/features/auth/hooks/useRole';
+import { useAuthStore } from '@/features/auth/store/auth.store';
+import { AuthGuard } from '@/features/auth/components/AuthGuard';
+import { ThemeToggle } from '@/common/components/layout/ThemeToggle';
+import { GlobalSearchInput } from '@/common/components/layout/GlobalSearchInput';
+import { Modal } from '@/common/components/ui/Modal';
+import toast from 'react-hot-toast';
 import {
   LayoutDashboard,
   Users,
@@ -10,18 +21,6 @@ import {
   Menu,
   X,
 } from 'lucide-react';
-import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
-import { ThemeToggle } from '@/common/components/layout/ThemeToggle';
-import { AuthGuard } from '@/features/auth/components/AuthGuard';
-import { useAuthStore } from '@/features/auth/store/auth.store';
-import { useRole } from '@/features/auth/hooks/useRole';
-import { useGym } from '@/features/gyms/hooks/useGyms';
-import { Modal } from '@/common/components/ui/Modal';
-import { useState } from 'react';
-import toast from 'react-hot-toast';
-import { GlobalSearchInput } from '@/common/components/layout/GlobalSearchInput';
-import { Suspense } from 'react';
 
 export default function DashboardLayout({
   children,

@@ -1,6 +1,6 @@
+import { Suspense } from 'react';
 import { ResetPasswordForm } from '@/features/auth/components/ResetPasswordForm';
 import { Dumbbell } from 'lucide-react';
-import { Suspense } from 'react';
 
 export default function ResetPasswordPage() {
   return (
