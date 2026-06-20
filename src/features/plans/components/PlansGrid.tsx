@@ -1,15 +1,11 @@
 'use client';
 
 import Link from 'next/link';
-import { Check, AlertCircle } from 'lucide-react';
 import { usePlans } from '../hooks/usePlans';
-import { formatDuration } from '../utils/format-duration';
 import { useRole } from '@/features/auth/hooks/useRole';
-
-const parseDescription = (description?: string | null): string[] => {
-  if (!description) return ['Sin beneficios especificados'];
-  return description.split('\n').filter((item) => item.trim() !== '');
-};
+import { formatDuration } from '../utils/format-duration';
+import { parseDescription } from '../utils/parse-description';
+import { Check, AlertCircle } from 'lucide-react';
 
 export function PlansGrid() {
   const { data, isLoading, isError } = usePlans(1, 100);

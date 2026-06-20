@@ -13,4 +13,10 @@ export interface CreatePlanPayload {
   description?: string;
 }
 
+export interface DeletePlanButtonProps {
+  id: string;
+  planName: string;
+  disabled?: boolean;
+}
+
 export type UpdatePlanPayload = Partial<CreatePlanPayload>;

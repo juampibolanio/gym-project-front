@@ -1,16 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { Loader2, Trash2, AlertTriangle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { Modal } from '@/common/components/ui/Modal';
 import { useDeletePlan } from '../hooks/usePlans';
-
-interface DeletePlanButtonProps {
-  id: string;
-  planName: string;
-  disabled?: boolean;
-}
+import { DeletePlanButtonProps } from '../interfaces/plan.interface';
+import { Modal } from '@/common/components/ui/Modal';
+import { Loader2, Trash2, AlertTriangle } from 'lucide-react';
 
 export function DeletePlanButton({
   id,
@@ -53,7 +48,7 @@ export function DeletePlanButton({
             <p className="text-sm">
               Esta acción no se puede deshacer. Los socios que actualmente
               tienen este plan no lo perderán, pero ya no estará disponible para
-              nuevas ventas.
+              nuevas asignaciones.
             </p>
           </div>
 

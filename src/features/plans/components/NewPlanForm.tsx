@@ -1,17 +1,14 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { planSchema } from '@/features/plans/schemas/plan.schema';
-import * as z from 'zod';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useCreatePlan } from '@/features/plans/hooks/usePlans';
-import { Loader2 } from 'lucide-react';
+import { PlanFormValues, planSchema } from '@/features/plans/schemas/plan.schema';
 import { InputField } from '@/common/components/ui/InputField';
 import { TextareaField } from '@/common/components/ui/TextareaField';
-
-type PlanFormValues = z.infer<typeof planSchema>;
+import { Loader2 } from 'lucide-react';
 
 export function NewPlanForm() {
   const router = useRouter();
