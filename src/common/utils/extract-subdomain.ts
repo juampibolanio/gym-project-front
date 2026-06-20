@@ -1,11 +1,5 @@
 export const getSubdomain = () => {
-  if (typeof window !== 'undefined') {
-    const hostname = window.location.hostname;
-    const parts = hostname.split('.');
-
-    if (parts.length >= 2 && parts[0] !== 'www') {
-      return parts[0];
-    }
-  }
-  return '';
+  // HARDCODED PARA PRESENTACIÓN: 
+  // Siempre devuelve 'energyclub-gym' para que el login funcione sin importar si estás en Vercel, localhost, etc.
+  return 'energyclub-gym';
 };
