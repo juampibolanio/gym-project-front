@@ -10,6 +10,7 @@ import {
 } from '../constants/member-styles-ui.constants';
 import { DeleteMemberButton } from './DeleteMemberButton';
 import { MoreHorizontal, Edit, Eye } from 'lucide-react';
+import { useRole } from '@/features/auth/hooks/useRole';
 
 export function MemberList({
   name,
@@ -21,6 +22,7 @@ export function MemberList({
   birthdate,
 }: MemberListProps) {
   const [showDropdown, setShowDropdown] = useState(false);
+  const { isAdmin } = useRole();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const safeStatusStyles = statusStyles[status] || statusStyles['INACTIVE'];
@@ -109,11 +111,14 @@ export function MemberList({
             >
               <Edit size={14} className="text-text-muted" /> Editar
             </Link>
-            <DeleteMemberButton
-              uuid={uuid}
-              name={name}
-              onDeleted={() => setShowDropdown(false)}
-            />
+
+            {isAdmin && (
+              <DeleteMemberButton
+                uuid={uuid}
+                name={name}
+                onDeleted={() => setShowDropdown(false)}
+              />
+            )}
           </div>
         )}
       </div>
