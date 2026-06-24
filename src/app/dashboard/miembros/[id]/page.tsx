@@ -43,12 +43,13 @@ export default function MemberDetailPage({
   }
 
   const now = new Date();
+  
   const activeSubscription =
     member.subscriptions?.find(
       (sub) => sub.status === 'ACTIVE' && new Date(sub.startDate) <= now
     ) ||
-    member.subscriptions?.find((sub) => sub.status === 'ACTIVE') ||
-    member.subscriptions?.[0];
+    member.subscriptions?.find((sub) => sub.status === 'ACTIVE');
+
   const futureSubscriptions =
     member.subscriptions
       ?.filter(
@@ -58,6 +59,7 @@ export default function MemberDetailPage({
         (a, b) =>
           new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
       ) || [];
+
   const planName = activeSubscription?.plan?.name || 'Sin plan asignado';
 
   let daysRemaining = 0;
