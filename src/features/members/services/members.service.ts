@@ -45,4 +45,8 @@ export class MembersService {
   static async remove(id: string): Promise<Member> {
     return await httpClient.delete<Member>(`${this.ENDPOINT}/${id}`);
   }
+
+  static async deactivate(id: string): Promise<Member> {
+    return await httpClient.patch<Member>(`${this.ENDPOINT}/${id}/deactivate`); 
+  }
 }

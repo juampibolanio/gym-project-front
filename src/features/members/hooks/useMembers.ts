@@ -77,17 +77,34 @@ export const useUpdateMember = () => {
   });
 };
 
-export const useDeleteMember = () => {
+export const useDeactivateMember = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: MembersService.remove,
+    mutationFn: (id: string) => MembersService.deactivate(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['members'] });
-      toast.success('Socio eliminado correctamente');
+      toast.success('Socio desactivado correctamente');
     },
     onError: (error: any) => {
       toast.error(
-        error.response?.data?.message || 'Error al eliminar el socio'
+        error.response?.data?.message || 'Error al desactivar el socio'
+      );
+    },
+  });
+};
+
+export const useDeleteMember = () => {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: (id: string) => MembersService.remove(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['members'] });
+      toast.success('Socio eliminado definitivamente');
+    },
+    onError: (error: any) => {
+      toast.error(
+        error.response?.data?.message || 'Error al intentar eliminar el socio'
       );
     },
   });
