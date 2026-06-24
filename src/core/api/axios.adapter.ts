@@ -62,7 +62,7 @@ export class AxiosAdapter implements HttpAdapter {
     return response.data;
   }
 
-  async patch<T>(url: string, data: any, config?: any): Promise<T> {
+  async patch<T>(url: string, data?: any, config?: any): Promise<T> {
     const response = await this.axiosInstance.patch<T>(url, data, config);
     return response.data;
   }
