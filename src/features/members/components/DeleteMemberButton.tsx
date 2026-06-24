@@ -24,7 +24,7 @@ export function DeleteMemberButton({
         onClick={() => setIsModalOpen(true)}
         className="w-full flex items-center gap-2 px-3 py-2 text-xs text-danger-main hover:bg-danger-main/10 transition-colors cursor-pointer"
       >
-        <Trash2 size={14} /> Dar de baja / Eliminar
+        <Trash2 size={14} />Dar de baja
       </button>
 
       <Modal
