@@ -51,14 +51,14 @@ export function AdminTable() {
   };
 
   return (
-    <div className="bg-surface border border-border-primary rounded-lg flex flex-col relative">
+    <div className="bg-surface border border-border-primary rounded-lg flex flex-col overflow-hidden">
       <div className="overflow-x-auto">
         <div className="min-w-200">
-          <div className="grid grid-cols-[2fr_1fr_2fr_100px] px-5 py-4 border-b border-border-primary text-[10px] font-bold text-text-muted tracking-widest uppercase">
+          <div className="grid grid-cols-[2fr_1fr_2fr_100px] gap-4 items-center px-5 py-3 border-b border-border-primary bg-background text-[10px] font-bold text-text-muted tracking-widest uppercase">
             <div>ADMINISTRADOR E ID</div>
             <div>ROL</div>
             <div>EMAIL</div>
-            <div>ACCIONES</div>
+            <div className="text-center">ACCIONES</div>
           </div>
 
           <div className="flex flex-col relative">
