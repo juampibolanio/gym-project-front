@@ -1,3 +1,4 @@
+import { Payment } from '@/features/payments/interfaces/payments.interface';
 import { Plan } from '../../plans/interfaces/plan.interface';
 
 export interface Subscription {
@@ -7,14 +8,6 @@ export interface Subscription {
   endDate: string;
   status: 'ACTIVE' | 'EXPIRED' | 'CANCELLED';
   plan?: Plan;
-}
-
-export interface Payment {
-  uuid: string;
-  date: string;
-  paymentMethod: 'CASH' | 'BANK_TRANSFER';
-  amountPaid: number | string;
-  notes?: string;
 }
 
 export interface Member {
