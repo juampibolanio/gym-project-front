@@ -5,7 +5,6 @@ export class GymsService {
   private static readonly ENDPOINT = '/gyms';
 
   static async getByTerm(term: string): Promise<Gym> {
-    console.log(`term now: ${term}`);
     return await httpClient.get<Gym>(`${this.ENDPOINT}/${term}`);
   }
 
