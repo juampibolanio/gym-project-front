@@ -1,9 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useDebounce } from '@/common/hooks/useDebounce';
-import { Search } from 'lucide-react';
+import { Search, X } from 'lucide-react';
 
 const SEARCH_CONFIG: Record<string, { placeholder: string }> = {
   '/dashboard/miembros': { placeholder: 'Buscar miembros, IDs o planes...' },
@@ -16,41 +15,101 @@ export function GlobalSearchInput() {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const initialQ = searchParams.get('q') || '';
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const [searchTerm, setSearchTerm] = useState(initialQ);
-  const debouncedSearchTerm = useDebounce(searchTerm, 500);
+  const urlQ = searchParams.get('q') || '';
+  const [searchTerm, setSearchTerm] = useState(urlQ);
+  const [prevUrlQ, setPrevUrlQ] = useState(urlQ);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+  if (urlQ !== prevUrlQ) {
+    setPrevUrlQ(urlQ);
+    setSearchTerm(urlQ);
+  }
 
   useEffect(() => {
-    const currentQ = searchParams.get('q') || '';
-    if (debouncedSearchTerm !== currentQ) {
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
+  }, []);
+
+  const pushSearchToUrl = (query: string, immediate = false) => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+
+    const execute = () => {
       const params = new URLSearchParams(searchParams.toString());
-      if (debouncedSearchTerm) {
-        params.set('q', debouncedSearchTerm);
+      const trimmed = query.trim();
+      if (trimmed) {
+        params.set('q', trimmed);
       } else {
         params.delete('q');
       }
-      router.replace(`${pathname}?${params.toString()}`);
-    }
-  }, [debouncedSearchTerm, pathname, router, searchParams]);
+      params.delete('page');
 
-  if (
-    pathname !== '/dashboard/miembros' &&
-    pathname !== '/dashboard/administradores'
-  ) {
+      const queryString = params.toString();
+      router.replace(queryString ? `${pathname}?${queryString}` : pathname, {
+        scroll: false,
+      });
+    };
+
+    if (immediate) {
+      execute();
+    } else {
+      timerRef.current = setTimeout(execute, 350);
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setSearchTerm(val);
+    pushSearchToUrl(val, false);
+  };
+
+  const handleClear = () => {
+    setSearchTerm('');
+    pushSearchToUrl('', true);
+    inputRef.current?.focus();
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Escape') {
+      handleClear();
+      inputRef.current?.blur();
+    }
+  };
+
+  if (!SEARCH_CONFIG[pathname]) {
     return null;
   }
 
   return (
-    <div className="flex items-center gap-3 bg-surface border border-border-primary rounded-md px-4 py-2 w-full focus-within:border-brand-main transition-colors">
+    <div className="relative flex items-center gap-2.5 bg-surface border border-border-primary rounded-lg px-3.5 py-2 w-full focus-within:border-brand-main focus-within:ring-1 focus-within:ring-brand-main/30 transition-all shadow-xs">
       <Search size={16} className="text-text-muted shrink-0" />
       <input
+        ref={inputRef}
         type="text"
         placeholder={SEARCH_CONFIG[pathname]?.placeholder || 'Buscar...'}
-        className="bg-transparent border-none outline-none text-sm text-text-main w-full placeholder:text-text-muted"
+        className="bg-transparent border-none outline-hidden text-sm text-text-main w-full placeholder:text-text-muted"
         value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
+        onChange={handleChange}
+        onKeyDown={handleKeyDown}
       />
+
+      {searchTerm && (
+        <button
+          type="button"
+          onClick={handleClear}
+          title="Limpiar búsqueda"
+          className="text-text-muted hover:text-text-main p-0.5 rounded-full hover:bg-surface-hover transition-colors shrink-0 cursor-pointer"
+        >
+          <X size={14} />
+        </button>
+      )}
     </div>
   );
 }
