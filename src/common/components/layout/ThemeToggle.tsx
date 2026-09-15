@@ -5,7 +5,7 @@ import { useTheme } from 'next-themes';
 import { Moon, Sun } from 'lucide-react';
 
 export function ThemeToggle({ className = '' }: { className?: string }) {
-  const { theme, setTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = React.useState(false);
 
   React.useEffect(() => {
@@ -17,13 +17,16 @@ export function ThemeToggle({ className = '' }: { className?: string }) {
     return <div className={`w-9 h-9 ${className}`} />;
   }
 
+  const isDark = resolvedTheme === 'dark';
+
   return (
     <button
-      onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-      className={`text-text-muted hover:text-text-main transition-colors focus:outline-none flex items-center justify-center ${className}`}
-      title="Cambiar tema"
+      type="button"
+      onClick={() => setTheme(isDark ? 'light' : 'dark')}
+      className={`text-text-muted hover:text-text-main transition-colors focus:outline-hidden flex items-center justify-center cursor-pointer ${className}`}
+      title={isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
     >
-      {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+      {isDark ? <Sun size={18} /> : <Moon size={18} />}
     </button>
   );
 }
