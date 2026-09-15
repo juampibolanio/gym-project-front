@@ -1,13 +1,20 @@
+import Image from 'next/image';
 import { LoginForm } from '@/features/auth/components/LoginForm';
-import { Dumbbell, ShieldAlert } from 'lucide-react';
+import { ShieldAlert } from 'lucide-react';
 
 export default function LoginPage() {
   return (
     <div className="w-full max-w-100 flex flex-col items-center">
       <div className="flex flex-col items-center mb-8">
-        <div className="w-12 h-12 rounded-full border border-border-primary bg-surface flex items-center justify-center mb-4  transition-colors">
-          <Dumbbell className="text-brand-main" size={24} />
-        </div>
+        <Image
+          src="/images/logo-chacugym.webp"
+          alt="ChacuGym Logo"
+          width={80}
+          height={80}
+          priority
+          className="w-16 h-16 object-contain mb-3"
+        />
+
         <h1 className="text-xl font-bold text-text-main transition-colors">
           ChacuGym
         </h1>
