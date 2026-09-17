@@ -58,7 +58,7 @@ export function EditMemberForm({ id }: { id: string }) {
         surname: member.surname,
         phoneNumber: member.phoneNumber || '',
         birthDate: member.birthDate
-          ? new Date(member.birthDate).toISOString().split('T')[0]
+          ? member.birthDate.split('T')[0]
           : '',
         observations: member.observations || '',
         emergencyName: member.emergencyContact?.name || '',
@@ -100,10 +100,10 @@ export function EditMemberForm({ id }: { id: string }) {
         profileImageUrl: profileImageUrl,
         emergencyContact: hasEmergency
           ? {
-              name: data.emergencyName as string,
-              phoneNumber: data.emergencyPhone as string,
-              relationship: data.emergencyRelation as string,
-            }
+            name: data.emergencyName as string,
+            phoneNumber: data.emergencyPhone as string,
+            relationship: data.emergencyRelation as string,
+          }
           : null,
       };
 
@@ -140,17 +140,17 @@ export function EditMemberForm({ id }: { id: string }) {
     <div className="flex flex-col gap-6">
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
         <div className="border border-border-primary rounded-lg bg-surface flex flex-col p-6 gap-8 ">
-          
+
           <div className="flex flex-col gap-6">
             <h2 className="text-[15px] font-bold text-text-main">
               Identidad y Contacto
             </h2>
 
             <div className="flex justify-center pb-4">
-              <ImageUpload 
+              <ImageUpload
                 currentImageUrl={member?.profileImageUrl}
-                onImageSelect={handleImageSelect} 
-                disabled={isSubmitting} 
+                onImageSelect={handleImageSelect}
+                disabled={isSubmitting}
               />
             </div>
 
@@ -240,7 +240,7 @@ export function EditMemberForm({ id }: { id: string }) {
           </div>
 
           <hr className="border-border-primary" />
-          
+
           <div className="flex flex-col gap-6">
             <h2 className="text-[15px] font-bold text-text-main">
               Información Médica / Adicional
