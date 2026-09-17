@@ -183,7 +183,7 @@ export default function DashboardLayout({
             <div className="flex-1 flex items-center">
               <Suspense fallback={<div className="w-full max-w-md" />}>
                 <div className="w-full max-w-xs md:max-w-md">
-                  <GlobalSearchInput />
+                  <GlobalSearchInput key={pathname} />
                 </div>
               </Suspense>
             </div>

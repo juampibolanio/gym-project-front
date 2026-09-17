@@ -10,7 +10,6 @@ import {
   Calendar,
   Eye,
   EyeOff,
-  Lock,
 } from 'lucide-react';
 import { MetricCard } from './MetricCard';
 import { MetricCardProps } from '../interfaces/metric-card.interface';
@@ -84,36 +83,33 @@ export function DashboardKpiGrid({
       trendIcon: renderTrendIcon(memberTrend),
       trendColor: getTrendColor(memberTrend),
     },
-    {
-      title: 'Ingresos Mensuales',
-      value: isRevenueVisible
-        ? `$${metrics.monthlyRevenue.total.toLocaleString('es-AR')}`
-        : '****',
-      icon: <Wallet size={16} className="text-brand-main transition-colors" />,
-      trendText: canViewRevenue
-        ? getTrendText(revenueTrend, 'vs último mes')
-        : 'Restringido',
-      trendIcon: canViewRevenue ? renderTrendIcon(revenueTrend) : undefined,
-      trendColor: canViewRevenue
-        ? getTrendColor(revenueTrend)
-        : 'text-text-muted',
-      action: canViewRevenue ? (
-        <button
-          onClick={onToggleRevenueVisible}
-          className="text-text-muted hover:text-text-main transition-colors ml-2 cursor-pointer"
-          title={isRevenueVisible ? 'Ocultar ingresos' : 'Mostrar ingresos'}
-        >
-          {isRevenueVisible ? <EyeOff size={14} /> : <Eye size={14} />}
-        </button>
-      ) : (
-        <span
-          className="text-text-muted ml-2 cursor-not-allowed"
-          title="Visualización bloqueada para tu rol"
-        >
-          <Lock size={14} />
-        </span>
-      ),
-    },
+    ...(canViewRevenue
+      ? [
+          {
+            title: 'Ingresos Mensuales',
+            value: isRevenueVisible
+              ? `$${metrics.monthlyRevenue.total.toLocaleString('es-AR')}`
+              : '****',
+            icon: (
+              <Wallet size={16} className="text-brand-main transition-colors" />
+            ),
+            trendText: getTrendText(revenueTrend, 'vs último mes'),
+            trendIcon: renderTrendIcon(revenueTrend),
+            trendColor: getTrendColor(revenueTrend),
+            action: (
+              <button
+                onClick={onToggleRevenueVisible}
+                className="text-text-muted hover:text-text-main transition-colors ml-2 cursor-pointer"
+                title={
+                  isRevenueVisible ? 'Ocultar ingresos' : 'Mostrar ingresos'
+                }
+              >
+                {isRevenueVisible ? <EyeOff size={14} /> : <Eye size={14} />}
+              </button>
+            ),
+          },
+        ]
+      : []),
     {
       title: 'Cuentas Vencidas',
       value: metrics.overdueAccounts.total.toLocaleString('es-AR'),
@@ -140,7 +136,13 @@ export function DashboardKpiGrid({
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div
+      className={`grid gap-4 ${
+        canViewRevenue
+          ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4'
+          : 'grid-cols-1 md:grid-cols-3'
+      }`}
+    >
       {cards.map((card) => (
         <MetricCard key={card.title} {...card} />
       ))}
