@@ -56,7 +56,10 @@ export function MemberProfileCard({
             Fecha de nacimiento
           </span>
           <span className="text-sm text-text-main">
-            {new Date(member.birthDate).toLocaleDateString('es-ES')}
+            {member.birthDate ? (() => {
+              const [year, month, day] = member.birthDate.split('T')[0].split('-');
+              return `${day}/${month}/${year}`;
+            })() : '-'}
           </span>
         </div>
 

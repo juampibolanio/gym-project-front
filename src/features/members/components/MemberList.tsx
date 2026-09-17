@@ -23,7 +23,8 @@ export function MemberList({
   observations,
   planName,
   profileImageUrl,
-}: MemberListProps & { profileImageUrl?: string }) {
+  birthDate,
+}: MemberListProps & { profileImageUrl?: string | null; birthDate?: string }) {
   const [showDropdown, setShowDropdown] = useState(false);
   const [dropdownStyle, setDropdownStyle] = useState<React.CSSProperties>({});
   const { isAdmin } = useRole();
@@ -107,7 +108,7 @@ export function MemberList({
     <div 
       onClick={handleRowClick}
       onMouseEnter={handleMouseEnter}
-      className="grid grid-cols-[2fr_1fr_1.5fr_2fr_1fr_50px] gap-4 items-center px-5 py-4 border-b border-border-primary hover:bg-surface-hover transition-colors min-w-225 cursor-pointer"
+      className="grid grid-cols-[2fr_1fr_1.5fr_1.5fr_2fr_1fr_50px] gap-4 items-center px-5 py-4 border-b border-border-primary hover:bg-surface-hover transition-colors min-w-225 cursor-pointer"
     >
       <div className="min-w-0"> 
         <div className="flex items-center gap-3">
@@ -143,6 +144,15 @@ export function MemberList({
       <div className="min-w-0">
         <p className="text-sm font-medium text-text-main truncate">
           {phoneNumber || '-'}
+        </p>
+      </div>
+
+      <div className="min-w-0">
+        <p className="text-sm font-medium text-text-main truncate">
+          {birthDate ? (() => {
+            const [year, month, day] = birthDate.split('T')[0].split('-');
+            return `${day}/${month}/${year}`;
+          })() : '-'}
         </p>
       </div>
 
