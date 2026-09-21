@@ -174,6 +174,7 @@ export function MembersDirectory() {
                         status={dynamicState}
                         profileImageUrl={member.profileImageUrl || ''}
                         phoneNumber={member.phoneNumber || ''}
+                        birthDate={member.birthDate}
                         observations={member.observations || ''}
                         planName={planName}
                       />

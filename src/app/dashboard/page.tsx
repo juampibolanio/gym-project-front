@@ -9,6 +9,7 @@ import { DashboardKpiGrid } from '@/features/dashboard/components/DashboardKpiGr
 import { RevenueChart } from '@/features/dashboard/components/RevenueChart';
 import { MembersFlowChart } from '@/features/dashboard/components/MembersFlowChart';
 import { UpcomingRenewalsCard } from '@/features/dashboard/components/UpcomingRenewalsCard';
+import { UpcomingBirthdaysCard } from '@/features/dashboard/components/UpcomingBirthdaysCard';
 import { EyeOff } from 'lucide-react';
 
 export default function DashboardPage() {
@@ -82,10 +83,11 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <UpcomingRenewalsCard renewals={metrics.upcomingRenewals} />
+        <div className="flex flex-col gap-6">
+          <UpcomingRenewalsCard renewals={metrics.upcomingRenewals} />
+          <UpcomingBirthdaysCard birthdays={metrics.upcomingBirthdays} />
+        </div>
       </div>
     </div>
   );
 }
-
-

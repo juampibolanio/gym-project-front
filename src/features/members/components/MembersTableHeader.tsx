@@ -15,7 +15,7 @@ export function MembersTableHeader({
   const isNameSorted = sortConfig?.sortBy === 'name';
 
   return (
-    <div className="grid grid-cols-[2fr_1fr_1.5fr_2fr_1fr_50px] gap-4 items-center px-5 py-3 border-b border-border-primary bg-background min-w-225 select-none">
+    <div className="grid grid-cols-[2fr_1fr_1.5fr_1.5fr_2fr_1fr_50px] gap-4 items-center px-5 py-3 border-b border-border-primary bg-background min-w-225 select-none">
       <button
         type="button"
         onClick={onSortName}
@@ -48,6 +48,9 @@ export function MembersTableHeader({
       </h5>
       <h5 className="text-[10px] font-bold text-text-muted tracking-widest uppercase">
         TELÉFONO
+      </h5>
+      <h5 className="text-[10px] font-bold text-text-muted tracking-widest uppercase">
+        FECHA NAC.
       </h5>
       <h5 className="text-[10px] font-bold text-text-muted tracking-widest uppercase">
         PLAN
