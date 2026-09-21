@@ -82,3 +82,18 @@ export interface MemberDetailClientProps {
 }
 
 export type UpdateMemberPayload = Partial<CreateMemberPayload>;
+
+export type MemberSortBy = 'name' | 'surname' | 'createdAt';
+export type SortOrder = 'asc' | 'desc';
+
+export interface GetMembersParams {
+  page?: number;
+  limit?: number;
+  term?: string;
+  state?: string;
+  planId?: string;
+  sortBy?: MemberSortBy;
+  order?: SortOrder;
+  initial?: string;
+}
+

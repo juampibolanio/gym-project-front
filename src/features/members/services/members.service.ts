@@ -2,6 +2,7 @@ import { httpClient } from '@/core/api/axios.adapter';
 import { PaginatedResult } from '@/common/interfaces/pagination.interface';
 import {
   CreateMemberPayload,
+  GetMembersParams,
   Member,
   UpdateMemberPayload,
 } from '../interfaces/members.interface';
@@ -9,21 +10,31 @@ import {
 export class MembersService {
   private static readonly ENDPOINT = '/members';
 
-  static async getAll(
-    page: number = 1,
-    limit: number = 10,
-    term?: string,
-    state?: string
-  ): Promise<PaginatedResult<Member>> {
-    const params = new URLSearchParams({
+  static async getAll(params: GetMembersParams = {}): Promise<PaginatedResult<Member>> {
+    const {
+      page = 1,
+      limit = 10,
+      term,
+      state,
+      planId,
+      sortBy,
+      order,
+      initial,
+    } = params;
+
+    const searchParams = new URLSearchParams({
       page: page.toString(),
       limit: limit.toString(),
     });
-    if (term) params.append('term', term);
-    if (state) params.append('state', state);
+    if (term) searchParams.append('term', term);
+    if (state) searchParams.append('state', state);
+    if (planId) searchParams.append('planId', planId);
+    if (sortBy) searchParams.append('sortBy', sortBy);
+    if (order) searchParams.append('order', order);
+    if (initial) searchParams.append('initial', initial);
 
     return await httpClient.get<PaginatedResult<Member>>(
-      `${this.ENDPOINT}?${params.toString()}`
+      `${this.ENDPOINT}?${searchParams.toString()}`
     );
   }
 

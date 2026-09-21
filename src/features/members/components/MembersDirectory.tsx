@@ -2,17 +2,28 @@
 
 import { useState, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
+import { Loader2 } from 'lucide-react';
 import { useMembers } from '../hooks/useMembers';
-import { MemberList } from '@/features/members/components/MemberList';
+import { usePlans } from '@/features/plans/hooks/usePlans';
+import { MemberList } from './MemberList';
+import { MembersToolbar, SortOption } from './MembersToolbar';
+import { MembersTableHeader } from './MembersTableHeader';
+import { MembersPagination } from './MembersPagination';
 import { TableSkeleton } from '@/common/components/ui/skeletons/TableSkeleton';
-import { ChevronRight, ChevronLeft, Loader2 } from 'lucide-react';
+import { MemberSortBy, SortOrder } from '../interfaces/members.interface';
+
+const ITEMS_PER_PAGE = 10;
 
 export function MembersDirectory() {
   const [filter, setFilter] = useState<
     'RELEVANT' | 'ACTIVE' | 'INACTIVE' | 'SUSPENDED'
   >('RELEVANT');
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const [selectedPlanId, setSelectedPlanId] = useState<string>('');
+  const [sortConfig, setSortConfig] = useState<{
+    sortBy: MemberSortBy;
+    order: SortOrder;
+  } | null>(null);
 
   const searchParams = useSearchParams();
   const q = searchParams.get('q') || undefined;
@@ -23,25 +34,69 @@ export function MembersDirectory() {
     setCurrentPage(1);
   }
 
+  const { data: plansResponse } = usePlans(1, 100);
+  const plans = plansResponse?.data || [];
+
   const stateQuery = filter === 'RELEVANT' ? 'ACTIVE,SUSPENDED' : filter;
-  
-  const { data: response, isLoading } = useMembers(
-    currentPage,
-    itemsPerPage,
-    q,
-    stateQuery
-  );
+
+  const { data: response, isLoading } = useMembers({
+    page: currentPage,
+    limit: ITEMS_PER_PAGE,
+    term: q,
+    state: stateQuery,
+    planId: selectedPlanId || undefined,
+    sortBy: sortConfig?.sortBy,
+    order: sortConfig?.order,
+  });
 
   const members = response?.data || [];
-  const meta = response?.meta;
-  const totalPages = meta?.lastPage || 1;
+  const totalPages = response?.meta?.lastPage || 1;
 
-  const handlePrevPage = () => {
-    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  const handlePlanChange = (planId: string) => {
+    setSelectedPlanId(planId);
+    setCurrentPage(1);
   };
 
-  const handleNextPage = () => {
-    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+  const handleSortChange = (value: SortOption) => {
+    setCurrentPage(1);
+    switch (value) {
+      case 'createdAt_desc':
+        setSortConfig({ sortBy: 'createdAt', order: 'desc' });
+        break;
+      case 'name_asc':
+        setSortConfig({ sortBy: 'name', order: 'asc' });
+        break;
+      case 'name_desc':
+        setSortConfig({ sortBy: 'name', order: 'desc' });
+        break;
+      case 'surname_asc':
+        setSortConfig({ sortBy: 'surname', order: 'asc' });
+        break;
+      case 'surname_desc':
+        setSortConfig({ sortBy: 'surname', order: 'desc' });
+        break;
+      default:
+        setSortConfig(null);
+        break;
+    }
+  };
+
+  const handleSortName = () => {
+    setCurrentPage(1);
+    if (!sortConfig || sortConfig.sortBy !== 'name') {
+      setSortConfig({ sortBy: 'name', order: 'asc' });
+    } else if (sortConfig.order === 'asc') {
+      setSortConfig({ sortBy: 'name', order: 'desc' });
+    } else {
+      setSortConfig(null);
+    }
+  };
+
+  const handleFilterChange = (
+    newFilter: 'RELEVANT' | 'ACTIVE' | 'INACTIVE' | 'SUSPENDED'
+  ) => {
+    setFilter(newFilter);
+    setCurrentPage(1);
   };
 
   const now = new Date();
@@ -53,60 +108,23 @@ export function MembersDirectory() {
 
   return (
     <div className="bg-background flex flex-col gap-6">
-      <div className="flex justify-end">
-        <div className="flex items-center gap-4">
-          <div className="flex bg-surface border border-border-primary rounded-lg p-1">
-            <button
-              onClick={() => {
-                setFilter('RELEVANT');
-                setCurrentPage(1);
-              }}
-              className={`px-4 py-1.5 text-[10px] font-bold rounded transition-colors tracking-wider uppercase cursor-pointer ${filter === 'RELEVANT' ? 'bg-brand-main text-white ' : 'text-text-muted hover:text-text-main'}`}
-            >
-              Frecuentes
-            </button>
-            <button
-              onClick={() => {
-                setFilter('ACTIVE');
-                setCurrentPage(1);
-              }}
-              className={`px-4 py-1.5 text-[10px] font-bold rounded transition-colors tracking-wider uppercase cursor-pointer ${filter === 'ACTIVE' ? 'bg-brand-main text-white ' : 'text-text-muted hover:text-text-main'}`}
-            >
-              Activos
-            </button>
-            <button
-              onClick={() => {
-                setFilter('SUSPENDED');
-                setCurrentPage(1);
-              }}
-              className={`px-4 py-1.5 text-[10px] font-bold rounded transition-colors tracking-wider uppercase cursor-pointer ${filter === 'SUSPENDED' ? 'bg-brand-main text-white ' : 'text-text-muted hover:text-text-main'}`}
-            >
-              Suspendidos
-            </button>
-            <button
-              onClick={() => {
-                setFilter('INACTIVE');
-                setCurrentPage(1);
-              }}
-              className={`px-4 py-1.5 text-[10px] font-bold rounded transition-colors tracking-wider uppercase cursor-pointer ${filter === 'INACTIVE' ? 'bg-brand-main text-white ' : 'text-text-muted hover:text-text-main'}`}
-            >
-              Bajas
-            </button>
-          </div>
-        </div>
-      </div>
+      <MembersToolbar
+        selectedPlanId={selectedPlanId}
+        onPlanChange={handlePlanChange}
+        plans={plans}
+        sortConfig={sortConfig}
+        onSortChange={handleSortChange}
+        filter={filter}
+        onFilterChange={handleFilterChange}
+      />
 
       <div className="bg-surface border border-border-primary rounded-lg flex flex-col overflow-hidden">
         <div className="overflow-x-auto">
           <div className="min-w-250">
-            <div className="grid grid-cols-[2fr_1fr_1.5fr_2fr_1fr_50px] gap-4 items-center px-5 py-3 border-b border-border-primary bg-background min-w-225">
-              <h5 className="text-[10px] font-bold text-text-muted tracking-widest uppercase">NOMBRE Y DNI</h5>
-              <h5 className="text-[10px] font-bold text-text-muted tracking-widest uppercase">ESTADO</h5>
-              <h5 className="text-[10px] font-bold text-text-muted tracking-widest uppercase">TELÉFONO</h5>
-              <h5 className="text-[10px] font-bold text-text-muted tracking-widest uppercase">PLAN</h5>
-              <h5 className="text-[10px] font-bold text-text-muted tracking-widest uppercase">OBSERVACIONES</h5> 
-              <h5 className="text-[10px] font-bold text-text-muted tracking-widest uppercase text-right">ACCIONES</h5>
-            </div>
+            <MembersTableHeader
+              sortConfig={sortConfig}
+              onSortName={handleSortName}
+            />
 
             <div className="flex flex-col relative">
               {isLoading && members.length === 0 && (
@@ -127,16 +145,21 @@ export function MembersDirectory() {
               )}
               {members.length > 0
                 ? members.map((member) => {
-                    const activeSub = 
+                    const activeSub =
                       member.subscriptions?.find(
-                        (sub) => sub.status === 'ACTIVE' && new Date(sub.startDate) <= now && new Date(sub.endDate) > now
+                        (sub) =>
+                          sub.status === 'ACTIVE' &&
+                          new Date(sub.startDate) <= now &&
+                          new Date(sub.endDate) > now
                       ) ||
                       member.subscriptions?.find(
-                        (sub) => sub.status === 'ACTIVE' && new Date(sub.endDate) > now
+                        (sub) =>
+                          sub.status === 'ACTIVE' &&
+                          new Date(sub.endDate) > now
                       );
-                      
+
                     const planName = activeSub?.plan?.name || 'Sin plan';
-                    
+
                     let dynamicState = member.state;
                     if (dynamicState === 'ACTIVE' && !activeSub) {
                       dynamicState = 'SUSPENDED';
@@ -157,35 +180,23 @@ export function MembersDirectory() {
                     );
                   })
                 : !isLoading && (
-                  <div className="flex-1 flex items-center justify-center py-10 text-sm text-text-muted">
-                    No hay miembros que coincidan con los filtros.
-                  </div>
-                )}
+                    <div className="flex-1 flex items-center justify-center py-10 text-sm text-text-muted">
+                      No hay miembros que coincidan con los filtros.
+                    </div>
+                  )}
             </div>
           </div>
         </div>
 
-        <div className="flex items-center justify-between px-5 py-4 border-t border-border-primary">
-          <p className="text-sm text-text-muted">
-            Mostrando página {currentPage} de {totalPages || 1}
-          </p>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={handlePrevPage}
-              disabled={currentPage === 1 || isLoading}
-              className="p-1 text-text-muted hover:text-text-main disabled:opacity-50 disabled:hover:text-text-muted transition-colors cursor-pointer disabled:cursor-not-allowed"
-            >
-              <ChevronLeft size={18} />
-            </button>
-            <button
-              onClick={handleNextPage}
-              disabled={currentPage >= totalPages || isLoading}
-              className="p-1 text-text-muted hover:text-text-main disabled:opacity-50 disabled:hover:text-text-muted transition-colors cursor-pointer disabled:cursor-not-allowed"
-            >
-              <ChevronRight size={18} />
-            </button>
-          </div>
-        </div>
+        <MembersPagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          isLoading={isLoading}
+          onPrevPage={() => currentPage > 1 && setCurrentPage(currentPage - 1)}
+          onNextPage={() =>
+            currentPage < totalPages && setCurrentPage(currentPage + 1)
+          }
+        />
       </div>
     </div>
   );
