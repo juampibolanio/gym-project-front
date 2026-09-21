@@ -99,10 +99,11 @@ export function MembersDirectory() {
       <div className="bg-surface border border-border-primary rounded-lg flex flex-col overflow-hidden">
         <div className="overflow-x-auto">
           <div className="min-w-250">
-            <div className="grid grid-cols-[2fr_1fr_1.5fr_2fr_1fr_50px] gap-4 items-center px-5 py-3 border-b border-border-primary bg-background min-w-225">
+            <div className="grid grid-cols-[2fr_1fr_1.5fr_1.5fr_2fr_1fr_50px] gap-4 items-center px-5 py-3 border-b border-border-primary bg-background min-w-225">
               <h5 className="text-[10px] font-bold text-text-muted tracking-widest uppercase">NOMBRE Y DNI</h5>
               <h5 className="text-[10px] font-bold text-text-muted tracking-widest uppercase">ESTADO</h5>
               <h5 className="text-[10px] font-bold text-text-muted tracking-widest uppercase">TELÉFONO</h5>
+              <h5 className="text-[10px] font-bold text-text-muted tracking-widest uppercase">FECHA NAC.</h5>
               <h5 className="text-[10px] font-bold text-text-muted tracking-widest uppercase">PLAN</h5>
               <h5 className="text-[10px] font-bold text-text-muted tracking-widest uppercase">OBSERVACIONES</h5> 
               <h5 className="text-[10px] font-bold text-text-muted tracking-widest uppercase text-right">ACCIONES</h5>
@@ -151,6 +152,7 @@ export function MembersDirectory() {
                         status={dynamicState}
                         profileImageUrl={member.profileImageUrl || ''}
                         phoneNumber={member.phoneNumber || ''}
+                        birthDate={member.birthDate}
                         observations={member.observations || ''}
                         planName={planName}
                       />
