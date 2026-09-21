@@ -26,6 +26,16 @@ export interface UpcomingRenewal {
   isUrgent: boolean;
 }
 
+export interface UpcomingBirthday {
+  id: string;
+  name: string;
+  initials: string;
+  profileImageUrl?: string | null;
+  daysLeft: number;
+  isToday: boolean;
+  birthDate: string;
+}
+
 export interface RenewalItemProps {
   id: string;
   initials: string;
@@ -42,7 +52,7 @@ export interface DashboardMetrics {
   overdueAccounts: MetricValue;
   statusDistribution?: StatusDistribution;
   upcomingRenewals: UpcomingRenewal[];
+  upcomingBirthdays: UpcomingBirthday[];
   revenueTrajectory: { month: string; amount: number }[];
   membersTrajectory?: MemberTrajectoryItem[];
 }
-
