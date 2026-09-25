@@ -20,6 +20,7 @@ import {
   LogOut,
   Menu,
   X,
+  Sparkles,
 } from 'lucide-react';
 
 export default function DashboardLayout({
@@ -134,6 +135,20 @@ export default function DashboardLayout({
           </div>
 
           <div className="flex flex-col mt-auto mb-6 space-y-1">
+            <div className="px-6 mb-2">
+              <div className="bg-surface-hover border border-border-primary rounded-lg p-3 flex flex-col gap-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-text-main flex items-center gap-1.5">
+                    <Sparkles size={14} className="text-brand-main" /> Novedades
+                  </span>
+                  <span className="text-[10px] font-bold bg-background border border-border-primary text-text-muted px-1.5 py-0.5 rounded">v1.5.1</span>
+                </div>
+                <p className="text-[11px] text-text-muted leading-relaxed">
+                  Corrección visual en lista de miembros (en dispositivos móviles).
+                </p>
+              </div>
+            </div>
+
             <button
               onClick={() => setIsLogoutModalOpen(true)}
               className="flex items-center gap-4 px-8 py-3 transition-colors border-l-2 border-transparent text-text-muted hover:bg-danger-surface hover:text-danger-main hover:border-danger-main cursor-pointer w-full text-left"
