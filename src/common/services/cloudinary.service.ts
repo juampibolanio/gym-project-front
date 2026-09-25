@@ -1,5 +1,6 @@
 import { httpClient } from '@/core/api/axios.adapter';
 import axios from 'axios';
+import { CloudinaryUploadError } from '../errors/cloudinaryUploadError';
 
 interface CloudinarySignature {
   timestamp: number;
@@ -10,7 +11,7 @@ interface CloudinarySignature {
 
 export const uploadImageToCloudinary = async (file: File): Promise<string> => {
   try {
-    const { timestamp, signature, apiKey, cloudName } = 
+    const { timestamp, signature, apiKey, cloudName } =
       await httpClient.get<CloudinarySignature>('/upload/signature');
 
     const formData = new FormData();
@@ -25,7 +26,11 @@ export const uploadImageToCloudinary = async (file: File): Promise<string> => {
     );
 
     return response.data.secure_url;
-  } catch (error) {
-    throw new Error('Error al autorizar o subir la imagen de perfil');
+  } catch (error: unknown) {
+    console.error('[Cloudinary Service] Image upload failed:', error);
+    throw new CloudinaryUploadError(
+      'Failed to authorize or upload profile image to Cloudinary',
+      error
+    );
   }
 };
