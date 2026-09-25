@@ -5,7 +5,9 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Search, X } from 'lucide-react';
 
 const SEARCH_CONFIG: Record<string, { placeholder: string }> = {
-  '/dashboard/miembros': { placeholder: 'Buscar miembros, IDs o planes...' },
+  '/dashboard/miembros': {
+    placeholder: 'Buscar miembros...',
+  },
   '/dashboard/administradores': {
     placeholder: 'Buscar administradores, rol o estado...',
   },
@@ -16,63 +18,57 @@ export function GlobalSearchInput() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const inputRef = useRef<HTMLInputElement>(null);
+  const timerRef = useRef<number | null>(null);
 
-  const urlQ = searchParams.get('q') || '';
-  const [searchTerm, setSearchTerm] = useState(urlQ);
-  const [prevUrlQ, setPrevUrlQ] = useState(urlQ);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const urlQuery = searchParams.get('q') || '';
+  const [searchTerm, setSearchTerm] = useState(urlQuery);
+  const [prevUrlQuery, setPrevUrlQuery] = useState(urlQuery);
 
-  if (urlQ !== prevUrlQ) {
-    setPrevUrlQ(urlQ);
-    setSearchTerm(urlQ);
+  if (urlQuery !== prevUrlQuery) {
+    setPrevUrlQuery(urlQuery);
+    setSearchTerm(urlQuery);
   }
 
   useEffect(() => {
     return () => {
-      if (timerRef.current) {
-        clearTimeout(timerRef.current);
-      }
+      if (timerRef.current) window.clearTimeout(timerRef.current);
     };
   }, []);
 
-  const pushSearchToUrl = (query: string, immediate = false) => {
-    if (timerRef.current) {
-      clearTimeout(timerRef.current);
-      timerRef.current = null;
-    }
+  const updateUrlParams = (query: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    const trimmedQuery = query.trim();
 
-    const execute = () => {
-      const params = new URLSearchParams(searchParams.toString());
-      const trimmed = query.trim();
-      if (trimmed) {
-        params.set('q', trimmed);
-      } else {
-        params.delete('q');
-      }
-      params.delete('page');
-
-      const queryString = params.toString();
-      router.replace(queryString ? `${pathname}?${queryString}` : pathname, {
-        scroll: false,
-      });
-    };
-
-    if (immediate) {
-      execute();
+    if (trimmedQuery) {
+      params.set('q', trimmedQuery);
     } else {
-      timerRef.current = setTimeout(execute, 350);
+      params.delete('q');
     }
+
+    params.delete('page');
+
+    const queryString = params.toString();
+    router.replace(queryString ? `${pathname}?${queryString}` : pathname, {
+      scroll: false,
+    });
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value;
-    setSearchTerm(val);
-    pushSearchToUrl(val, false);
+    const value = e.target.value;
+    setSearchTerm(value);
+
+    if (timerRef.current) window.clearTimeout(timerRef.current);
+
+    timerRef.current = window.setTimeout(() => {
+      updateUrlParams(value);
+    }, 350);
   };
 
   const handleClear = () => {
     setSearchTerm('');
-    pushSearchToUrl('', true);
+    if (timerRef.current) window.clearTimeout(timerRef.current);
+
+    updateUrlParams('');
     inputRef.current?.focus();
   };
 
