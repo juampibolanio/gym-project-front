@@ -73,10 +73,14 @@ export function MemberList({
 
       <div className="min-w-0">
         <span
-          className={`inline-flex items-center gap-1.5 px-2 py-1 text-[10px] font-bold border rounded-full uppercase transition-colors whitespace-nowrap ${safeStatusStyles}`}
+          className={`inline-flex items-center gap-1.5 px-2 py-1 text-[10px] font-bold border rounded-md uppercase transition-colors ${safeStatusStyles}`}
         >
-          <span className={`w-1.5 h-1.5 rounded-full ${safeDotStyles}`}></span>
-          {displayStatus}
+          <span className={`w-1.5 h-1.5 shrink-0 rounded-full ${safeDotStyles}`}></span>
+          <span className="flex flex-col text-left leading-[1.1]">
+            {displayStatus.split('/').map((part, index) => (
+              <span key={index}>{part.trim()}</span>
+            ))}
+          </span>
         </span>
       </div>
 
