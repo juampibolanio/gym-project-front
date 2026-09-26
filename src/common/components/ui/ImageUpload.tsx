@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import Image from 'next/image';
-import Cropper from 'react-easy-crop';
+import Cropper, { Area } from 'react-easy-crop';
 import { Camera, User, Trash2 } from 'lucide-react';
 import { Modal } from '@/common/components/ui/Modal';
 import { getCroppedImg } from '../../utils/cropImage';
@@ -14,6 +14,7 @@ interface ImageUploadProps {
 }
 
 export function ImageUpload({ currentImageUrl, onImageSelect, disabled }: ImageUploadProps) {
+  const [prevImageUrl, setPrevImageUrl] = useState(currentImageUrl);
   const [preview, setPreview] = useState<string | null>(currentImageUrl || null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -21,12 +22,13 @@ export function ImageUpload({ currentImageUrl, onImageSelect, disabled }: ImageU
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState<any>(null);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
   const [isCropping, setIsCropping] = useState(false);
 
-  useEffect(() => {
+  if (currentImageUrl !== prevImageUrl) {
+    setPrevImageUrl(currentImageUrl);
     setPreview(currentImageUrl || null);
-  }, [currentImageUrl]);
+  }
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -40,7 +42,7 @@ export function ImageUpload({ currentImageUrl, onImageSelect, disabled }: ImageU
     }
   };
 
-  const onCropComplete = useCallback((croppedArea: any, croppedAreaPixels: any) => {
+  const onCropComplete = useCallback((croppedArea: Area, croppedAreaPixels: Area) => {
     setCroppedAreaPixels(croppedAreaPixels);
   }, []);
 
@@ -56,8 +58,8 @@ export function ImageUpload({ currentImageUrl, onImageSelect, disabled }: ImageU
         setPreview(objectUrl);
         onImageSelect(croppedFile);
       }
-    } catch (e) {
-      console.error(e);
+    } catch (error: unknown) {
+      console.error('[ImageUpload] Failed to process cropped image:', error);
     } finally {
       setIsCropping(false);
       setIsCropModalOpen(false);
