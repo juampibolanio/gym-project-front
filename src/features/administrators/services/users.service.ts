@@ -15,11 +15,17 @@ export class UsersService {
     limit: number = 10,
     term?: string
   ): Promise<PaginatedResult<User>> {
-    const query = term
-      ? `?page=${page}&limit=${limit}&term=${term}`
-      : `?page=${page}&limit=${limit}`;
+    const params = new URLSearchParams({
+      page: page.toString(),
+      limit: limit.toString(),
+    });
+
+    if (term) {
+      params.append('term', term.trim());
+    }
+
     return await httpClient.get<PaginatedResult<User>>(
-      `${this.ENDPOINT}${query}`
+      `${this.ENDPOINT}?${params.toString()}`
     );
   }
 
@@ -28,7 +34,7 @@ export class UsersService {
   }
 
   static async create(payload: CreateUserPayload): Promise<User> {
-    return await httpClient.post(this.ENDPOINT, payload);
+    return await httpClient.post<User>(this.ENDPOINT, payload);
   }
 
   static async update(id: string, payload: UpdateUserPayload): Promise<User> {
