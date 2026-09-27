@@ -19,7 +19,7 @@ export default function LoginPage() {
           ChacuGym
         </h1>
         <p className="text-sm text-text-muted mt-1 transition-colors">
-          Terminal de Inicio Administradores
+          Terminal de Inicio de Sesión
         </p>
       </div>
 
