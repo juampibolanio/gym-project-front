@@ -1,4 +1,4 @@
-import { Roles } from './roles.interface';
+export type Roles = 'SUPER_ADMIN' | 'ADMIN' | 'USER';
 
 export interface LoginPayload {
   email: string;
