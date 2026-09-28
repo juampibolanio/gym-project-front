@@ -7,13 +7,12 @@ import {
 } from '../interfaces/auth.interface';
 
 export class AuthService {
-  private static readonly ENDPOINT = '/auth';
 
   /**
    * Authenticates a user and retrieves session tokens.
    */
   static async login(payload: LoginPayload): Promise<AuthResponse> {
-    return await httpClient.post<AuthResponse>(`${this.ENDPOINT}/login`, payload);
+    return await httpClient.post<AuthResponse>(`/auth/login`, payload);
   }
 
   /**
@@ -21,7 +20,7 @@ export class AuthService {
    */
   static async forgotPassword(payload: ForgotPasswordPayload): Promise<{ message: string }> {
     return await httpClient.post<{ message: string }>(
-      `${this.ENDPOINT}/forgot-password`,
+      `/auth/forgot-password`,
       payload
     );
   }
@@ -31,7 +30,7 @@ export class AuthService {
    */
   static async resetPassword(payload: ResetPasswordPayload): Promise<{ message: string }> {
     return await httpClient.post<{ message: string }>(
-      `${this.ENDPOINT}/reset-password`,
+      `/auth/reset-password`,
       payload
     );
   }
@@ -40,6 +39,6 @@ export class AuthService {
    * Invalidates the current session tokens on the server.
    */
   static async logout(): Promise<{ message: string }> {
-    return await httpClient.post<{ message: string }>(`${this.ENDPOINT}/logout`);
+    return await httpClient.post<{ message: string }>(`/auth/logout`);
   }
 }
