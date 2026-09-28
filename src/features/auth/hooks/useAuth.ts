@@ -3,6 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useAuthStore } from '../store/auth.store';
 import { AuthService } from '../services/auth.service';
 import { AuthResponse } from '../interfaces/auth.interface';
+import { ApiError } from '@/common/interfaces/api-error.interface';
 import toast from 'react-hot-toast';
 
 export const useLogin = () => {
@@ -16,11 +17,12 @@ export const useLogin = () => {
       toast.success(`¡Bienvenido, ${data.user.name}!`);
       router.push('/dashboard');
     },
-    onError: (error: any) => {
-      const errorMessage =
-        error?.response?.data?.message || 'Error al iniciar sesión';
-      toast.error(errorMessage);
-      console.error('Error al iniciar sesión:', errorMessage);
+    onError: (error: ApiError) => {
+      console.error('[useAuth] Login failed:', error);
+      const message = error?.response?.data?.message;
+      toast.error(
+        Array.isArray(message) ? message[0] : (message || 'Error al iniciar sesión')
+      );
     },
   });
 };
