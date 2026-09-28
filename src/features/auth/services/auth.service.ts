@@ -1,34 +1,45 @@
 import { httpClient } from '@/core/api/axios.adapter';
-import { AuthResponse, LoginPayload } from '../interfaces/auth.interface';
+import { 
+  AuthResponse, 
+  LoginPayload, 
+  ForgotPasswordPayload, 
+  ResetPasswordPayload 
+} from '../interfaces/auth.interface';
 
 export class AuthService {
+  private static readonly ENDPOINT = '/auth';
+
+  /**
+   * Authenticates a user and retrieves session tokens.
+   */
   static async login(payload: LoginPayload): Promise<AuthResponse> {
-    return await httpClient.post<AuthResponse>('auth/login', payload);
+    return await httpClient.post<AuthResponse>(`${this.ENDPOINT}/login`, payload);
   }
 
-  static async forgotPassword(payload: {
-    email: string;
-    domain: string;
-  }): Promise<{ message: string }> {
-    const data = await httpClient.post<{ message: string }>(
-      'auth/forgot-password',
+  /**
+   * Requests a password reset email for a given domain.
+   */
+  static async forgotPassword(payload: ForgotPasswordPayload): Promise<{ message: string }> {
+    return await httpClient.post<{ message: string }>(
+      `${this.ENDPOINT}/forgot-password`,
       payload
     );
-    return data;
   }
 
-  static async resetPassword(payload: {
-    token: string;
-    newPassword: string;
-  }): Promise<{ message: string }> {
-    const data = await httpClient.post<{ message: string }>(
-      'auth/reset-password',
+  /**
+   * Resets the user's password using a valid recovery token.
+   */
+  static async resetPassword(payload: ResetPasswordPayload): Promise<{ message: string }> {
+    return await httpClient.post<{ message: string }>(
+      `${this.ENDPOINT}/reset-password`,
       payload
     );
-    return data;
   }
 
+  /**
+   * Invalidates the current session tokens on the server.
+   */
   static async logout(): Promise<{ message: string }> {
-    return await httpClient.post<{ message: string }>('auth/logout');
+    return await httpClient.post<{ message: string }>(`${this.ENDPOINT}/logout`);
   }
 }

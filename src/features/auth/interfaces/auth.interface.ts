@@ -22,3 +22,13 @@ export interface RefreshResponse {
   access_token: string;
   refresh_token: string;
 }
+
+export interface ForgotPasswordPayload {
+  email: string;
+  domain: string;
+}
+
+export interface ResetPasswordPayload {
+  token: string;
+  newPassword: string;
+}
