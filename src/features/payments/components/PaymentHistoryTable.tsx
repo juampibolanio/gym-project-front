@@ -21,7 +21,6 @@ export function PaymentHistoryTable({ memberUuid }: Props) {
   const [paymentToVoid, setPaymentToVoid] = useState<Payment | null>(null);
   
   const { mutate: deletePayment, isPending: isDeleting } = useDeletePayment();
-
   const { data: response, isLoading } = usePayments(currentPage, itemsPerPage, memberUuid, filter);
   
   const payments = response?.data || [];
@@ -36,50 +35,66 @@ export function PaymentHistoryTable({ memberUuid }: Props) {
     });
   };
 
+  const priceFormatter = new Intl.NumberFormat('es-AR');
+
   return (
-    <div className="bg-surface border border-border-primary rounded-lg p-6 overflow-hidden flex flex-col transition-colors">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+    <section className="bg-surface border border-border-primary rounded-lg p-6 overflow-hidden flex flex-col transition-colors shadow-sm">
+      <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
         <h3 className="text-sm font-bold text-text-main uppercase tracking-wider">
           Historial de Pagos
         </h3>
         
-        <div className="flex bg-background border border-border-primary rounded-lg p-1">
+        <div 
+          className="flex bg-background border border-border-primary rounded-lg p-1"
+          role="group"
+          aria-label="Filtro de estado de pagos"
+        >
           <button
             onClick={() => { setFilter('VALID'); setCurrentPage(1); }}
-            className={`px-4 py-1.5 text-[10px] font-bold rounded transition-colors tracking-wider uppercase cursor-pointer ${filter === 'VALID' ? 'bg-brand-main text-white ' : 'text-text-muted hover:text-text-main'}`}
+            aria-pressed={filter === 'VALID'}
+            className={`px-4 py-1.5 text-[10px] font-bold rounded transition-colors tracking-wider uppercase cursor-pointer ${
+              filter === 'VALID' ? 'bg-brand-main text-white shadow-sm' : 'text-text-muted hover:text-text-main'
+            }`}
           >
             Válidos
           </button>
           <button
             onClick={() => { setFilter('VOIDED'); setCurrentPage(1); }}
-            className={`px-4 py-1.5 text-[10px] font-bold rounded transition-colors tracking-wider uppercase cursor-pointer ${filter === 'VOIDED' ? 'bg-danger-main text-white ' : 'text-text-muted hover:text-text-main'}`}
+            aria-pressed={filter === 'VOIDED'}
+            className={`px-4 py-1.5 text-[10px] font-bold rounded transition-colors tracking-wider uppercase cursor-pointer ${
+              filter === 'VOIDED' ? 'bg-danger-main text-white shadow-sm' : 'text-text-muted hover:text-text-main'
+            }`}
           >
             Anulados
           </button>
         </div>
-      </div>
+      </header>
 
-      <div className="overflow-x-auto relative min-h-50">
+      <div className="overflow-x-auto relative min-h-50" aria-live="polite">
         {isLoading && (
-           <div className="absolute inset-0 bg-surface/50 backdrop-blur-[1px] flex items-center justify-center z-10">
-              <Loader2 className="w-6 h-6 animate-spin text-brand-main" />
+           <div className="absolute inset-0 bg-surface/50 backdrop-blur-[1px] flex flex-col items-center justify-center z-10 rounded-md">
+              <Loader2 className="w-6 h-6 animate-spin text-brand-main mb-2" aria-hidden="true" />
+              <span className="text-xs font-medium text-text-muted">Cargando pagos...</span>
            </div>
         )}
+        
         <table className="w-full min-w-150 text-left border-collapse">
           <thead>
             <tr className="border-b border-t border-border-primary">
-              <th className="pb-3 pt-3 text-xs font-bold text-text-muted uppercase tracking-wider">Fecha</th>
-              <th className="pb-3 pt-3 text-xs font-bold text-text-muted uppercase tracking-wider">Monto</th>
-              <th className="pb-3 pt-3 text-xs font-bold text-text-muted uppercase tracking-wider">Método</th>
-              <th className="pb-3 pt-3 text-xs font-bold text-text-muted uppercase tracking-wider hidden sm:table-cell">Notas</th>
-              <th className="pb-3 pt-3 text-xs font-bold text-text-muted uppercase tracking-wider text-right">Estado / Acciones</th>
+              <th scope="col" className="pb-3 pt-3 text-xs font-bold text-text-muted uppercase tracking-wider">Fecha</th>
+              <th scope="col" className="pb-3 pt-3 text-xs font-bold text-text-muted uppercase tracking-wider">Monto</th>
+              <th scope="col" className="pb-3 pt-3 text-xs font-bold text-text-muted uppercase tracking-wider">Método</th>
+              <th scope="col" className="pb-3 pt-3 text-xs font-bold text-text-muted uppercase tracking-wider hidden sm:table-cell">Notas</th>
+              <th scope="col" className="pb-3 pt-3 text-xs font-bold text-text-muted uppercase tracking-wider text-right">Estado / Acciones</th>
             </tr>
           </thead>
           <tbody className="text-sm text-text-main">
             {payments.map((payment) => (
               <tr
                 key={payment.uuid}
-                className={`border-b border-border-primary transition-colors ${payment.isVoided ? 'bg-danger-main/5 hover:bg-danger-main/10' : 'hover:bg-surface-hover'}`}
+                className={`border-b border-border-primary transition-colors ${
+                  payment.isVoided ? 'bg-danger-main/5 hover:bg-danger-main/10' : 'hover:bg-surface-hover'
+                }`}
               >
                 <td className={`py-4 ${payment.isVoided ? 'opacity-60 line-through' : ''}`}>
                   {new Date(payment.date).toLocaleDateString('es-ES', {
@@ -87,19 +102,21 @@ export function PaymentHistoryTable({ memberUuid }: Props) {
                   })}
                 </td>
                 <td className={`py-4 font-bold ${payment.isVoided ? 'text-text-muted line-through' : 'text-text-main'}`}>
-                  ${Number(payment.amountPaid).toLocaleString('es-AR')}
+                  ${priceFormatter.format(payment.amountPaid)}
                 </td>
                 <td className={`py-4 ${payment.isVoided ? 'opacity-60' : ''}`}>
                   <div className="flex items-center gap-2">
-                    <CreditCard size={16} className="text-text-muted" />
+                    <CreditCard size={16} className="text-text-muted" aria-hidden="true" />
                     <span>{paymentMethods[payment.paymentMethod] || payment.paymentMethod}</span>
                   </div>
                 </td>
                 <td className="py-4 max-w-40 truncate hidden sm:table-cell" title={payment.notes || ''}>
                   {payment.notes ? (
-                    <span className={`text-sm ${payment.isVoided ? 'text-danger-main/80 font-medium' : 'text-text-muted'}`}>{payment.notes}</span>
+                    <span className={`text-sm ${payment.isVoided ? 'text-danger-main/80 font-medium' : 'text-text-muted'}`}>
+                      {payment.notes}
+                    </span>
                   ) : (
-                    <span className="text-text-muted opacity-50">-</span>
+                    <span className="text-text-muted opacity-50" aria-hidden="true">-</span>
                   )}
                 </td>
                 <td className="py-4 text-right">
@@ -117,18 +134,22 @@ export function PaymentHistoryTable({ memberUuid }: Props) {
                     {!payment.isVoided && (
                       <>
                         <button
+                          type="button"
                           onClick={() => setSelectedPayment(payment)}
                           className="p-1.5 rounded-md text-text-muted hover:text-brand-main hover:bg-brand-main/10 transition-colors cursor-pointer"
+                          aria-label="Editar pago"
                           title="Editar pago"
                         >
-                          <Edit2 size={16} />
+                          <Edit2 size={16} aria-hidden="true" />
                         </button>
                         <button
+                          type="button"
                           onClick={() => setPaymentToVoid(payment)}
                           className="p-1.5 rounded-md text-text-muted hover:text-danger-main hover:bg-danger-main/10 transition-colors cursor-pointer"
+                          aria-label="Anular pago"
                           title="Anular pago"
                         >
-                          <Trash2 size={16} />
+                          <Trash2 size={16} aria-hidden="true" />
                         </button>
                       </>
                     )}
@@ -136,6 +157,7 @@ export function PaymentHistoryTable({ memberUuid }: Props) {
                 </td>
               </tr>
             ))}
+            
             {!isLoading && payments.length === 0 && (
               <tr>
                 <td colSpan={5} className="py-10 text-center text-text-muted text-sm">
@@ -160,12 +182,15 @@ export function PaymentHistoryTable({ memberUuid }: Props) {
       <Modal isOpen={!!paymentToVoid} onClose={() => !isDeleting && setPaymentToVoid(null)} title="Anular Pago">
         <div className="flex flex-col gap-4 mt-2">
           <p className="text-sm text-text-main">
-            Estás a punto de anular un pago de <strong className="text-brand-main">${paymentToVoid ? Number(paymentToVoid.amountPaid).toLocaleString('es-AR') : 0}</strong>.
+            Estás a punto de anular un pago de <strong className="text-brand-main">${paymentToVoid ? priceFormatter.format(paymentToVoid.amountPaid) : 0}</strong>.
           </p>
 
-          <div className="p-4 border border-warning-main/30 bg-warning-surface rounded-lg flex flex-col gap-2">
+          <div 
+            className="p-4 border border-warning-main/30 bg-warning-surface rounded-lg flex flex-col gap-2"
+            role="alert"
+          >
             <div className="flex items-center gap-2 text-warning-main font-bold">
-              <AlertTriangle size={18} />
+              <AlertTriangle size={18} aria-hidden="true" />
               <h3>Atención</h3>
             </div>
             <p className="text-xs text-text-main">
@@ -175,21 +200,23 @@ export function PaymentHistoryTable({ memberUuid }: Props) {
 
           <div className="flex justify-end gap-3 mt-4">
             <button
+              type="button"
               onClick={() => setPaymentToVoid(null)}
               disabled={isDeleting}
-              className="px-4 py-2 text-sm font-medium text-text-main border border-border-primary hover:bg-surface-hover transition-colors rounded cursor-pointer disabled:opacity-50"
+              className="px-4 py-2 text-sm font-medium text-text-main border border-border-primary hover:bg-surface-hover transition-colors rounded cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Cancelar
             </button>
             <button
+              type="button"
               onClick={handleVoidPayment}
               disabled={isDeleting}
-              className="py-2 px-6 text-sm font-medium text-white bg-danger-main hover:bg-opacity-90 transition-colors rounded flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              className="py-2 px-6 text-sm font-medium text-white bg-danger-main hover:bg-danger-hover transition-colors rounded flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed min-w-35"
             >
               {isDeleting ? (
-                <><Loader2 className="w-4 h-4 animate-spin" /> Procesando...</>
+                <><Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" /> <span>Procesando...</span></>
               ) : (
-                'Anular Pago'
+                <span>Anular Pago</span>
               )}
             </button>
           </div>
@@ -197,16 +224,32 @@ export function PaymentHistoryTable({ memberUuid }: Props) {
       </Modal>
 
       {totalPages > 1 && (
-        <div className="flex items-center justify-between mt-6 px-2 border-t border-border-primary pt-4">
+        <footer className="flex items-center justify-between mt-6 px-2 border-t border-border-primary pt-4">
           <span className="text-xs text-text-muted font-medium">
             Página {currentPage} de {totalPages}
           </span>
-          <div className="flex gap-2">
-            <button onClick={() => setCurrentPage((p) => Math.max(1, p - 1))} disabled={currentPage === 1 || isLoading} className="p-1.5 rounded-md border border-border-primary text-text-main hover:bg-surface-hover disabled:opacity-50 disabled:cursor-not-allowed transition-colors"><ChevronLeft size={16} /></button>
-            <button onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages || isLoading} className="p-1.5 rounded-md border border-border-primary text-text-main hover:bg-surface-hover disabled:opacity-50 disabled:cursor-not-allowed transition-colors"><ChevronRight size={16} /></button>
-          </div>
-        </div>
+          <nav className="flex gap-2" aria-label="Navegación de historial de pagos">
+            <button 
+              type="button"
+              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))} 
+              disabled={currentPage === 1 || isLoading} 
+              aria-label="Página anterior"
+              className="p-1.5 rounded-md border border-border-primary text-text-main hover:bg-surface-hover disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
+            >
+              <ChevronLeft size={16} aria-hidden="true" />
+            </button>
+            <button 
+              type="button"
+              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))} 
+              disabled={currentPage === totalPages || isLoading} 
+              aria-label="Página siguiente"
+              className="p-1.5 rounded-md border border-border-primary text-text-main hover:bg-surface-hover disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
+            >
+              <ChevronRight size={16} aria-hidden="true" />
+            </button>
+          </nav>
+        </footer>
       )}
-    </div>
+    </section>
   );
 }
