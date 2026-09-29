@@ -10,7 +10,12 @@ import {
 export class MembersService {
   private static readonly ENDPOINT = '/members';
 
-  static async getAll(params: GetMembersParams = {}): Promise<PaginatedResult<Member>> {
+  /**
+   * Retrieves a paginated and filtered list of members.
+   */
+  static async getAll(
+    params: GetMembersParams = {}
+  ): Promise<PaginatedResult<Member>> {
     const {
       page = 1,
       limit = 10,
@@ -23,9 +28,10 @@ export class MembersService {
     } = params;
 
     const searchParams = new URLSearchParams({
-      page: page.toString(),
-      limit: limit.toString(),
+      page: String(page),
+      limit: String(limit),
     });
+
     if (term) searchParams.append('term', term);
     if (state) searchParams.append('state', state);
     if (planId) searchParams.append('planId', planId);
@@ -38,29 +44,44 @@ export class MembersService {
     );
   }
 
+  /**
+   * Retrieves a specific member by their UUID.
+   */
   static async getById(id: string): Promise<Member> {
     return await httpClient.get<Member>(`${this.ENDPOINT}/${id}`);
   }
 
+  /**
+   * Creates a new member in the system.
+   */
   static async create(payload: CreateMemberPayload): Promise<Member> {
-    return await httpClient.post(this.ENDPOINT, payload);
+    return await httpClient.post<Member>(this.ENDPOINT, payload);
   }
 
-  static async update(
-    id: string,
-    payload: UpdateMemberPayload
-  ): Promise<Member> {
+  /**
+   * Updates an existing member's information.
+   */
+  static async update(id: string, payload: UpdateMemberPayload): Promise<Member> {
     return await httpClient.patch<Member>(`${this.ENDPOINT}/${id}`, payload);
   }
 
+  /**
+   * Permanently deletes a member from the system (if no financial records exist).
+   */
   static async remove(id: string): Promise<Member> {
     return await httpClient.delete<Member>(`${this.ENDPOINT}/${id}`);
   }
 
+  /**
+   * Soft-deactivates a member and cancels their active subscriptions.
+   */
   static async deactivate(id: string): Promise<Member> {
-    return await httpClient.patch<Member>(`${this.ENDPOINT}/${id}/deactivate`); 
+    return await httpClient.patch<Member>(`${this.ENDPOINT}/${id}/deactivate`);
   }
 
+  /**
+   * Renews a member's plan and processes the payment.
+   */
   static async renewPlan(
     id: string,
     payload: { planUuid: string; paymentMethod: string }
@@ -68,6 +89,9 @@ export class MembersService {
     return await httpClient.post<Member>(`${this.ENDPOINT}/${id}/renew`, payload);
   }
 
+  /**
+   * Changes a member's active plan, adjusting billing and scheduling.
+   */
   static async changePlan(
     id: string,
     payload: {
