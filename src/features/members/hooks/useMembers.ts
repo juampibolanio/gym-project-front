@@ -1,11 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
 import { MembersService } from '../services/members.service';
 import {
   CreateMemberPayload,
   GetMembersParams,
   UpdateMemberPayload,
 } from '../interfaces/members.interface';
+import { ApiError } from '@/common/interfaces/api-error.interface';
 import toast from 'react-hot-toast';
 
 export const useMembers = (params: GetMembersParams = {}) => {
@@ -32,15 +32,17 @@ export const useCreateMember = () => {
       MembersService.create(payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['members'] });
+      toast.success('Miembro creado con éxito');
     },
-    onError: (error: AxiosError<{ message?: string | string[] }>) => {
-      const message =
-        error.response?.data?.message || 'Ocurrió un error al crear el miembro';
-      if (Array.isArray(message)) {
-        message.forEach((msg: string) => toast.error(msg));
-      } else {
-        toast.error(message);
-      }
+    onError: (error: unknown) => {
+      const apiError = error as ApiError;
+      const message = apiError.response?.data?.message;
+      
+      toast.error(
+        Array.isArray(message)
+          ? message[0]
+          : (message || 'Ocurrió un error al crear el miembro')
+      );
     },
   });
 };
@@ -57,35 +59,41 @@ export const useUpdateMember = () => {
       payload: UpdateMemberPayload;
     }) => MembersService.update(id, payload),
     onSuccess: (_, variables) => {
-      queryClient.removeQueries({ queryKey: ['member', variables.id] });
+      queryClient.invalidateQueries({ queryKey: ['member', variables.id] });
       queryClient.invalidateQueries({ queryKey: ['members'] });
-      
       toast.success('Miembro actualizado con éxito');
     },
-    onError: (error: AxiosError<{ message?: string | string[] }>) => {
-      const message =
-        error.response?.data?.message || 'No se pudo actualizar el miembro';
-      if (Array.isArray(message)) {
-        message.forEach((msg: string) => toast.error(msg));
-      } else {
-        toast.error(message);
-      }
+    onError: (error: unknown) => {
+      const apiError = error as ApiError;
+      const message = apiError.response?.data?.message;
+      
+      toast.error(
+        Array.isArray(message)
+          ? message[0]
+          : (message || 'No se pudo actualizar el miembro')
+      );
     },
   });
 };
 
 export const useDeactivateMember = () => {
   const queryClient = useQueryClient();
+  
   return useMutation({
     mutationFn: (id: string) => MembersService.deactivate(id),
     onSuccess: (_, id) => {
-      queryClient.removeQueries({ queryKey: ['member', id] });
+      queryClient.invalidateQueries({ queryKey: ['member', id] });
       queryClient.invalidateQueries({ queryKey: ['members'] });
       toast.success('Socio desactivado correctamente');
     },
-    onError: (error: AxiosError<{ message?: string }>) => {
+    onError: (error: unknown) => {
+      const apiError = error as ApiError;
+      const message = apiError.response?.data?.message;
+      
       toast.error(
-        error.response?.data?.message || 'Error al desactivar el socio'
+        Array.isArray(message) 
+          ? message[0] 
+          : (message || 'Error al desactivar el socio')
       );
     },
   });
@@ -93,6 +101,7 @@ export const useDeactivateMember = () => {
 
 export const useRenewPlan = () => {
   const queryClient = useQueryClient();
+  
   return useMutation({
     mutationFn: ({
       id,
@@ -105,14 +114,22 @@ export const useRenewPlan = () => {
       queryClient.invalidateQueries({ queryKey: ['member', variables.id] });
       toast.success('¡Plan renovado con éxito!');
     },
-    onError: (error: AxiosError<{ message?: string }>) => {
-      toast.error(error.response?.data?.message || 'Hubo un error al renovar el plan');
+    onError: (error: unknown) => {
+      const apiError = error as ApiError;
+      const message = apiError.response?.data?.message;
+      
+      toast.error(
+        Array.isArray(message) 
+          ? message[0] 
+          : (message || 'Hubo un error al renovar el plan')
+      );
     },
   });
 };
 
 export const useChangePlan = () => {
   const queryClient = useQueryClient();
+  
   return useMutation({
     mutationFn: ({
       id,
@@ -131,9 +148,15 @@ export const useChangePlan = () => {
       queryClient.invalidateQueries({ queryKey: ['member', variables.id] });
       toast.success('¡Plan modificado con éxito!');
     },
-    onError: (error: AxiosError<{ message?: string }>) => {
-      toast.error(error.response?.data?.message || 'Hubo un error al cambiar el plan');
+    onError: (error: unknown) => {
+      const apiError = error as ApiError;
+      const message = apiError.response?.data?.message;
+      
+      toast.error(
+        Array.isArray(message) 
+          ? message[0] 
+          : (message || 'Hubo un error al cambiar el plan')
+      );
     },
   });
 };
-
