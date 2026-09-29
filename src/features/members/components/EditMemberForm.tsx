@@ -3,16 +3,17 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useForm } from 'react-hook-form';
+import { useForm, Resolver } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   useUpdateMember,
   useMember,
 } from '@/features/members/hooks/useMembers';
 import {
-  EditMemberFormValues,
-  editMemberSchema,
-} from '@/features/members/schemas/editMember.schema';
+  memberSchema,
+  MemberFormInput,
+  MemberFormValues,
+} from '@/features/members/schemas/member.schema';
 import { UpdateMemberPayload } from '../interfaces/members.interface';
 import { InputField } from '@/common/components/ui/InputField';
 import { TextareaField } from '@/common/components/ui/TextareaField';
@@ -35,8 +36,8 @@ export function EditMemberForm({ id }: { id: string }) {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<EditMemberFormValues>({
-    resolver: zodResolver(editMemberSchema),
+  } = useForm<MemberFormInput, unknown, MemberFormValues>({
+    resolver: zodResolver(memberSchema) as unknown as Resolver<MemberFormInput, unknown, MemberFormValues>,
     defaultValues: {
       dni: '',
       name: '',
@@ -58,7 +59,7 @@ export function EditMemberForm({ id }: { id: string }) {
         surname: member.surname,
         phoneNumber: member.phoneNumber || '',
         birthDate: member.birthDate
-          ? member.birthDate.split('T')[0]
+          ? new Date(member.birthDate).toISOString().split('T')[0]
           : '',
         observations: member.observations || '',
         emergencyName: member.emergencyContact?.name || '',
@@ -77,10 +78,10 @@ export function EditMemberForm({ id }: { id: string }) {
     }
   };
 
-  const onSubmit = async (data: EditMemberFormValues) => {
+  const onSubmit = async (data: MemberFormValues) => {
     setIsUploading(true);
     try {
-      let profileImageUrl: string | null | undefined = member?.profileImageUrl;
+      let profileImageUrl = member?.profileImageUrl;
 
       if (selectedImage) {
         profileImageUrl = await uploadImageToCloudinary(selectedImage);
@@ -97,13 +98,13 @@ export function EditMemberForm({ id }: { id: string }) {
         birthDate: data.birthDate,
         phoneNumber: data.phoneNumber || undefined,
         observations: data.observations || undefined,
-        profileImageUrl: profileImageUrl,
+        profileImageUrl: profileImageUrl as string | undefined | null,
         emergencyContact: hasEmergency
           ? {
-            name: data.emergencyName as string,
-            phoneNumber: data.emergencyPhone as string,
-            relationship: data.emergencyRelation as string,
-          }
+              name: data.emergencyName as string,
+              phoneNumber: data.emergencyPhone as string,
+              relationship: data.emergencyRelation as string,
+            }
           : null,
       };
 
@@ -116,7 +117,8 @@ export function EditMemberForm({ id }: { id: string }) {
           },
         }
       );
-    } catch (error) {
+    } catch (error: unknown) {
+      console.error('[EditMemberForm] Error uploading image:', error);
       toast.error('Error al procesar la imagen. Inténtalo de nuevo.');
     } finally {
       setIsUploading(false);
@@ -127,8 +129,12 @@ export function EditMemberForm({ id }: { id: string }) {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col justify-center items-center h-64">
-        <Loader2 className="w-8 h-8 text-brand-main animate-spin mb-3" />
+      <div 
+        className="flex flex-col justify-center items-center h-64"
+        role="status"
+        aria-live="polite"
+      >
+        <Loader2 className="w-8 h-8 text-brand-main animate-spin mb-3" aria-hidden="true" />
         <span className="text-text-muted text-sm">
           Cargando datos del socio...
         </span>
@@ -138,19 +144,20 @@ export function EditMemberForm({ id }: { id: string }) {
 
   return (
     <div className="flex flex-col gap-6">
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
-        <div className="border border-border-primary rounded-lg bg-surface flex flex-col p-6 gap-8 ">
-
-          <div className="flex flex-col gap-6">
+      <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-6">
+        <div className="border border-border-primary rounded-lg bg-surface flex flex-col p-6 gap-8">
+          
+          <fieldset className="flex flex-col gap-6">
+            <legend className="sr-only">Identidad y Contacto</legend>
             <h2 className="text-[15px] font-bold text-text-main">
               Identidad y Contacto
             </h2>
 
             <div className="flex justify-center pb-4">
-              <ImageUpload
+              <ImageUpload 
                 currentImageUrl={member?.profileImageUrl}
-                onImageSelect={handleImageSelect}
-                disabled={isSubmitting}
+                onImageSelect={handleImageSelect} 
+                disabled={isSubmitting} 
               />
             </div>
 
@@ -162,7 +169,7 @@ export function EditMemberForm({ id }: { id: string }) {
                 registration={register('dni')}
                 error={errors.dni?.message}
                 disabled={isSubmitting}
-                icon={<IdCard size={14} className="text-text-muted" />}
+                icon={<IdCard size={14} className="text-text-muted" aria-hidden="true" />}
                 className="md:col-span-2"
               />
 
@@ -199,16 +206,17 @@ export function EditMemberForm({ id }: { id: string }) {
                 registration={register('phoneNumber')}
                 error={errors.phoneNumber?.message}
                 disabled={isSubmitting}
-                icon={<Phone size={14} className="text-text-muted" />}
+                icon={<Phone size={14} className="text-text-muted" aria-hidden="true" />}
               />
             </div>
-          </div>
+          </fieldset>
 
           <hr className="border-border-primary" />
 
-          <div className="flex flex-col gap-6">
+          <fieldset className="flex flex-col gap-6">
+            <legend className="sr-only">Información de Emergencia</legend>
             <div className="flex items-center gap-2">
-              <HeartPulse className="text-danger-main" size={20} />
+              <HeartPulse className="text-danger-main" size={20} aria-hidden="true" />
               <h2 className="text-[15px] font-bold text-text-main">Información de Emergencia (Opcional)</h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -226,7 +234,7 @@ export function EditMemberForm({ id }: { id: string }) {
                 disabled={isSubmitting}
                 registration={register('emergencyPhone')}
                 error={errors.emergencyPhone?.message}
-                icon={<Phone size={14} className="text-text-muted" />}
+                icon={<Phone size={14} className="text-text-muted" aria-hidden="true" />}
               />
               <InputField
                 label="Parentesco"
@@ -237,11 +245,12 @@ export function EditMemberForm({ id }: { id: string }) {
                 error={errors.emergencyRelation?.message}
               />
             </div>
-          </div>
+          </fieldset>
 
           <hr className="border-border-primary" />
-
-          <div className="flex flex-col gap-6">
+          
+          <fieldset className="flex flex-col gap-6">
+            <legend className="sr-only">Información Médica o Adicional</legend>
             <h2 className="text-[15px] font-bold text-text-main">
               Información Médica / Adicional
             </h2>
@@ -253,7 +262,7 @@ export function EditMemberForm({ id }: { id: string }) {
               disabled={isSubmitting}
               rows={4}
             />
-          </div>
+          </fieldset>
 
           <div className="flex items-center justify-end gap-3 pt-4 border-t border-border-primary">
             <Link
@@ -265,9 +274,16 @@ export function EditMemberForm({ id }: { id: string }) {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex items-center justify-center gap-2 px-6 py-2.5 bg-brand-main hover:bg-brand-hover text-white rounded-sm text-sm font-medium transition-colors disabled:opacity-50 cursor-pointer"
+              className="flex items-center justify-center gap-2 px-6 py-2.5 bg-brand-main hover:bg-brand-hover text-white rounded-sm text-sm font-medium transition-colors disabled:opacity-50 cursor-pointer min-w-35"
             >
-              {isSubmitting ? 'Guardando...' : 'Guardar Cambios'}
+              {isSubmitting ? (
+                <>
+                  <Loader2 size={16} className="animate-spin" aria-hidden="true" />
+                  <span>Guardando...</span>
+                </>
+              ) : (
+                <span>Guardar Cambios</span>
+              )}
             </button>
           </div>
 

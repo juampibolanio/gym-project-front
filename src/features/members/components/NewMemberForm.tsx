@@ -3,18 +3,19 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useForm } from 'react-hook-form';
+import { useForm, Resolver } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useCreateMember } from '@/features/members/hooks/useMembers';
 import {
-  createMemberSchema,
+  memberSchema,
+  MemberFormInput,
   MemberFormValues,
-} from '@/features/members/schemas/createMember.schema';
+} from '@/features/members/schemas/member.schema';
 import { CreateMemberPayload, Member } from '../interfaces/members.interface';
 import { InputField } from '@/common/components/ui/InputField';
 import { TextareaField } from '@/common/components/ui/TextareaField';
 import { uploadImageToCloudinary } from '@/common/services/cloudinary.service';
-import { Phone, IdCard, UserPlus, HeartPulse } from 'lucide-react';
+import { Phone, IdCard, UserPlus, HeartPulse, Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { ImageUpload } from '@/common/components/ui/ImageUpload';
 
@@ -29,8 +30,8 @@ export function NewMemberForm() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<MemberFormValues>({
-    resolver: zodResolver(createMemberSchema),
+  } = useForm<MemberFormInput, unknown, MemberFormValues>({
+    resolver: zodResolver(memberSchema) as unknown as Resolver<MemberFormInput, unknown, MemberFormValues>,
     defaultValues: {
       dni: '',
       name: '',
@@ -84,7 +85,8 @@ export function NewMemberForm() {
           }
         },
       });
-    } catch (error) {
+    } catch (error: unknown) {
+      console.error('[NewMemberForm] Error uploading image:', error);
       toast.error('Error al procesar la imagen. Inténtalo de nuevo.');
     } finally {
       setIsUploading(false);
@@ -95,12 +97,13 @@ export function NewMemberForm() {
 
   return (
     <div className="flex flex-col gap-6">
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
+      <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-6">
         <div className="border border-border-primary rounded-lg bg-surface flex flex-col p-6 gap-8">
           
-          <div className="flex flex-col gap-6">
+          <fieldset className="flex flex-col gap-6">
+            <legend className="sr-only">Ficha del Nuevo Miembro</legend>
             <div className="flex items-center gap-2">
-              <UserPlus className="text-brand-main" size={20} />
+              <UserPlus className="text-brand-main" size={20} aria-hidden="true" />
               <h2 className="text-[15px] font-bold text-text-main">Ficha del Nuevo Miembro</h2>
             </div>
             
@@ -119,7 +122,7 @@ export function NewMemberForm() {
                 disabled={isSubmitting}
                 registration={register('dni')}
                 error={errors.dni?.message}
-                icon={<IdCard size={14} className="text-text-muted" />}
+                icon={<IdCard size={14} className="text-text-muted" aria-hidden="true" />}
                 className="md:col-span-2"
               />
               <InputField
@@ -152,16 +155,17 @@ export function NewMemberForm() {
                 disabled={isSubmitting}
                 registration={register('phoneNumber')}
                 error={errors.phoneNumber?.message}
-                icon={<Phone size={14} className="text-text-muted" />}
+                icon={<Phone size={14} className="text-text-muted" aria-hidden="true" />}
               />
             </div>
-          </div>
+          </fieldset>
 
           <hr className="border-border-primary" />
 
-          <div className="flex flex-col gap-6">
+          <fieldset className="flex flex-col gap-6">
+            <legend className="sr-only">Información de Emergencia</legend>
             <div className="flex items-center gap-2">
-              <HeartPulse className="text-danger-main" size={20} />
+              <HeartPulse className="text-danger-main" size={20} aria-hidden="true" />
               <h2 className="text-[15px] font-bold text-text-main">Información de Emergencia (Opcional)</h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -179,7 +183,7 @@ export function NewMemberForm() {
                 disabled={isSubmitting}
                 registration={register('emergencyPhone')}
                 error={errors.emergencyPhone?.message}
-                icon={<Phone size={14} className="text-text-muted" />}
+                icon={<Phone size={14} className="text-text-muted" aria-hidden="true" />}
               />
               <InputField
                 label="Parentesco"
@@ -190,11 +194,12 @@ export function NewMemberForm() {
                 error={errors.emergencyRelation?.message}
               />
             </div>
-          </div>
+          </fieldset>
 
           <hr className="border-border-primary" />
 
-          <div className="flex flex-col gap-6">
+          <fieldset className="flex flex-col gap-6">
+            <legend className="sr-only">Información Médica o Adicional</legend>
             <h2 className="text-[15px] font-bold text-text-main">Información Médica / Adicional</h2>
             <TextareaField
               label="Observaciones / Notas"
@@ -204,7 +209,7 @@ export function NewMemberForm() {
               error={errors.observations?.message}
               rows={4}
             />
-          </div>
+          </fieldset>
 
           <div className="flex items-center justify-end gap-3 pt-4 border-t border-border-primary">
             <Link
@@ -216,9 +221,16 @@ export function NewMemberForm() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex items-center justify-center gap-2 px-6 py-2.5 bg-brand-main hover:bg-brand-hover text-white rounded-sm text-sm font-medium transition-colors disabled:opacity-50 cursor-pointer"
+              className="flex items-center justify-center gap-2 px-6 py-2.5 bg-brand-main hover:bg-brand-hover text-white rounded-sm text-sm font-medium transition-colors disabled:opacity-50 cursor-pointer min-w-35"
             >
-              {isSubmitting ? 'Procesando...' : 'Crear Socio'}
+              {isSubmitting ? (
+                <>
+                  <Loader2 size={16} className="animate-spin" aria-hidden="true" />
+                  <span>Procesando...</span>
+                </>
+              ) : (
+                <span>Crear Socio</span>
+              )}
             </button>
           </div>
         </div>
