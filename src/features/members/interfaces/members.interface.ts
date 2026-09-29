@@ -1,5 +1,5 @@
 import { Payment } from '@/features/payments/interfaces/payments.interface';
-import { Plan } from '../../plans/interfaces/plan.interface';
+import { Plan } from '@/features/plans/interfaces/plan.interface';
 
 export interface Subscription {
   uuid: string;
@@ -48,6 +48,23 @@ export interface CreateMemberPayload {
   } | null;
 }
 
+export type UpdateMemberPayload = Partial<CreateMemberPayload>;
+
+export type MemberSortBy = 'name' | 'surname' | 'createdAt';
+export type SortOrder = 'asc' | 'desc';
+
+export interface GetMembersParams {
+  page?: number;
+  limit?: number;
+  term?: string;
+  state?: string;
+  planId?: string;
+  sortBy?: MemberSortBy;
+  order?: SortOrder;
+  initial?: string;
+}
+
+
 export interface MemberListProps {
   name: string;
   memberID: string;
@@ -81,19 +98,8 @@ export interface MemberDetailClientProps {
   id: string;
 }
 
-export type UpdateMemberPayload = Partial<CreateMemberPayload>;
-
-export type MemberSortBy = 'name' | 'surname' | 'createdAt';
-export type SortOrder = 'asc' | 'desc';
-
-export interface GetMembersParams {
-  page?: number;
-  limit?: number;
-  term?: string;
-  state?: string;
-  planId?: string;
-  sortBy?: MemberSortBy;
-  order?: SortOrder;
-  initial?: string;
+export interface DeleteMemberButtonProps {
+  uuid: string;
+  name: string;
+  onDeleted: () => void;
 }
-
