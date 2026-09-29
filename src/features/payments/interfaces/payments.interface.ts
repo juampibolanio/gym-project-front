@@ -19,17 +19,12 @@ export interface Payment {
 export interface CreatePaymentPayload {
   paymentMethod: PaymentMethod;
   amountPaid: number;
-  notes?: string;
   memberUuid: string;
+  notes?: string;
   date?: string;
 }
 
-export interface UpdatePaymentPayload {
-  paymentMethod?: PaymentMethod;
-  amountPaid?: number;
-  notes?: string;
-  date?: string;
-}
+export type UpdatePaymentPayload = Partial<Omit<CreatePaymentPayload, 'memberUuid'>>;
 
 export interface PaymentFormProps {
   memberName: string;
