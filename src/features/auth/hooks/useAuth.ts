@@ -1,10 +1,10 @@
 import { useRouter } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
 import { useAuthStore } from '../store/auth.store';
-import { AuthService } from '../services/auth.service';
 import { AuthResponse } from '../interfaces/auth.interface';
 import { ApiError } from '@/common/interfaces/api-error.interface';
 import toast from 'react-hot-toast';
+import { AuthService } from '../services/auth.service';
 
 export const useLogin = () => {
   const setLogin = useAuthStore((state) => state.setLogin);
