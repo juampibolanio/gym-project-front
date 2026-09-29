@@ -1,5 +1,5 @@
+import { CreatePlanButton } from '@/features/plans/components/CreatePlanButton';
 import { PlansGrid } from '@/features/plans/components/PlansGrid';
-import CreatePlanButton from '@/features/plans/components/CreatePlanButton';
 
 export default function PlansPage() {
   return (
