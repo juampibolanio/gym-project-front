@@ -39,27 +39,32 @@ export function MemberDetailClient({ id }: MemberDetailClientProps) {
     );
   }
 
-  const now = new Date();
-  const nowMs = now.getTime();
-  
-  const startOfToday = new Date(now);
-  startOfToday.setHours(0, 0, 0, 0);
+  const getMidnightTime = (dateInput?: string | Date) => {
+    const d = dateInput ? new Date(dateInput) : new Date();
+    d.setHours(0, 0, 0, 0);
+    return d.getTime();
+  };
 
-  const endOfToday = new Date(now);
-  endOfToday.setHours(23, 59, 59, 999);
+  const todayMidnight = getMidnightTime();
+
+  const isFuture = (startDate: string) => getMidnightTime(startDate) > todayMidnight;
+  
+  const isActive = (startDate: string, endDate: string) => {
+    return getMidnightTime(startDate) <= todayMidnight && getMidnightTime(endDate) >= todayMidnight;
+  };
 
   const activeSubscription =
     member.subscriptions?.find(
-      (sub) => sub.status === 'ACTIVE' && new Date(sub.startDate) <= endOfToday && new Date(sub.endDate) > startOfToday
+      (sub) => sub.status === 'ACTIVE' && isActive(sub.startDate, sub.endDate)
     ) ||
     member.subscriptions?.find(
-      (sub) => sub.status === 'ACTIVE' && new Date(sub.endDate) > startOfToday
+      (sub) => sub.status === 'ACTIVE' && getMidnightTime(sub.endDate) >= todayMidnight
     );
 
   const futureSubscriptions =
     member.subscriptions
-      ?.filter((sub) => sub.status === 'ACTIVE' && new Date(sub.startDate) > endOfToday)
-      .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime()) || [];
+      ?.filter((sub) => sub.status === 'ACTIVE' && isFuture(sub.startDate))
+      .sort((a, b) => getMidnightTime(a.startDate) - getMidnightTime(b.startDate)) || [];
 
   const planName = activeSubscription?.plan?.name || 'Sin plan asignado';
   const isCurrentPlanActive = activeSubscription?.plan?.isActive !== false;
@@ -74,31 +79,35 @@ export function MemberDetailClient({ id }: MemberDetailClientProps) {
   let nextDueDate = '-';
 
   if (activeSubscription) {
-    const end = new Date(activeSubscription.endDate);
-    const start = new Date(activeSubscription.startDate);
-    const totalDuration = end.getTime() - start.getTime();
-    const elapsed = nowMs - start.getTime();
+    const endMidnight = getMidnightTime(activeSubscription.endDate);
+    const startMidnight = getMidnightTime(activeSubscription.startDate);
 
-    daysRemaining = Math.max(0, Math.ceil((end.getTime() - nowMs) / (1000 * 60 * 60 * 24)));
-    progressPercentage = Math.min(100, Math.max(0, (elapsed / totalDuration) * 100));
-    nextDueDate = end.toLocaleDateString('es-ES', { year: 'numeric', month: 'short', day: 'numeric' });
+    const totalDurationDays = Math.max(1, Math.ceil((endMidnight - startMidnight) / (1000 * 60 * 60 * 24)));
+    const elapsedDays = Math.max(0, Math.ceil((todayMidnight - startMidnight) / (1000 * 60 * 60 * 24)));
+
+    daysRemaining = Math.max(0, Math.ceil((endMidnight - todayMidnight) / (1000 * 60 * 60 * 24)));
+    progressPercentage = Math.min(100, Math.max(0, (elapsedDays / totalDurationDays) * 100));
+    
+    nextDueDate = new Date(activeSubscription.endDate).toLocaleDateString('es-ES', { 
+      year: 'numeric', month: 'short', day: 'numeric' 
+    });
   }
 
   return (
     <section>
-      <Link href="/dashboard/miembros" className="flex text-text-muted uppercase text-xs font-bold items-center gap-1 mb-4 hover:text-text-main transition-colors">
-        <ArrowLeft size={16} />
+      <Link href="/dashboard/miembros" className="flex text-text-muted uppercase text-xs font-bold items-center gap-1 mb-4 hover:text-text-main transition-colors w-max">
+        <ArrowLeft size={16} aria-hidden="true" />
         <span>Volver a la lista de miembros</span>
       </Link>
 
-      <div className="flex justify-between items-center border-b-2 border-border-primary pb-4 mb-6">
+      <header className="flex justify-between items-center border-b-2 border-border-primary pb-4 mb-6">
         <div className="flex flex-col gap-2">
           <h1 className="text-3xl text-text-main font-bold">
             {member.name} {member.surname}
           </h1>
           <p className="text-sm text-text-muted">DNI: {member.dni}</p>
         </div>
-      </div>
+      </header>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start max-w-7xl mx-auto p-4">
         <MemberProfileCard 
@@ -109,12 +118,12 @@ export function MemberDetailClient({ id }: MemberDetailClientProps) {
         />
 
         <div className="lg:col-span-2 flex flex-col gap-6">
-          <div className="bg-surface border border-border-primary rounded-lg p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-colors">
+          <div className="bg-surface border border-border-primary rounded-lg p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-colors shadow-sm">
             <div className="flex flex-col gap-1">
               <span className="text-xs text-text-muted font-bold uppercase tracking-wider">Plan Actual</span>
               <div className="flex items-center gap-2 mt-1">
                 <h3 className="text-2xl font-bold text-text-main">{planName}</h3>
-                <Award size={20} className="text-brand-main" />
+                <Award size={20} className="text-brand-main" aria-hidden="true" />
               </div>
             </div>
 
@@ -124,8 +133,8 @@ export function MemberDetailClient({ id }: MemberDetailClientProps) {
                 className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-md font-bold text-sm bg-surface-hover border border-border-primary text-text-main hover:bg-surface transition-all active:scale-95 shadow-sm cursor-pointer"
                 title="Cambiar a un plan diferente"
               >
-                <ArrowRightLeft size={16} />
-                Cambiar Plan
+                <ArrowRightLeft size={16} aria-hidden="true" />
+                <span>Cambiar Plan</span>
               </button>
 
               {activeSubscription && (
@@ -145,16 +154,18 @@ export function MemberDetailClient({ id }: MemberDetailClientProps) {
                       : 'Renovar y apilar mes'
                   }
                 >
-                  <RefreshCw size={16} />
-                  Renovar
+                  <RefreshCw size={16} aria-hidden="true" />
+                  <span>Renovar</span>
                 </button>
               )}
             </div>
           </div>
 
           {futureSubscriptions.length > 0 && (
-            <div className="bg-surface border border-border-primary rounded-lg p-6 flex flex-col gap-4 transition-colors">
-              <span className="text-xs text-text-muted font-bold uppercase tracking-wider">Planes Programados ({futureSubscriptions.length})</span>
+            <div className="bg-surface border border-border-primary rounded-lg p-6 flex flex-col gap-4 transition-colors shadow-sm">
+              <span className="text-xs text-text-muted font-bold uppercase tracking-wider">
+                Planes Programados ({futureSubscriptions.length})
+              </span>
               <div className="flex flex-col gap-3 mt-1">
                 {futureSubscriptions.map((sub) => (
                   <div key={sub.uuid} className="flex justify-between items-center p-3 bg-background border border-border-primary rounded-md">
@@ -173,17 +184,17 @@ export function MemberDetailClient({ id }: MemberDetailClientProps) {
           )}
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-surface border border-border-primary rounded-lg p-6 flex flex-col justify-center gap-4 transition-colors">
+            <div className="bg-surface border border-border-primary rounded-lg p-6 flex flex-col justify-center gap-4 transition-colors shadow-sm">
               <div className="flex justify-between items-end">
                 <span className="text-xs text-text-muted font-bold uppercase tracking-wider">Tiempo Restante</span>
                 <span className="text-sm text-text-main font-bold">{daysRemaining > 0 ? `${daysRemaining} días` : '-'}</span>
               </div>
-              <div className="w-full bg-border-primary h-2 rounded-full overflow-hidden">
+              <div className="w-full bg-border-primary h-2 rounded-full overflow-hidden" role="progressbar" aria-valuenow={progressPercentage} aria-valuemin={0} aria-valuemax={100}>
                 <div className="bg-brand-main h-full rounded-full transition-all duration-500" style={{ width: `${progressPercentage}%` }}></div>
               </div>
             </div>
 
-            <div className="bg-surface border border-border-primary rounded-lg p-6 flex flex-col justify-center gap-2 transition-colors">
+            <div className="bg-surface border border-border-primary rounded-lg p-6 flex flex-col justify-center gap-2 transition-colors shadow-sm">
               <span className="text-xs text-text-muted font-bold uppercase tracking-wider">Próximo Vencimiento</span>
               <span className="text-xl font-bold text-text-main">{nextDueDate}</span>
             </div>
