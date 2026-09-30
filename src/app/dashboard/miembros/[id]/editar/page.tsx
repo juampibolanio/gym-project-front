@@ -1,4 +1,10 @@
+import { Metadata } from 'next';
 import { EditMemberForm } from '@/features/members/components/EditMemberForm';
+
+export const metadata: Metadata = {
+  title: 'Editar Miembro | GymAdmin',
+  description: 'Modificar los datos personales, de contacto y médicos del socio.',
+};
 
 export default async function EditMemberPage({
   params,
@@ -6,15 +12,19 @@ export default async function EditMemberPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+  
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex flex-col">
-        <h1 className="text-2xl font-bold text-text-main">Editar Miembro</h1>
+    <main className="flex flex-col gap-6" aria-labelledby="edit-member-title">
+      <header className="flex flex-col">
+        <h1 id="edit-member-title" className="text-2xl font-bold text-text-main">
+          Editar Miembro
+        </h1>
         <p className="text-sm text-text-muted mt-1">
-          Modificá los datos del alumno y el estado a continuación.
+          Modificá los datos del alumno y actualizá su información a continuación.
         </p>
-      </div>
+      </header>
+      
       <EditMemberForm id={id} />
-    </div>
+    </main>
   );
 }

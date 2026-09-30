@@ -1,4 +1,12 @@
+import { Metadata } from 'next';
 import { MemberDetailClient } from '@/features/members/components/MemberDetailClient';
+
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: 'Detalle del Miembro | GymAdmin',
+    description: 'Información detallada, suscripciones activas e historial de pagos del socio.',
+  };
+}
 
 export default async function MemberDetailPage({
   params,
@@ -7,5 +15,9 @@ export default async function MemberDetailPage({
 }) {
   const { id } = await params;
 
-  return <MemberDetailClient id={id} />;
+  return (
+    <main aria-label="Vista detallada del miembro">
+      <MemberDetailClient id={id} />
+    </main>
+  );
 }
