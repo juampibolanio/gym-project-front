@@ -14,6 +14,12 @@ import { MemberSortBy, SortOrder } from '../interfaces/members.interface';
 
 const ITEMS_PER_PAGE = 10;
 
+const getMidnightTime = (dateInput?: string | Date) => {
+  const d = dateInput ? new Date(dateInput) : new Date();
+  d.setHours(0, 0, 0, 0);
+  return d.getTime();
+};
+
 export function MembersDirectory() {
   const [filter, setFilter] = useState<
     'RELEVANT' | 'ACTIVE' | 'INACTIVE' | 'SUSPENDED'
@@ -99,15 +105,14 @@ export function MembersDirectory() {
     setCurrentPage(1);
   };
 
-  const now = new Date();
-  now.setHours(0, 0, 0, 0);
+  const todayMidnight = getMidnightTime();
 
   if (isLoading && members.length === 0) {
     return <TableSkeleton />;
   }
 
   return (
-    <div className="bg-background flex flex-col gap-6">
+    <section className="bg-background flex flex-col gap-6" aria-label="Directorio de miembros">
       <MembersToolbar
         selectedPlanId={selectedPlanId}
         onPlanChange={handlePlanChange}
@@ -118,73 +123,68 @@ export function MembersDirectory() {
         onFilterChange={handleFilterChange}
       />
 
-      <div className="bg-surface border border-border-primary rounded-lg flex flex-col overflow-hidden">
+      <div className="bg-surface border border-border-primary rounded-lg flex flex-col overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
-          <div className="min-w-250">
+          <div className="min-w-225" role="table" aria-label="Lista de miembros">
             <MembersTableHeader
               sortConfig={sortConfig}
               onSortName={handleSortName}
             />
 
-            <div className="flex flex-col relative">
-              {isLoading && members.length === 0 && (
-                <div className="flex flex-col items-center justify-center py-16 z-10">
-                  <Loader2 className="w-8 h-8 text-brand-main animate-spin mb-3" />
-                  <p className="text-text-muted text-sm">
-                    Cargando información de miembros...
-                  </p>
-                </div>
-              )}
+            <div className="flex flex-col relative" aria-live="polite">
               {isLoading && members.length > 0 && (
-                <div className="absolute inset-0 bg-surface/80 flex flex-col items-center justify-center z-10 backdrop-blur-[1px]">
-                  <Loader2 className="w-8 h-8 text-brand-main animate-spin mb-3" />
-                  <p className="text-text-muted text-sm">
-                    Cargando información de miembros...
+                <div className="absolute inset-0 bg-surface/60 flex flex-col items-center justify-center z-10 backdrop-blur-[2px]">
+                  <Loader2 className="w-8 h-8 text-brand-main animate-spin mb-3" aria-hidden="true" />
+                  <p className="text-text-muted text-sm font-medium">
+                    Actualizando lista...
                   </p>
                 </div>
               )}
-              {members.length > 0
-                ? members.map((member) => {
-                    const activeSub =
-                      member.subscriptions?.find(
-                        (sub) =>
-                          sub.status === 'ACTIVE' &&
-                          new Date(sub.startDate) <= now &&
-                          new Date(sub.endDate) > now
-                      ) ||
-                      member.subscriptions?.find(
-                        (sub) =>
-                          sub.status === 'ACTIVE' &&
-                          new Date(sub.endDate) > now
-                      );
 
-                    const planName = activeSub?.plan?.name || 'Sin plan';
-
-                    let dynamicState = member.state;
-                    if (dynamicState === 'ACTIVE' && !activeSub) {
-                      dynamicState = 'SUSPENDED';
-                    }
-
-                    return (
-                      <MemberList
-                        key={member.uuid}
-                        name={`${member.name} ${member.surname}`}
-                        memberID={member.dni}
-                        uuid={member.uuid}
-                        status={dynamicState}
-                        profileImageUrl={member.profileImageUrl || ''}
-                        phoneNumber={member.phoneNumber || ''}
-                        birthDate={member.birthDate}
-                        observations={member.observations || ''}
-                        planName={planName}
-                      />
+              {members.length > 0 ? (
+                members.map((member) => {
+                  const activeSub =
+                    member.subscriptions?.find(
+                      (sub) =>
+                        sub.status === 'ACTIVE' &&
+                        getMidnightTime(sub.startDate) <= todayMidnight &&
+                        getMidnightTime(sub.endDate) >= todayMidnight
+                    ) ||
+                    member.subscriptions?.find(
+                      (sub) =>
+                        sub.status === 'ACTIVE' &&
+                        getMidnightTime(sub.endDate) >= todayMidnight
                     );
-                  })
-                : !isLoading && (
-                    <div className="flex-1 flex items-center justify-center py-10 text-sm text-text-muted">
-                      No hay miembros que coincidan con los filtros.
-                    </div>
-                  )}
+
+                  const planName = activeSub?.plan?.name || 'Sin plan';
+
+                  let dynamicState = member.state;
+                  if (dynamicState === 'ACTIVE' && !activeSub) {
+                    dynamicState = 'SUSPENDED';
+                  }
+
+                  return (
+                    <MemberList
+                      key={member.uuid}
+                      name={`${member.name} ${member.surname}`}
+                      memberID={member.dni}
+                      uuid={member.uuid}
+                      status={dynamicState}
+                      profileImageUrl={member.profileImageUrl}
+                      phoneNumber={member.phoneNumber || ''}
+                      birthDate={member.birthDate}
+                      observations={member.observations || ''} 
+                      planName={planName}
+                    />
+                  );
+                })
+              ) : (
+                !isLoading && (
+                  <div className="flex-1 flex items-center justify-center py-16 text-sm text-text-muted">
+                    No hay miembros que coincidan con los filtros seleccionados.
+                  </div>
+                )
+              )}
             </div>
           </div>
         </div>
@@ -199,6 +199,6 @@ export function MembersDirectory() {
           }
         />
       </div>
-    </div>
+    </section>
   );
 }
