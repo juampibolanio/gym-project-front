@@ -4,9 +4,14 @@ import { useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
 import ReactECharts from 'echarts-for-react';
 import { buildRevenueChartOptions } from '../utils/revenue-chart-options';
-import { RevenueChartProps } from '../interfaces/metrics.interface';
+import { RevenueTrajectoryItem } from '../interfaces/metrics.interface';
 
 let hasAnimated = false;
+
+export interface RevenueChartProps {
+  data: RevenueTrajectoryItem[];
+  periodLabel?: string;
+}
 
 export function RevenueChart({
   data,
@@ -18,13 +23,31 @@ export function RevenueChart({
 
   useEffect(() => {
     hasAnimated = true;
+    
     const timer = setTimeout(() => {
       setMounted(true);
     }, 0);
+    
     return () => clearTimeout(timer);
   }, []);
 
-  if (!mounted) return null;
+  if (!mounted) {
+    return (
+      <article className="bg-surface border border-border-primary rounded-xl p-6 h-full flex flex-col shadow-sm">
+        <header className="mb-4">
+          <h3 className="text-lg font-bold text-text-main">
+            Trayectoria de Ingresos
+          </h3>
+          <p className="text-sm text-text-muted">
+            Evolución de recaudación ({periodLabel})
+          </p>
+        </header>
+        <div className="w-full mt-4 min-h-75 flex items-center justify-center bg-surface-hover/30 rounded-lg animate-pulse">
+          <span className="sr-only">Cargando gráfico...</span>
+        </div>
+      </article>
+    );
+  }
 
   const option = buildRevenueChartOptions({
     data,
@@ -33,24 +56,30 @@ export function RevenueChart({
   });
 
   return (
-    <div className="bg-surface border border-border-primary rounded-xl p-6 h-full flex flex-col">
-      <div className="mb-4">
+    <article 
+      className="bg-surface border border-border-primary rounded-xl p-6 h-full flex flex-col shadow-sm"
+      aria-label="Gráfico de trayectoria de ingresos"
+    >
+      <header className="mb-4">
         <h3 className="text-lg font-bold text-text-main">
           Trayectoria de Ingresos
         </h3>
         <p className="text-sm text-text-muted">
           Evolución de recaudación ({periodLabel})
         </p>
-      </div>
-      <div className="h-75 w-full mt-4">
+      </header>
+      
+      <div 
+        className="w-full mt-4 flex-1 min-h-75" 
+        aria-hidden="true"
+      >
         <ReactECharts
           option={option}
-          style={{ height: '300px', width: '100%' }}
+          style={{ height: '100%', minHeight: '300px', width: '100%' }}
           notMerge={true}
           lazyUpdate={true}
         />
       </div>
-    </div>
+    </article>
   );
 }
-
