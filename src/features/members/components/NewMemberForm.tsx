@@ -229,7 +229,7 @@ export function NewMemberForm() {
                   <span>Procesando...</span>
                 </>
               ) : (
-                <span>Crear Socio</span>
+                <span>Crear Miembro</span>
               )}
             </button>
           </div>
