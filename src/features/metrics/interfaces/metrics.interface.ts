@@ -11,6 +11,11 @@ export interface MemberTrajectoryItem {
   churnedMembers: number;
 }
 
+export interface RevenueTrajectoryItem {
+  month: string;
+  amount: number;
+}
+
 export interface StatusDistribution {
   active: number;
   suspended: number;
@@ -36,6 +41,24 @@ export interface UpcomingBirthday {
   birthDate: string;
 }
 
+export interface PlanDistributionItem {
+  name: string;
+  count: number;
+  percentage: number;
+}
+
+export interface MetricsOverview {
+  activeMembers: MetricValue;
+  monthlyRevenue: MetricValue;
+  overdueAccounts: MetricValue;
+  statusDistribution?: StatusDistribution;
+  upcomingRenewals: UpcomingRenewal[];
+  upcomingBirthdays: UpcomingBirthday[];
+  revenueTrajectory: RevenueTrajectoryItem[];
+  membersTrajectory?: MemberTrajectoryItem[];
+  planDistribution?: PlanDistributionItem[];
+}
+
 export interface RenewalItemProps {
   id: string;
   initials: string;
@@ -44,15 +67,4 @@ export interface RenewalItemProps {
   daysText: string;
   isUrgent?: boolean;
   hasBorder?: boolean;
-}
-
-export interface DashboardMetrics {
-  activeMembers: MetricValue;
-  monthlyRevenue: MetricValue;
-  overdueAccounts: MetricValue;
-  statusDistribution?: StatusDistribution;
-  upcomingRenewals: UpcomingRenewal[];
-  upcomingBirthdays: UpcomingBirthday[];
-  revenueTrajectory: { month: string; amount: number }[];
-  membersTrajectory?: MemberTrajectoryItem[];
 }

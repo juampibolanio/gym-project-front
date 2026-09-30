@@ -1,16 +1,17 @@
 'use client';
 
 import { useState } from 'react';
-import { useDashboardMetrics } from '@/features/dashboard/hooks/useDashboard';
+import { useDashboardMetrics } from '@/features/metrics/hooks/useDashboard';
 import { useRole } from '@/features/auth/hooks/useRole';
 import { DashboardSkeleton } from '@/common/components/ui/skeletons/DashboardSkeleton';
-import { DashboardHeader } from '@/features/dashboard/components/DashboardHeader';
-import { DashboardKpiGrid } from '@/features/dashboard/components/DashboardKpiGrid';
-import { RevenueChart } from '@/features/dashboard/components/RevenueChart';
-import { MembersFlowChart } from '@/features/dashboard/components/MembersFlowChart';
-import { UpcomingRenewalsCard } from '@/features/dashboard/components/UpcomingRenewalsCard';
-import { UpcomingBirthdaysCard } from '@/features/dashboard/components/UpcomingBirthdaysCard';
+import { DashboardHeader } from '@/features/metrics/components/DashboardHeader';
+import { DashboardKpiGrid } from '@/features/metrics/components/DashboardKpiGrid';
+import { RevenueChart } from '@/features/metrics/components/RevenueChart';
+import { MembersFlowChart } from '@/features/metrics/components/MembersFlowChart';
+import { UpcomingRenewalsCard } from '@/features/metrics/components/UpcomingRenewalsCard';
+import { UpcomingBirthdaysCard } from '@/features/metrics/components/UpcomingBirthdaysCard';
 import { EyeOff } from 'lucide-react';
+import { PlanDistributionCard } from '@/features/metrics/components/PlanDistributionCard';
 
 export default function DashboardPage() {
   const { isUser } = useRole();
@@ -86,6 +87,7 @@ export default function DashboardPage() {
         <div className="flex flex-col gap-6">
           <UpcomingRenewalsCard renewals={metrics.upcomingRenewals} />
           <UpcomingBirthdaysCard birthdays={metrics.upcomingBirthdays} />
+          <PlanDistributionCard distribution={metrics.planDistribution || []} />
         </div>
       </div>
     </div>

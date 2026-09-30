@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { DashboardService } from '../services/dashboard.service';
+import { DashboardService } from '../services/metrics.service';
 
 export const useDashboardMetrics = (year?: string) => {
   return useQuery({
