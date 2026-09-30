@@ -5,36 +5,39 @@ import { Calendar, Clock } from 'lucide-react';
 import { MetricCard } from './MetricCard';
 
 export function CurrentDateCard() {
-  const [currentTime, setCurrentTime] = useState<string>('');
+  const [dateTime, setDateTime] = useState({ date: '', time: '' });
 
   useEffect(() => {
-    const updateTime = () => {
-      setCurrentTime(
-        new Date().toLocaleTimeString('es-ES', {
+    const updateDateTime = () => {
+      const now = new Date();
+      setDateTime({
+        date: now.toLocaleDateString('es-ES', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+        }),
+        time: now.toLocaleTimeString('es-ES', {
           hour: '2-digit',
           minute: '2-digit',
-        })
-      );
+        }),
+      });
     };
     
-    updateTime();
-    const interval = setInterval(updateTime, 60000);
+    updateDateTime();
+    
+    const interval = setInterval(updateDateTime, 30000);
     return () => clearInterval(interval);
   }, []);
 
-  const todayStr = new Date().toLocaleDateString('es-ES', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-  });
+  const isHydrated = dateTime.date !== '';
 
   return (
     <MetricCard
       title="Fecha de Hoy"
-      value={todayStr}
-      icon={<Calendar size={16} className="text-brand-main transition-colors" />}
-      trendText={currentTime ? currentTime : 'Calculando...'}
-      trendIcon={<Clock size={12} />}
+      value={isHydrated ? dateTime.date : '--/--/----'}
+      icon={<Calendar size={16} className="text-brand-main transition-colors" aria-hidden="true" />}
+      trendText={isHydrated ? dateTime.time : 'Calculando...'}
+      trendIcon={<Clock size={12} aria-hidden="true" />}
       trendColor="text-text-muted"
     />
   );
