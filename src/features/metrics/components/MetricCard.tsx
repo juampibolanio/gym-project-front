@@ -1,4 +1,15 @@
-import { MetricCardProps } from "../interfaces/metrics.interface";
+import { ReactNode } from 'react';
+
+export interface MetricCardProps {
+  title: string;
+  value: string | number;
+  icon?: ReactNode;
+  trendText?: string;
+  trendIcon?: ReactNode;
+  trendColor?: string;
+  action?: ReactNode;
+  badge?: ReactNode;
+}
 
 export function MetricCard({
   title,
@@ -11,26 +22,38 @@ export function MetricCard({
   badge,
 }: MetricCardProps) {
   return (
-    <div className="bg-surface rounded-lg p-5 border border-border-primary transition-colors">
-      <div className="flex justify-between items-center mb-4">
+    <article className="bg-surface rounded-lg p-5 border border-border-primary transition-colors shadow-sm flex flex-col justify-between">
+      <header className="flex justify-between items-start mb-4 gap-4">
         <div className="flex items-center gap-2">
-          <span className="text-[10px] font-bold text-text-muted tracking-wider uppercase">
+          <h3 className="text-[10px] font-bold text-text-muted tracking-wider uppercase">
             {title}
-          </span>
+          </h3>
           {action}
         </div>
-        {icon}
-      </div>
-      <div className="text-3xl font-bold text-text-main transition-colors">
+        {icon && (
+          <div aria-hidden="true" className="text-text-muted shrink-0">
+            {icon}
+          </div>
+        )}
+      </header>
+
+      <div className="text-3xl font-bold text-text-main transition-colors tracking-tight">
         {value}
       </div>
-      <div className="flex items-center justify-between mt-2 text-xs transition-colors">
-        <div className={`flex items-center gap-1 ${trendColor}`}>
-          {trendIcon}
-          <span>{trendText}</span>
-        </div>
-        {badge}
-      </div>
-    </div>
+
+      {(trendText || badge) && (
+        <footer className="flex items-center justify-between mt-3 text-xs transition-colors">
+          <div className={`flex items-center gap-1 font-medium ${trendColor}`}>
+            {trendIcon && (
+              <span aria-hidden="true" className="shrink-0">
+                {trendIcon}
+              </span>
+            )}
+            {trendText && <span>{trendText}</span>}
+          </div>
+          {badge && <div className="shrink-0">{badge}</div>}
+        </footer>
+      )}
+    </article>
   );
 }
