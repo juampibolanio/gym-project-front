@@ -6,7 +6,20 @@ import ReactECharts from 'echarts-for-react';
 import { buildMembersChartOptions } from '../utils/members-chart-options';
 import { MembersFlowHeader } from './MembersFlowHeader';
 import { MembersStatusFooter } from './MembersStatusFooter';
-import { MembersFlowChartProps } from '../interfaces/metrics.interface';
+import { StatusDistribution } from '../interfaces/metrics.interface';
+
+
+export interface MemberTrajectoryItem {
+  month: string;
+  newMembers: number;
+  churnedMembers: number;
+}
+
+export interface MembersFlowChartProps {
+  data: MemberTrajectoryItem[];
+  statusDistribution?: StatusDistribution;
+  periodLabel?: string;
+}
 
 let hasAnimated = false;
 

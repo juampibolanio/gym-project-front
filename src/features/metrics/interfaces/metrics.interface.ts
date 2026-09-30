@@ -58,25 +58,3 @@ export interface MetricsOverview {
   membersTrajectory?: MemberTrajectoryItem[];
   planDistribution?: PlanDistributionItem[];
 }
-
-export interface RenewalItemProps {
-  id: string;
-  initials: string;
-  name: string;
-  plan: string;
-  daysText: string;
-  isUrgent?: boolean;
-  hasBorder?: boolean;
-}
-
-export interface RevenueChartProps {
-  data: { month: string; amount: number }[];
-  periodLabel?: string;
-}
-
-export interface MembersFlowChartProps {
-  data: MemberTrajectoryItem[];
-  statusDistribution?: StatusDistribution;
-  periodLabel?: string;
-}
-
