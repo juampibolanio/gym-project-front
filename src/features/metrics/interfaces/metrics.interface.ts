@@ -68,3 +68,26 @@ export interface RenewalItemProps {
   isUrgent?: boolean;
   hasBorder?: boolean;
 }
+
+export interface MetricCardProps {
+  title: string;
+  value: string | number | React.ReactNode;
+  icon: React.ReactNode;
+  trendText: string;
+  trendIcon: React.ReactNode;
+  trendColor?: string;
+  action?: React.ReactNode;
+  badge?: React.ReactNode;
+}
+
+export interface RevenueChartProps {
+  data: { month: string; amount: number }[];
+  periodLabel?: string;
+}
+
+export interface MembersFlowChartProps {
+  data: MemberTrajectoryItem[];
+  statusDistribution?: StatusDistribution;
+  periodLabel?: string;
+}
+

@@ -3,10 +3,10 @@
 import { useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
 import ReactECharts from 'echarts-for-react';
-import { MembersFlowChartProps } from '../interfaces/members-chart.interface';
 import { buildMembersChartOptions } from '../utils/members-chart-options';
 import { MembersFlowHeader } from './MembersFlowHeader';
 import { MembersStatusFooter } from './MembersStatusFooter';
+import { MembersFlowChartProps } from '../interfaces/metrics.interface';
 
 let hasAnimated = false;
 

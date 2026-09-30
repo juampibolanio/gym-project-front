@@ -1,4 +1,4 @@
-import { MetricCardProps } from '../interfaces/metric-card.interface';
+import { MetricCardProps } from "../interfaces/metrics.interface";
 
 export function MetricCard({
   title,

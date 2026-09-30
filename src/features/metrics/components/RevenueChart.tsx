@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
 import ReactECharts from 'echarts-for-react';
-import { RevenueChartProps } from '../interfaces/revenue-chart.interface';
 import { buildRevenueChartOptions } from '../utils/revenue-chart-options';
+import { RevenueChartProps } from '../interfaces/metrics.interface';
 
 let hasAnimated = false;
 
