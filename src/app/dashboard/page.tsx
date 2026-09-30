@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useDashboardMetrics } from '@/features/metrics/hooks/useDashboard';
+import { useDashboardMetrics } from '@/features/metrics/hooks/useMetrics';
 import { useRole } from '@/features/auth/hooks/useRole';
 import { DashboardSkeleton } from '@/common/components/ui/skeletons/DashboardSkeleton';
 import { DashboardHeader } from '@/features/metrics/components/DashboardHeader';
