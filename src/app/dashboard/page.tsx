@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useDashboardMetrics } from '@/features/metrics/hooks/useMetrics';
+import { useMetricsOverview } from '@/features/metrics/hooks/useMetrics';
 import { useRole } from '@/features/auth/hooks/useRole';
 import { DashboardSkeleton } from '@/common/components/ui/skeletons/DashboardSkeleton';
 import { DashboardHeader } from '@/features/metrics/components/DashboardHeader';
@@ -18,7 +18,7 @@ export default function DashboardPage() {
   const canViewRevenue = !isUser;
   const [selectedPeriod, setSelectedPeriod] = useState('rolling');
   const { data: metrics, isLoading, isError } =
-    useDashboardMetrics(selectedPeriod);
+    useMetricsOverview(selectedPeriod);
   const [isRevenueVisible, setIsRevenueVisible] = useState(true);
 
   if (isLoading) {
