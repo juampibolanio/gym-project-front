@@ -15,52 +15,63 @@ export function MembersTableHeader({
   const isNameSorted = sortConfig?.sortBy === 'name';
 
   return (
-    <div className="grid grid-cols-[2fr_1fr_1.5fr_1.5fr_2fr_1fr_50px] gap-4 items-center px-5 py-3 border-b border-border-primary bg-background min-w-225 select-none">
-      <button
-        type="button"
-        onClick={onSortName}
-        className="flex items-center gap-1.5 text-[10px] font-bold tracking-widest uppercase text-left transition-colors cursor-pointer group focus:outline-none"
+    <header 
+      className="grid grid-cols-[2fr_1fr_1.5fr_1.5fr_2fr_1fr_50px] gap-4 items-center px-5 py-3 border-b border-border-primary bg-background min-w-225 select-none"
+      role="row"
+    >
+      <div 
+        role="columnheader" 
+        aria-sort={isNameSorted ? (sortConfig.order === 'asc' ? 'ascending' : 'descending') : 'none'}
       >
-        <span
-          className={
-            isNameSorted
-              ? 'text-brand-main'
-              : 'text-text-muted group-hover:text-text-main'
-          }
+        <button
+          type="button"
+          onClick={onSortName}
+          aria-label={isNameSorted && sortConfig.order === 'asc' ? 'Ordenar por nombre descendente' : 'Ordenar por nombre ascendente'}
+          className="flex items-center gap-1.5 text-[10px] font-bold tracking-widest uppercase text-left transition-colors cursor-pointer group focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-main rounded-sm"
         >
-          NOMBRE Y DNI
-        </span>
-        {isNameSorted ? (
-          sortConfig.order === 'asc' ? (
-            <ArrowUp size={14} className="text-brand-main shrink-0" />
+          <span
+            className={
+              isNameSorted
+                ? 'text-brand-main'
+                : 'text-text-muted group-hover:text-text-main'
+            }
+          >
+            Nombre y DNI
+          </span>
+          {isNameSorted ? (
+            sortConfig.order === 'asc' ? (
+              <ArrowUp size={14} className="text-brand-main shrink-0" aria-hidden="true" />
+            ) : (
+              <ArrowDown size={14} className="text-brand-main shrink-0" aria-hidden="true" />
+            )
           ) : (
-            <ArrowDown size={14} className="text-brand-main shrink-0" />
-          )
-        ) : (
-          <ArrowUpDown
-            size={13}
-            className="text-text-muted/40 group-hover:text-text-muted shrink-0 transition-colors"
-          />
-        )}
-      </button>
-      <h5 className="text-[10px] font-bold text-text-muted tracking-widest uppercase">
-        ESTADO
-      </h5>
-      <h5 className="text-[10px] font-bold text-text-muted tracking-widest uppercase">
-        TELÉFONO
-      </h5>
-      <h5 className="text-[10px] font-bold text-text-muted tracking-widest uppercase">
-        FECHA NAC.
-      </h5>
-      <h5 className="text-[10px] font-bold text-text-muted tracking-widest uppercase">
-        PLAN
-      </h5>
-      <h5 className="text-[10px] font-bold text-text-muted tracking-widest uppercase">
-        OBSERVACIONES
-      </h5>
-      <h5 className="text-[10px] font-bold text-text-muted tracking-widest uppercase text-right">
-        ACCIONES
-      </h5>
-    </div>
+            <ArrowUpDown
+              size={13}
+              className="text-text-muted/40 group-hover:text-text-muted shrink-0 transition-colors"
+              aria-hidden="true"
+            />
+          )}
+        </button>
+      </div>
+      
+      <div role="columnheader" className="text-[10px] font-bold text-text-muted tracking-widest uppercase">
+        Estado
+      </div>
+      <div role="columnheader" className="text-[10px] font-bold text-text-muted tracking-widest uppercase">
+        Teléfono
+      </div>
+      <div role="columnheader" className="text-[10px] font-bold text-text-muted tracking-widest uppercase">
+        Fecha Nac.
+      </div>
+      <div role="columnheader" className="text-[10px] font-bold text-text-muted tracking-widest uppercase">
+        Plan
+      </div>
+      <div role="columnheader" className="text-[10px] font-bold text-text-muted tracking-widest uppercase">
+        Observaciones
+      </div>
+      <div role="columnheader" className="text-[10px] font-bold text-text-muted tracking-widest uppercase text-right">
+        Acciones
+      </div>
+    </header>
   );
 }
