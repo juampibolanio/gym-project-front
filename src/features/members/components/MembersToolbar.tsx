@@ -59,9 +59,20 @@ export function MembersToolbar({
         setShowSortMenu(false);
       }
     }
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Escape') {
+        setShowPlansMenu(false);
+        setShowSortMenu(false);
+      }
+    }
+
     document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleKeyDown);
+    
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
     };
   }, []);
 
@@ -96,7 +107,9 @@ export function MembersToolbar({
             setShowSortMenu(false);
           }}
           aria-label="Filtrar por plan de membresía"
-          className={`h-9 flex items-center gap-2 bg-surface border text-xs font-semibold rounded-lg px-3 focus:outline-none focus:border-brand-main transition-colors cursor-pointer ${
+          aria-haspopup="menu"
+          aria-expanded={showPlansMenu}
+          className={`h-9 flex items-center gap-2 bg-surface border text-xs font-semibold rounded-lg px-3 focus:outline-none focus:border-brand-main transition-colors cursor-pointer shadow-sm ${
             selectedPlanId
               ? 'border-brand-main text-brand-main font-bold'
               : 'border-border-primary text-text-muted hover:text-text-main hover:border-border-primary/80'
@@ -105,6 +118,7 @@ export function MembersToolbar({
           <Filter
             size={12}
             className={selectedPlanId ? 'text-brand-main' : 'text-text-muted'}
+            aria-hidden="true"
           />
           <span className="max-w-36 truncate">
             {selectedPlan ? selectedPlan.name : 'Todos los planes'}
@@ -114,11 +128,15 @@ export function MembersToolbar({
             className={`text-text-muted transition-transform duration-200 ${
               showPlansMenu ? 'rotate-180' : ''
             }`}
+            aria-hidden="true"
           />
         </button>
 
         {showPlansMenu && (
-          <div className="absolute left-0 sm:left-auto sm:right-0 top-full mt-2 z-50 bg-surface border border-border-primary rounded-xl p-2 shadow-2xl min-w-48 backdrop-blur-md flex flex-col gap-1">
+          <div 
+            className="absolute left-0 sm:left-auto sm:right-0 top-full mt-2 z-50 bg-surface border border-border-primary rounded-xl p-2 shadow-2xl min-w-48 backdrop-blur-md flex flex-col gap-1"
+            role="menu"
+          >
             <div className="flex items-center justify-between px-2 py-1 mb-1 border-b border-border-primary/60">
               <span className="text-[10px] font-bold tracking-wider uppercase text-text-muted">
                 Planes de Membresía
@@ -138,6 +156,7 @@ export function MembersToolbar({
             </div>
             <button
               type="button"
+              role="menuitem"
               onClick={() => {
                 onPlanChange('');
                 setShowPlansMenu(false);
@@ -154,6 +173,7 @@ export function MembersToolbar({
               <button
                 key={plan.uuid}
                 type="button"
+                role="menuitem"
                 onClick={() => {
                   onPlanChange(plan.uuid);
                   setShowPlansMenu(false);
@@ -179,7 +199,9 @@ export function MembersToolbar({
             setShowPlansMenu(false);
           }}
           aria-label="Ordenar miembros"
-          className={`h-9 flex items-center gap-2 bg-surface border text-xs font-semibold rounded-lg px-3 focus:outline-none focus:border-brand-main transition-colors cursor-pointer ${
+          aria-haspopup="menu"
+          aria-expanded={showSortMenu}
+          className={`h-9 flex items-center gap-2 bg-surface border text-xs font-semibold rounded-lg px-3 focus:outline-none focus:border-brand-main transition-colors cursor-pointer shadow-sm ${
             sortConfig
               ? 'border-brand-main text-brand-main font-bold'
               : 'border-border-primary text-text-muted hover:text-text-main hover:border-border-primary/80'
@@ -188,6 +210,7 @@ export function MembersToolbar({
           <ArrowUpDown
             size={12}
             className={sortConfig ? 'text-brand-main' : 'text-text-muted'}
+            aria-hidden="true"
           />
           <span className="max-w-36 truncate">{currentSortLabel}</span>
           <ChevronDown
@@ -195,11 +218,15 @@ export function MembersToolbar({
             className={`text-text-muted transition-transform duration-200 ${
               showSortMenu ? 'rotate-180' : ''
             }`}
+            aria-hidden="true"
           />
         </button>
 
         {showSortMenu && (
-          <div className="absolute right-0 top-full mt-2 z-50 bg-surface border border-border-primary rounded-xl p-2 shadow-2xl min-w-44 backdrop-blur-md flex flex-col gap-1">
+          <div 
+            className="absolute right-0 top-full mt-2 z-50 bg-surface border border-border-primary rounded-xl p-2 shadow-2xl min-w-44 backdrop-blur-md flex flex-col gap-1"
+            role="menu"
+          >
             <div className="flex items-center justify-between px-2 py-1 mb-1 border-b border-border-primary/60">
               <span className="text-[10px] font-bold tracking-wider uppercase text-text-muted">
                 Ordenar por
@@ -223,6 +250,7 @@ export function MembersToolbar({
                 <button
                   key={opt.value}
                   type="button"
+                  role="menuitem"
                   onClick={() => {
                     onSortChange(opt.value);
                     setShowSortMenu(false);
@@ -241,7 +269,11 @@ export function MembersToolbar({
         )}
       </div>
 
-      <div className="flex bg-surface border border-border-primary rounded-lg p-1">
+      <div 
+        className="flex bg-surface border border-border-primary rounded-lg p-1 shadow-sm"
+        role="group"
+        aria-label="Filtro de estado de miembros"
+      >
         {(
           [
             { key: 'RELEVANT', label: 'Frecuentes' },
@@ -253,9 +285,10 @@ export function MembersToolbar({
           <button
             key={key}
             onClick={() => onFilterChange(key)}
+            aria-pressed={filter === key}
             className={`px-4 py-1.5 text-[10px] font-bold rounded transition-colors tracking-wider uppercase cursor-pointer ${
               filter === key
-                ? 'bg-brand-main text-white'
+                ? 'bg-brand-main text-white shadow-sm'
                 : 'text-text-muted hover:text-text-main'
             }`}
           >
