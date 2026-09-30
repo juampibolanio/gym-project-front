@@ -10,91 +10,98 @@ export function MemberProfileCard({
   safeStatusStyles,
   defaultAmount,
 }: MemberProfileCardProps) {
+  
+  const formattedBirthDate = member.birthDate 
+    ? member.birthDate.split('T')[0].split('-').reverse().join('/')
+    : '-';
+
   return (
-    <div className="lg:col-span-1 bg-surface border border-border-primary rounded-lg p-6 flex flex-col transition-colors">
-      <div className="flex justify-between items-center mb-4">
-        <span className="text-sm font-bold text-text-main">
+    <aside 
+      className="lg:col-span-1 bg-surface border border-border-primary rounded-lg p-6 flex flex-col transition-colors shadow-sm"
+      aria-labelledby="profile-heading"
+    >
+      <header className="flex justify-between items-center mb-4">
+        <span className="text-sm font-bold text-text-main uppercase tracking-wider">
           Perfil del Miembro
         </span>
         <span
           className={`px-2.5 py-1 rounded-md border text-[10px] font-bold tracking-widest uppercase ${safeStatusStyles}`}
+          aria-label={`Estado actual: ${displayStatus}`}
         >
           {displayStatus}
         </span>
-      </div>
+      </header>
 
       <div className="flex flex-col items-center mb-8 pt-4 border-t border-border-primary">
         <div className="w-24 h-24 bg-background border border-border-primary rounded-full flex items-center justify-center mb-4 shadow-inner relative overflow-hidden">
           {member.profileImageUrl ? (
             <Image
               src={member.profileImageUrl}
-              alt={`Foto de ${member.name}`}
+              alt={`Foto de perfil de ${member.name} ${member.surname}`}
               fill
               sizes="96px"
               className="object-cover"
             />
           ) : (
-            <User size={40} className="text-text-muted" />
+            <User size={40} className="text-text-muted" aria-hidden="true" />
           )}
         </div>
-        <h2 className="text-xl font-bold text-text-main text-center">
+        <h2 id="profile-heading" className="text-xl font-bold text-text-main text-center">
           {member.name} {member.surname}
         </h2>
       </div>
 
-      <div className="flex flex-col gap-6 border-t border-border-primary pt-6">
+      <dl className="flex flex-col gap-6 border-t border-border-primary pt-6">
         <div className="flex flex-col gap-1">
-          <span className="text-xs text-text-muted font-bold uppercase tracking-wider">
+          <dt className="text-xs text-text-muted font-bold uppercase tracking-wider">
             Teléfono
-          </span>
-          <span className="text-sm text-text-main">
+          </dt>
+          <dd className="text-sm text-text-main font-medium">
             {member.phoneNumber || '-'}
-          </span>
+          </dd>
         </div>
+        
         <div className="flex flex-col gap-1">
-          <span className="text-xs text-text-muted font-bold uppercase tracking-wider">
+          <dt className="text-xs text-text-muted font-bold uppercase tracking-wider">
             Fecha de nacimiento
-          </span>
-          <span className="text-sm text-text-main">
-            {member.birthDate ? (() => {
-              const [year, month, day] = member.birthDate.split('T')[0].split('-');
-              return `${day}/${month}/${year}`;
-            })() : '-'}
-          </span>
+          </dt>
+          <dd className="text-sm text-text-main font-medium">
+            {formattedBirthDate}
+          </dd>
         </div>
 
         {member.emergencyContact && (
           <div className="flex flex-col gap-3 mt-2 p-3 bg-danger-main/5 border border-danger-main/20 rounded-md">
             <div className="flex items-center gap-2">
-              <HeartPulse size={16} className="text-danger-main" />
-              <span className="text-xs font-bold text-danger-main uppercase tracking-wider">
+              <HeartPulse size={16} className="text-danger-main" aria-hidden="true" />
+              <dt className="text-xs font-bold text-danger-main uppercase tracking-wider">
                 Contacto de Emergencia
-              </span>
+              </dt>
             </div>
-            <div className="flex flex-col gap-1">
+            <dd className="flex flex-col gap-1">
               <span className="text-sm font-bold text-text-main">
-                {member.emergencyContact.name} ({member.emergencyContact.relationship})
+                {member.emergencyContact.name} <span className="font-normal text-text-muted">({member.emergencyContact.relationship})</span>
               </span>
-              <span className="text-sm text-text-main">
+              <span className="text-sm text-text-main font-medium">
                 {member.emergencyContact.phoneNumber}
               </span>
-            </div>
+            </dd>
           </div>
         )}
 
         {member.observations && (
           <div className="flex flex-col gap-1">
-            <span className="text-xs text-text-muted font-bold uppercase tracking-wider">
+            <dt className="text-xs text-text-muted font-bold uppercase tracking-wider">
               Observaciones
-            </span>
-            <span className="text-sm text-text-main">
+            </dt>
+            <dd className="text-sm text-text-main leading-relaxed">
               {member.observations}
-            </span>
+            </dd>
           </div>
         )}
-      </div>
+      </dl>
 
-      <div className="flex flex-col gap-3 mt-8 pt-6 border-t border-border-primary">
+      <footer className="flex flex-col gap-3 mt-8 pt-6 border-t border-border-primary">
         <RegisterPaymentButton
           memberName={member.name}
           memberSurname={member.surname}
@@ -103,11 +110,13 @@ export function MemberProfileCard({
         />
         <Link
           href={`/dashboard/miembros/${member.uuid}/editar`}
-          className="w-full py-2.5 bg-transparent border border-border-primary hover:bg-surface-hover text-text-main font-medium text-sm transition-colors rounded-sm flex items-center justify-center gap-2"
+          className="w-full py-2.5 bg-transparent border border-border-primary hover:bg-surface-hover text-text-main font-medium text-sm transition-colors rounded-sm flex items-center justify-center gap-2 cursor-pointer"
+          aria-label={`Editar datos de ${member.name}`}
         >
-          <Pencil size={16} /> Editar datos
+          <Pencil size={16} aria-hidden="true" /> 
+          <span>Editar datos</span>
         </Link>
-      </div>
-    </div>
+      </footer>
+    </aside>
   );
 }

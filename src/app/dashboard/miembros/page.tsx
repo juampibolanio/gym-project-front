@@ -1,5 +1,5 @@
+import { CreateMemberButton } from '@/features/members/components/CreateMemberButton';
 import { MembersDirectory } from '@/features/members/components/MembersDirectory';
-import CreateMemberButton from '@/features/members/components/CreateMemberButton';
 
 export default function MembersPage() {
   return (
