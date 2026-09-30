@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, MouseEvent as ReactMouseEvent } from 'react';
 import Link from 'next/link';
 import { MoreHorizontal, Edit, Eye } from 'lucide-react';
 import { useRole } from '@/features/auth/hooks/useRole';
@@ -15,6 +15,7 @@ export function MemberRowActions({ uuid, name }: MemberRowActionsProps) {
   const [showDropdown, setShowDropdown] = useState(false);
   const [dropdownStyle, setDropdownStyle] = useState<React.CSSProperties>({});
   const { isAdmin } = useRole();
+  
   const dropdownRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
@@ -45,8 +46,9 @@ export function MemberRowActions({ uuid, name }: MemberRowActionsProps) {
     };
   }, [showDropdown]);
 
-  const toggleDropdown = (e: React.MouseEvent) => {
+  const toggleDropdown = (e: ReactMouseEvent) => {
     e.stopPropagation();
+    
     if (!showDropdown && buttonRef.current) {
       const rect = buttonRef.current.getBoundingClientRect();
       const dropdownHeight = isAdmin ? 110 : 70;
@@ -77,32 +79,42 @@ export function MemberRowActions({ uuid, name }: MemberRowActionsProps) {
         type="button"
         onClick={toggleDropdown}
         aria-label="Opciones del socio"
+        aria-haspopup="menu"
+        aria-expanded={showDropdown}
         className="p-1.5 rounded hover:bg-surface-hover transition-colors cursor-pointer"
       >
-        <MoreHorizontal className="text-text-muted hover:text-text-main transition-colors" size={20} />
+        <MoreHorizontal className="text-text-muted hover:text-text-main transition-colors" size={20} aria-hidden="true" />
       </button>
 
       {showDropdown && (
         <div
           ref={dropdownRef}
           style={dropdownStyle}
+          role="menu"
           className="bg-surface border border-border-primary rounded-md shadow-xl py-1 overflow-hidden"
         >
           <Link
             href={`/dashboard/miembros/${uuid}`}
+            role="menuitem"
             className="w-full flex items-center gap-2 px-3 py-2 text-xs font-medium text-text-main hover:bg-surface-hover transition-colors"
+            onClick={() => setShowDropdown(false)}
           >
-            <Eye size={14} className="text-brand-main" /> Ver Detalles
+            <Eye size={14} className="text-brand-main" aria-hidden="true" /> 
+            <span>Ver Detalles</span>
           </Link>
+          
           <Link
             href={`/dashboard/miembros/${uuid}/editar`}
+            role="menuitem"
             className="w-full flex items-center gap-2 px-3 py-2 text-xs font-medium text-text-main hover:bg-surface-hover transition-colors"
+            onClick={() => setShowDropdown(false)}
           >
-            <Edit size={14} className="text-warning-main" /> Editar
+            <Edit size={14} className="text-warning-main" aria-hidden="true" /> 
+            <span>Editar</span>
           </Link>
 
           {isAdmin && (
-            <div className="border-t border-border-primary mt-1 pt-1">
+            <div className="border-t border-border-primary mt-1 pt-1" role="none">
               <DeleteMemberButton
                 uuid={uuid}
                 name={name}
