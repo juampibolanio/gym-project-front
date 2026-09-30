@@ -4,14 +4,14 @@ import { useState } from 'react';
 import { useMetricsOverview } from '@/features/metrics/hooks/useMetrics';
 import { useRole } from '@/features/auth/hooks/useRole';
 import { DashboardSkeleton } from '@/common/components/ui/skeletons/DashboardSkeleton';
-import { DashboardHeader } from '@/features/metrics/components/MetricsHeader';
-import { DashboardKpiGrid } from '@/features/metrics/components/MetricsKpiGrid';
 import { RevenueChart } from '@/features/metrics/components/RevenueChart';
 import { MembersFlowChart } from '@/features/metrics/components/MembersFlowChart';
 import { UpcomingRenewalsCard } from '@/features/metrics/components/UpcomingRenewalsCard';
 import { UpcomingBirthdaysCard } from '@/features/metrics/components/UpcomingBirthdaysCard';
 import { EyeOff } from 'lucide-react';
 import { PlanDistributionCard } from '@/features/metrics/components/PlanDistributionCard';
+import { MetricsHeader } from '@/features/metrics/components/MetricsHeader';
+import { MetricsKpiGrid } from '@/features/metrics/components/MetricsKpiGrid';
 
 export default function DashboardPage() {
   const { isUser } = useRole();
@@ -41,12 +41,12 @@ export default function DashboardPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <DashboardHeader
+      <MetricsHeader
         selectedPeriod={selectedPeriod}
         onPeriodChange={setSelectedPeriod}
       />
 
-      <DashboardKpiGrid
+      <MetricsKpiGrid
         metrics={metrics}
         isRevenueVisible={isRevenueVisible}
         onToggleRevenueVisible={() => setIsRevenueVisible(!isRevenueVisible)}
