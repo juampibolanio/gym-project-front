@@ -25,7 +25,7 @@ export function UpcomingRenewalsCard({ renewals }: UpcomingRenewalsCardProps) {
         </div>
       </header>
 
-      <div className="flex-1 p-0 overflow-y-auto min-h-0 relative">
+      <div className="flex-1 p-0 overflow-y-auto min-h-0 relative max-h-100">
         <div 
           className="flex items-center justify-between px-5 py-3 border-b border-border-primary text-[10px] font-bold text-text-muted tracking-widest uppercase sticky top-0 bg-surface z-10 backdrop-blur-sm"
           aria-hidden="true"
