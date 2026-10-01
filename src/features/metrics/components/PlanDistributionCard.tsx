@@ -18,6 +18,18 @@ interface PieTooltipParam {
   color: string;
 }
 
+const CHART_COLORS = [
+  '#3b82f6', 
+  '#10b981', 
+  '#f59e0b',
+  '#ef4444', 
+  '#8b5cf6', 
+  '#06b6d4', 
+  '#f97316',
+  '#ec4899', 
+  '#14b8a6', 
+];
+
 export const PlanDistributionCard = ({ distribution }: PlanDistributionCardProps) => {
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
@@ -31,8 +43,8 @@ export const PlanDistributionCard = ({ distribution }: PlanDistributionCardProps
 
   if (!mounted) {
     return (
-      <article className="bg-surface border border-border-primary rounded-xl p-6 flex flex-col shadow-sm h-full transition-colors">
-        <header className="flex items-center gap-3 border-b border-border-primary pb-4 mb-4">
+      <section className="bg-surface border border-border-primary rounded-lg flex flex-col shadow-sm h-full transition-colors">
+        <header className="flex items-center gap-3 border-b border-border-primary p-5 shrink-0">
           <div className="p-2 bg-brand-surface rounded-lg">
             <PieChart size={20} className="text-brand-main" aria-hidden="true" />
           </div>
@@ -41,15 +53,14 @@ export const PlanDistributionCard = ({ distribution }: PlanDistributionCardProps
             <p className="text-xs text-text-muted">Suscripciones activas</p>
           </div>
         </header>
-        <div className="flex-1 w-full flex items-center justify-center min-h-65 bg-surface-hover/30 rounded-lg animate-pulse">
+        <div className="flex-1 w-full flex items-center justify-center min-h-75 bg-surface-hover/30 rounded-b-lg animate-pulse">
           <span className="sr-only">Cargando gráfico de distribución de planes...</span>
         </div>
-      </article>
+      </section>
     );
   }
 
   const isDark = theme === 'dark';
-  const textColor = isDark ? '#9ca3af' : '#6b7280';
   const mainTextColor = isDark ? '#f3f4f6' : '#111827';
   const borderColor = isDark ? '#111827' : '#ffffff';
 
@@ -59,6 +70,7 @@ export const PlanDistributionCard = ({ distribution }: PlanDistributionCardProps
   }));
 
   const option: EChartsOption = {
+    color: CHART_COLORS,
     tooltip: {
       trigger: 'item',
       backgroundColor: isDark ? '#1f2937' : '#ffffff',
@@ -76,18 +88,14 @@ export const PlanDistributionCard = ({ distribution }: PlanDistributionCardProps
       },
     },
     legend: {
-      bottom: '0',
-      left: 'center',
-      textStyle: { color: textColor },
-      itemWidth: 10,
-      itemHeight: 10,
-      icon: 'circle',
+      show: false,
     },
     series: [
       {
         name: 'Planes',
         type: 'pie',
-        radius: ['45%', '75%'], 
+        radius: ['55%', '85%'],
+        center: ['50%', '50%'],
         avoidLabelOverlap: false,
         itemStyle: {
           borderRadius: 6,
@@ -96,16 +104,6 @@ export const PlanDistributionCard = ({ distribution }: PlanDistributionCardProps
         },
         label: {
           show: false,
-          position: 'center',
-        },
-        emphasis: {
-          label: {
-            show: true,
-            fontSize: 14,
-            fontWeight: 'bold',
-            color: mainTextColor,
-            formatter: '{b}\n{c}',
-          },
         },
         labelLine: {
           show: false,
@@ -116,37 +114,77 @@ export const PlanDistributionCard = ({ distribution }: PlanDistributionCardProps
   };
 
   return (
-    <article 
-      className="bg-surface border border-border-primary rounded-xl p-6 flex flex-col shadow-sm h-full transition-colors"
+    <section 
+      className="bg-surface border border-border-primary rounded-lg flex flex-col shadow-sm h-full transition-colors overflow-hidden"
       aria-label="Gráfico de distribución de planes activos"
     >
-      <header className="flex items-center gap-3 border-b border-border-primary pb-4 mb-4">
-        <div className="p-2 bg-brand-surface rounded-lg">
-          <PieChart size={20} className="text-brand-main" aria-hidden="true" />
+      <header className="flex items-center justify-between p-5 border-b border-border-primary shrink-0">
+        <div className="flex items-center gap-3">
+          <div className="p-2 bg-brand-surface rounded-lg">
+            <PieChart size={20} className="text-brand-main" aria-hidden="true" />
+          </div>
+          <div>
+            <h3 className="text-sm font-bold text-text-main">Distribución de Planes</h3>
+            <p className="text-[11px] text-text-muted mt-0.5">Suscripciones activas</p>
+          </div>
         </div>
-        <div>
-          <h3 className="text-sm font-bold text-text-main">Distribución de Planes</h3>
-          <p className="text-xs text-text-muted">Suscripciones activas</p>
+        <div 
+          className="text-xs font-bold text-brand-main bg-brand-surface px-2 py-0.5 rounded shadow-sm"
+          title={`${distribution.length} planes activos`}
+        >
+          {distribution.length}
         </div>
       </header>
 
       {!distribution || distribution.length === 0 ? (
-        <div className="flex-1 flex flex-col items-center justify-center py-6 text-text-muted">
-          <p className="text-sm">No hay datos suficientes.</p>
+        <div className="flex-1 flex flex-col items-center justify-center p-6 text-text-muted min-h-75">
+          <p className="text-sm font-medium">No hay suscripciones activas.</p>
+          <p className="text-xs mt-1 text-center">Registra pagos de planes para ver la distribución.</p>
         </div>
       ) : (
-        <div 
-          className="flex-1 w-full flex items-center justify-center min-h-62.5"
-          aria-hidden="true"
-        >
-          <ReactECharts
-            option={option}
-            style={{ height: '100%', width: '100%', minHeight: '260px' }}
-            notMerge={true}
-            lazyUpdate={true}
-          />
+        <div className="flex flex-col flex-1 min-h-0">
+          <div 
+            className="w-full h-55 shrink-0 pt-4"
+            aria-hidden="true"
+          >
+            <ReactECharts
+              option={option}
+              style={{ height: '100%', width: '100%' }}
+              notMerge={true}
+              lazyUpdate={true}
+            />
+          </div>
+
+          <div className="flex-1 overflow-y-auto min-h-0 max-h-62.5 border-t border-border-primary/50 mt-2">
+            <ul className="flex flex-col m-0 p-0 list-none">
+              {distribution.map((plan, index) => {
+                const color = CHART_COLORS[index % CHART_COLORS.length];
+                return (
+                  <li 
+                    key={plan.name} 
+                    className="flex items-center justify-between px-5 py-3 hover:bg-surface-hover transition-colors border-b border-border-primary/50 last:border-0"
+                  >
+                    <div className="flex items-center gap-3 min-w-0 pr-4">
+                      <span 
+                        className="w-3 h-3 rounded-full shrink-0 shadow-sm" 
+                        style={{ backgroundColor: color }} 
+                        aria-hidden="true"
+                      />
+                      <span className="text-sm text-text-main font-medium truncate">
+                        {plan.name}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-3 text-sm shrink-0">
+                      <span className="text-text-muted">{plan.count}</span>
+                      <span className="font-bold text-text-main w-11 text-right">{plan.percentage}%</span>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
         </div>
       )}
-    </article>
+    </section>
   );
 };
