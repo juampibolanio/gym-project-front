@@ -1,7 +1,6 @@
 'use client';
 
 import { Suspense, useState } from 'react';
-import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useGym } from '@/features/gyms/hooks/useGyms';
 import { useRole } from '@/features/auth/hooks/useRole';
@@ -20,8 +19,9 @@ import {
   LogOut,
   Menu,
   X,
-  Sparkles,
 } from 'lucide-react';
+import { SidebarNav, NavItem } from './SidebarNav';
+import { SidebarNews } from './SidebarNews';
 
 export function DashboardShell({
   children,
@@ -45,34 +45,23 @@ export function DashboardShell({
     router.replace('/login');
   };
 
-  const navItems = [
+  const navItems: NavItem[] = [
     {
       name: 'Dashboard',
       href: '/dashboard',
       icon: LayoutDashboard,
       exact: true,
-      show: true,
     },
-    { name: 'Miembros', href: '/dashboard/miembros', icon: Users, show: true },
+    { name: 'Miembros', href: '/dashboard/miembros', icon: Users },
     {
       name: 'Administradores',
       href: '/dashboard/administradores',
       icon: Shield,
       show: isAdmin,
     },
-    {
-      name: 'Planes',
-      href: '/dashboard/planes',
-      icon: ClipboardList,
-      show: true,
-    },
-    {
-      name: 'Configuración',
-      href: '/dashboard/configuracion',
-      icon: Settings,
-      show: true,
-    },
-  ].filter((item) => item.show);
+    { name: 'Planes', href: '/dashboard/planes', icon: ClipboardList },
+    { name: 'Configuración', href: '/dashboard/configuracion', icon: Settings },
+  ].filter((item) => item.show !== false);
 
   return (
     <AuthGuard>
@@ -109,50 +98,17 @@ export function DashboardShell({
               </button>
             </div>
 
-            <nav className="flex flex-col mt-6 space-y-1">
-              {navItems.map((item) => {
-                const Icon = item.icon;
-                const isActive = item.exact
-                  ? pathname === item.href
-                  : pathname.startsWith(item.href);
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    onClick={() => setIsSidebarOpen(false)}
-                    aria-current={isActive ? 'page' : undefined}
-                    className={`flex items-center gap-4 px-8 py-3 transition-colors border-l-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-main ${
-                      isActive
-                        ? 'bg-brand-surface border-brand-main text-text-main'
-                        : 'border-transparent text-text-muted hover:bg-surface-hover hover:text-text-main'
-                    }`}
-                  >
-                    <Icon
-                      size={18}
-                      className={isActive ? 'text-brand-main' : ''}
-                      aria-hidden="true"
-                    />
-                    <span className="font-medium text-sm">{item.name}</span>
-                  </Link>
-                );
-              })}
-            </nav>
+            <SidebarNav 
+              items={navItems} 
+              onItemClick={() => setIsSidebarOpen(false)} 
+            />
           </div>
 
           <div className="flex flex-col mt-auto mb-6 space-y-1">
-            <div className="px-6 mb-2">
-              <div className="bg-surface-hover border border-border-primary rounded-lg p-3 flex flex-col gap-2 shadow-sm">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-text-main flex items-center gap-1.5">
-                    <Sparkles size={14} className="text-brand-main" aria-hidden="true" /> Novedades
-                  </span>
-                  <span className="text-[10px] font-bold bg-background border border-border-primary text-text-muted px-1.5 py-0.5 rounded">v1.5.1</span>
-                </div>
-                <p className="text-[11px] text-text-muted leading-relaxed">
-                  Corrección visual en lista de miembros (en dispositivos móviles).
-                </p>
-              </div>
-            </div>
+            <SidebarNews 
+              version="v1.5.1" 
+              message="Corrección visual en lista de miembros (en dispositivos móviles)." 
+            />
 
             <button
               onClick={() => setIsLogoutModalOpen(true)}
