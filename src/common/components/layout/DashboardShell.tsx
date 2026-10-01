@@ -106,8 +106,8 @@ export function DashboardShell({
 
           <div className="flex flex-col mt-auto mb-6 space-y-1">
             <SidebarNews 
-              version="v1.5.1" 
-              message="Corrección visual en lista de miembros (en dispositivos móviles)." 
+              version="v1.6.0" 
+              message="Nuevo gráfico de distribución de planes y corrección de errores." 
             />
 
             <button
