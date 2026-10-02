@@ -79,7 +79,7 @@ export function MetricsKpiGrid({
             +{newToday} hoy
           </span>
         ) : null,
-      trendText: getTrendText(memberTrend, 'este mes'),
+      trendText: getTrendText(memberTrend, 'vs mismo periodo mes anterior'),
       trendIcon: renderTrendIcon(memberTrend),
       trendColor: getTrendColor(memberTrend),
     },
@@ -93,7 +93,7 @@ export function MetricsKpiGrid({
             icon: (
               <Wallet size={16} className="text-brand-main transition-colors" aria-hidden="true" />
             ),
-            trendText: getTrendText(revenueTrend, 'vs último mes'),
+            trendText: getTrendText(revenueTrend, 'vs mismo periodo mes anterior'),
             trendIcon: renderTrendIcon(revenueTrend),
             trendColor: getTrendColor(revenueTrend),
             action: (
