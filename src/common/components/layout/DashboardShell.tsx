@@ -106,7 +106,7 @@ export function DashboardShell({
 
           <div className="flex flex-col mt-auto mb-6 space-y-1">
             <SidebarNews 
-              version="v1.6.0" 
+              version="v1.6.1" 
               message="Nuevo gráfico de distribución de planes y corrección de errores." 
             />
 
