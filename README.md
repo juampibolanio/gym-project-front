@@ -2,7 +2,7 @@
   <a href="#" target="blank"><img src="https://res.cloudinary.com/dpxjhrv8s/image/upload/v1781116599/content_nhqpva.webp" width="220" alt="ChacuGym Logo" /></a>
 </p>
 
-<h1 align="center">ChacuGym - Frontend</h1>
+<h1 align="center">ChacuGym - Frontend - V1</h1>
 
 <p align="center">
   <strong>El futuro de la gestión de gimnasios.</strong>
