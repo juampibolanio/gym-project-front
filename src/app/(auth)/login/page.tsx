@@ -4,7 +4,7 @@ import { LoginForm } from '@/features/auth/components/LoginForm';
 import { ShieldAlert } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Iniciar Sesión | ChacuGym',
+  title: 'Iniciar Sesión',
   description: 'Terminal de acceso seguro para usuarios de ChacuGym.',
 };
 
