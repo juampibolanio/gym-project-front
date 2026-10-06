@@ -42,7 +42,7 @@ export default function LoginPage() {
 
           <div className="flex items-center justify-center gap-2 text-text-muted transition-colors -mt-1">
             <span className="text-[10px] font-bold tracking-wider uppercase">
-              v1.6.1 - by Chacú.IO
+              v1.7.0 - by Chacú.IO
             </span>
           </div>
         </footer>
