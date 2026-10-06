@@ -106,8 +106,8 @@ export function DashboardShell({
 
           <div className="flex flex-col mt-auto mb-6 space-y-1">
             <SidebarNews 
-              version="v1.6.1" 
-              message="Nuevo gráfico de distribución de planes y corrección de errores." 
+              version="v1.7.0" 
+              message="Nuevo botón de renovación de membresía en la sección de Miembros. Ahora puedes renovar membresías de manera más rápida y sencilla." 
             />
 
             <button
