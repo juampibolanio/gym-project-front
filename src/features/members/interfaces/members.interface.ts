@@ -30,6 +30,7 @@ export interface Member {
   emergencyContact?: EmergencyContact;
   subscriptions?: Subscription[];
   payments?: Payment[];
+  createdAt?: string;
 }
 
 export interface CreateMemberPayload {
@@ -88,6 +89,7 @@ export interface MemberProfileCardProps {
     observations?: string;
     state?: string;
     emergencyContact?: EmergencyContact;
+    createdAt?: string;
   };
   displayStatus: string;
   safeStatusStyles: string;

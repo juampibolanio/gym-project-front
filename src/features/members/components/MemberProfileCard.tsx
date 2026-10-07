@@ -2,7 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { MemberProfileCardProps } from '../interfaces/members.interface';
 import RegisterPaymentButton from '@/features/payments/components/RegisterPaymentButton';
-import { Pencil, User, HeartPulse } from 'lucide-react';
+import { Pencil, User, HeartPulse, Star } from 'lucide-react';
 
 export function MemberProfileCard({
   member,
@@ -14,6 +14,13 @@ export function MemberProfileCard({
   const formattedBirthDate = member.birthDate 
     ? member.birthDate.split('T')[0].split('-').reverse().join('/')
     : '-';
+
+  const memberSince = member.createdAt
+    ? new Date(member.createdAt).toLocaleDateString('es-ES', {
+        month: 'short',
+        year: 'numeric',
+      })
+    : null;
 
   return (
     <aside 
@@ -49,6 +56,13 @@ export function MemberProfileCard({
         <h2 id="profile-heading" className="text-xl font-bold text-text-main text-center">
           {member.name} {member.surname}
         </h2>
+        
+        {memberSince && (
+          <div className="flex items-center gap-1.5 mt-3 text-[11px] font-bold text-brand-main bg-brand-surface border border-brand-main/20 px-3 py-1 rounded-full shadow-sm">
+            <Star size={12} className="fill-brand-main/50" aria-hidden="true" />
+            <span className="uppercase tracking-wider">Miembro desde {memberSince}</span>
+          </div>
+        )}
       </div>
 
       <dl className="flex flex-col gap-6 border-t border-border-primary pt-6">
