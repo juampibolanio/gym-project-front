@@ -156,7 +156,8 @@ export function MembersDirectory() {
                         getMidnightTime(sub.endDate) >= todayMidnight
                     );
 
-                  const planName = activeSub?.plan?.name || 'Sin plan';
+                  const latestSub = member.subscriptions?.[0];
+                  const planName = activeSub?.plan?.name || latestSub?.plan?.name || 'Sin plan';
 
                   let dynamicState = member.state;
                   if (dynamicState === 'ACTIVE' && !activeSub) {
@@ -171,9 +172,9 @@ export function MembersDirectory() {
                       uuid={member.uuid}
                       status={dynamicState}
                       profileImageUrl={member.profileImageUrl}
-                      phoneNumber={member.phoneNumber || ''}
+                      phoneNumber={member.phoneNumber}
                       birthDate={member.birthDate}
-                      observations={member.observations || ''} 
+                      observations={member.observations}
                       planName={planName}
                     />
                   );

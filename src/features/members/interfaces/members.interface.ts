@@ -71,9 +71,9 @@ export interface MemberListProps {
   memberID: string;
   uuid: string;
   status: 'Activo' | 'Vencido' | 'Inactivo' | string;
-  phoneNumber: string;
+  phoneNumber?: string;
   profileImageUrl?: string | null;
-  observations: string;
+  observations?: string;
   planName: string;
   birthdate?: string;
 }
