@@ -12,7 +12,7 @@ import { RenewPlanModal } from '@/features/members/components/RenewPlanModal';
 import { STATUS_TRANSLATIONS, STATUS_STYLES } from '@/features/members/constants/member-styles-ui.constants';
 import { MemberDetailClientProps } from '../interfaces/members.interface';
 
-export function MemberDetailClient({ id }: MemberDetailClientProps) {
+export default function MemberDetailClient({ id }: MemberDetailClientProps) {
   const { data: member, isLoading, isError } = useMember(id);
   const { data: plans } = usePlans();
 

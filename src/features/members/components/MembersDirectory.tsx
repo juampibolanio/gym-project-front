@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useRef } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useRef, useCallback, useEffect } from 'react';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
 import { useMembers } from '../hooks/useMembers';
 import { usePlans } from '@/features/plans/hooks/usePlans';
@@ -21,24 +21,38 @@ const getMidnightTime = (dateInput?: string | Date) => {
 };
 
 export function MembersDirectory() {
-  const [filter, setFilter] = useState<
-    'RELEVANT' | 'ACTIVE' | 'INACTIVE' | 'SUSPENDED'
-  >('RELEVANT');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [selectedPlanId, setSelectedPlanId] = useState<string>('');
-  const [sortConfig, setSortConfig] = useState<{
-    sortBy: MemberSortBy;
-    order: SortOrder;
-  } | null>(null);
-
+  const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
+
+  const filter = (searchParams.get('filter') as 'RELEVANT' | 'ACTIVE' | 'INACTIVE' | 'SUSPENDED') || 'RELEVANT';
+  const currentPage = Number(searchParams.get('page')) || 1;
+  const selectedPlanId = searchParams.get('planId') || '';
+  const sortBy = searchParams.get('sortBy') as MemberSortBy | null;
+  const order = searchParams.get('order') as SortOrder | null;
   const q = searchParams.get('q') || undefined;
 
+  const sortConfig = sortBy && order ? { sortBy, order } : null;
+
+  const updateParams = useCallback((updates: Record<string, string | number | null>) => {
+    const params = new URLSearchParams(searchParams.toString());
+    Object.entries(updates).forEach(([key, value]) => {
+      if (value === null || value === undefined || value === '') {
+        params.delete(key);
+      } else {
+        params.set(key, String(value));
+      }
+    });
+    router.push(`${pathname}?${params.toString()}`, { scroll: false });
+  }, [searchParams, pathname, router]);
+
   const prevQRef = useRef(q);
-  if (prevQRef.current !== q) {
-    prevQRef.current = q;
-    setCurrentPage(1);
-  }
+  useEffect(() => {
+    if (prevQRef.current !== q) {
+      prevQRef.current = q;
+      updateParams({ page: 1 });
+    }
+  }, [q, updateParams]);
 
   const { data: plansResponse } = usePlans(1, 100);
   const plans = plansResponse?.data || [];
@@ -59,50 +73,46 @@ export function MembersDirectory() {
   const totalPages = response?.meta?.lastPage || 1;
 
   const handlePlanChange = (planId: string) => {
-    setSelectedPlanId(planId);
-    setCurrentPage(1);
+    updateParams({ planId, page: 1 });
   };
 
   const handleSortChange = (value: SortOption) => {
-    setCurrentPage(1);
     switch (value) {
       case 'createdAt_desc':
-        setSortConfig({ sortBy: 'createdAt', order: 'desc' });
+        updateParams({ sortBy: 'createdAt', order: 'desc', page: 1 });
         break;
       case 'name_asc':
-        setSortConfig({ sortBy: 'name', order: 'asc' });
+        updateParams({ sortBy: 'name', order: 'asc', page: 1 });
         break;
       case 'name_desc':
-        setSortConfig({ sortBy: 'name', order: 'desc' });
+        updateParams({ sortBy: 'name', order: 'desc', page: 1 });
         break;
       case 'surname_asc':
-        setSortConfig({ sortBy: 'surname', order: 'asc' });
+        updateParams({ sortBy: 'surname', order: 'asc', page: 1 });
         break;
       case 'surname_desc':
-        setSortConfig({ sortBy: 'surname', order: 'desc' });
+        updateParams({ sortBy: 'surname', order: 'desc', page: 1 });
         break;
       default:
-        setSortConfig(null);
+        updateParams({ sortBy: null, order: null, page: 1 });
         break;
     }
   };
 
   const handleSortName = () => {
-    setCurrentPage(1);
     if (!sortConfig || sortConfig.sortBy !== 'name') {
-      setSortConfig({ sortBy: 'name', order: 'asc' });
+      updateParams({ sortBy: 'name', order: 'asc', page: 1 });
     } else if (sortConfig.order === 'asc') {
-      setSortConfig({ sortBy: 'name', order: 'desc' });
+      updateParams({ sortBy: 'name', order: 'desc', page: 1 });
     } else {
-      setSortConfig(null);
+      updateParams({ sortBy: null, order: null, page: 1 });
     }
   };
 
   const handleFilterChange = (
     newFilter: 'RELEVANT' | 'ACTIVE' | 'INACTIVE' | 'SUSPENDED'
   ) => {
-    setFilter(newFilter);
-    setCurrentPage(1);
+    updateParams({ filter: newFilter, page: 1 });
   };
 
   const todayMidnight = getMidnightTime();
@@ -172,9 +182,9 @@ export function MembersDirectory() {
                       uuid={member.uuid}
                       status={dynamicState}
                       profileImageUrl={member.profileImageUrl}
-                      phoneNumber={member.phoneNumber}
+                      phoneNumber={member.phoneNumber || ''}
                       birthDate={member.birthDate}
-                      observations={member.observations}
+                      observations={member.observations || ''}
                       planName={planName}
                     />
                   );
@@ -194,9 +204,9 @@ export function MembersDirectory() {
           currentPage={currentPage}
           totalPages={totalPages}
           isLoading={isLoading}
-          onPrevPage={() => currentPage > 1 && setCurrentPage(currentPage - 1)}
+          onPrevPage={() => currentPage > 1 && updateParams({ page: currentPage - 1 })}
           onNextPage={() =>
-            currentPage < totalPages && setCurrentPage(currentPage + 1)
+            currentPage < totalPages && updateParams({ page: currentPage + 1 })
           }
         />
       </div>

@@ -1,5 +1,5 @@
+import MemberDetailClient from '@/features/members/components/MemberDetailClient';
 import { Metadata } from 'next';
-import { MemberDetailClient } from '@/features/members/components/MemberDetailClient';
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
