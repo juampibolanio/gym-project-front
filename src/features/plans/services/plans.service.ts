@@ -60,9 +60,9 @@ export class PlansService {
    * Soft-deletes (deactivates) a membership plan.
    *
    * @param id - The UUID of the plan to remove.
-   * @returns A promise that resolves to the removed plan.
+   * @returns A promise that resolves when the plan has been removed.
    */
-  static async remove(id: string): Promise<Plan> {
-    return await httpClient.delete<Plan>(`${this.ENDPOINT}/${id}`);
+  static async remove(id: string): Promise<void> {
+    await httpClient.delete<void>(`${this.ENDPOINT}/${id}`);
   }
 }

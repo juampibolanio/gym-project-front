@@ -75,9 +75,9 @@ export class PaymentsService {
    * Soft-deletes (voids) a payment.
    *
    * @param id - The UUID of the payment to void.
-   * @returns A promise resolving to the voided payment.
+   * @returns A promise that resolves when the payment has been voided.
    */
-  static async remove(id: string): Promise<Payment> {
-    return await httpClient.delete<Payment>(`${this.ENDPOINT}/${id}`);
+  static async remove(id: string): Promise<void> {
+    await httpClient.delete<void>(`${this.ENDPOINT}/${id}`);
   }
 }

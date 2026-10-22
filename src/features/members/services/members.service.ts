@@ -83,10 +83,10 @@ export class MembersService {
    * Note: This operation might be restricted by the backend if financial records exist.
    * 
    * @param id - The UUID of the member to remove.
-   * @returns A promise that resolves to the deleted member's data.
+   * @returns A promise that resolves when the member has been removed.
    */
-  static async remove(id: string): Promise<Member> {
-    return await httpClient.delete<Member>(`${this.ENDPOINT}/${id}`);
+  static async remove(id: string): Promise<void> {
+    await httpClient.delete<void>(`${this.ENDPOINT}/${id}`);
   }
 
   /**

@@ -72,10 +72,10 @@ export class UsersService {
    * Permanently removes a user from the system.
    * 
    * @param id - The UUID of the user to remove.
-   * @returns A promise that resolves to the deleted user's data.
+   * @returns A promise that resolves when the user has been removed.
    */
-  static async remove(id: string): Promise<User> {
-    return await httpClient.delete<User>(`${this.ENDPOINT}/${id}`);
+  static async remove(id: string): Promise<void> {
+    await httpClient.delete<void>(`${this.ENDPOINT}/${id}`);
   }
 
   /**
