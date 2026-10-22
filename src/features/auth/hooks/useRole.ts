@@ -9,7 +9,7 @@ import { useAuthStore } from '../store/auth.store';
 export const useRole = () => {
   const user = useAuthStore((state) => state.user);
 
-  const role = user?.role?.toString().toLowerCase() || 'user';
+  const role = user?.role ? user.role.toString().toLowerCase() : null;
 
   return {
     role,
