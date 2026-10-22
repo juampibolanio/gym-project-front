@@ -7,11 +7,13 @@ import axios, {
 import { HttpAdapter } from './http.adapter';
 import { useAuthStore } from '@/features/auth/store/auth.store'; 
 
+const AUTH_EXCLUDED_URLS = ['/auth/login', '/auth/refresh', '/auth/forgot-password', '/auth/reset-password'];
+
 export class AxiosAdapter implements HttpAdapter {
   private axiosInstance: AxiosInstance;
   private isRefreshing = false;
   private failedQueue: {
-    resolve: (value?: unknown) => void;
+    resolve: (token: string) => void;
     reject: (reason?: unknown) => void;
   }[] = [];
 
@@ -39,6 +41,11 @@ export class AxiosAdapter implements HttpAdapter {
       async (error: AxiosError) => {
         const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
 
+        const isAuthRoute = AUTH_EXCLUDED_URLS.some((url) => originalRequest?.url?.includes(url));
+        if (!originalRequest || isAuthRoute) {
+          return Promise.reject(error);
+        }
+
         if (error.response?.status === 401 && !originalRequest._retry) {
           originalRequest._retry = true;
 
@@ -50,7 +57,7 @@ export class AxiosAdapter implements HttpAdapter {
           }
 
           if (this.isRefreshing) {
-            return new Promise((resolve, reject) => {
+            return new Promise<string>((resolve, reject) => {
               this.failedQueue.push({ resolve, reject });
             })
               .then((token) => {
@@ -92,8 +99,8 @@ export class AxiosAdapter implements HttpAdapter {
 
   private processQueue(error: unknown, token: string | null = null) {
     this.failedQueue.forEach((prom) => {
-      if (error) {
-        prom.reject(error);
+      if (error || !token) {
+        prom.reject(error || new Error('No access token available'));
       } else {
         prom.resolve(token);
       }
@@ -104,7 +111,9 @@ export class AxiosAdapter implements HttpAdapter {
   private forceLogout(setLogoutFn: () => void) {
     if (typeof window !== 'undefined') {
       setLogoutFn();
-      window.location.href = '/login';
+      if (!window.location.pathname.startsWith('/login')) {
+        window.location.href = '/login';
+      }
     }
   }
 
