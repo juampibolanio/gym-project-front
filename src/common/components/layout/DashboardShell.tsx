@@ -5,6 +5,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useGym } from '@/features/gyms/hooks/useGyms';
 import { useRole } from '@/features/auth/hooks/useRole';
 import { useAuthStore } from '@/features/auth/store/auth.store';
+import { AuthService } from '@/features/auth/services/auth.service';
 import { AuthGuard } from '@/features/auth/components/AuthGuard';
 import { ThemeToggle } from '@/common/components/layout/ThemeToggle';
 import { GlobalSearchInput } from '@/common/components/layout/GlobalSearchInput';
@@ -19,6 +20,7 @@ import {
   LogOut,
   Menu,
   X,
+  Loader2,
 } from 'lucide-react';
 import { SidebarNav, NavItem } from './SidebarNav';
 import { SidebarNews } from './SidebarNews';
@@ -29,6 +31,7 @@ export function DashboardShell({
   children: React.ReactNode;
 }) {
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const pathname = usePathname();
@@ -38,11 +41,19 @@ export function DashboardShell({
   const gymDomain = useAuthStore((state) => state.user?.gymUuid);
   const { data: gymData, isLoading } = useGym(gymDomain);
 
-  const handleLogout = () => {
-    setIsLogoutModalOpen(false);
-    setLogout();
-    toast.success('Sesión cerrada correctamente');
-    router.replace('/login');
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    try {
+      await AuthService.logout();
+    } catch (error) {
+      console.warn('[Dashboard] Error al revocar sesión en servidor:', error);
+    } finally {
+      setIsLoggingOut(false);
+      setIsLogoutModalOpen(false);
+      setLogout();
+      toast.success('Sesión cerrada correctamente');
+      router.replace('/login');
+    }
   };
 
   const navItems: NavItem[] = [
@@ -122,7 +133,7 @@ export function DashboardShell({
 
         <Modal
           isOpen={isLogoutModalOpen}
-          onClose={() => setIsLogoutModalOpen(false)}
+          onClose={() => !isLoggingOut && setIsLogoutModalOpen(false)}
           title="Cerrar sesión"
         >
           <div className="flex flex-col gap-4">
@@ -133,15 +144,24 @@ export function DashboardShell({
             <div className="flex justify-end gap-3 mt-4">
               <button
                 onClick={() => setIsLogoutModalOpen(false)}
-                className="px-4 py-2 text-sm font-medium text-text-main border border-border-primary hover:bg-surface-hover transition-colors rounded cursor-pointer"
+                disabled={isLoggingOut}
+                className="px-4 py-2 text-sm font-medium text-text-main border border-border-primary hover:bg-surface-hover transition-colors rounded cursor-pointer disabled:opacity-50"
               >
                 Cancelar
               </button>
               <button
                 onClick={handleLogout}
-                className="px-4 py-2 text-sm font-medium text-white bg-danger-main hover:bg-danger-hover transition-colors rounded cursor-pointer"
+                disabled={isLoggingOut}
+                className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-danger-main hover:bg-danger-hover transition-colors rounded cursor-pointer disabled:opacity-50"
               >
-                Sí, cerrar sesión
+                {isLoggingOut ? (
+                  <>
+                    <Loader2 size={16} className="animate-spin" aria-hidden="true" />
+                    <span>Cerrando...</span>
+                  </>
+                ) : (
+                  <span>Sí, cerrar sesión</span>
+                )}
               </button>
             </div>
           </div>
