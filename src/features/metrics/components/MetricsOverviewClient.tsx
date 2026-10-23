@@ -1,17 +1,70 @@
 'use client';
 
 import { useState } from 'react';
+import dynamic from 'next/dynamic';
 import { useMetricsOverview } from '@/features/metrics/hooks/useMetrics';
 import { useRole } from '@/features/auth/hooks/useRole';
 import { DashboardSkeleton } from '@/common/components/ui/skeletons/DashboardSkeleton';
-import { RevenueChart } from '@/features/metrics/components/RevenueChart';
-import { MembersFlowChart } from '@/features/metrics/components/MembersFlowChart';
 import { UpcomingRenewalsCard } from '@/features/metrics/components/UpcomingRenewalsCard';
 import { UpcomingBirthdaysCard } from '@/features/metrics/components/UpcomingBirthdaysCard';
 import { EyeOff } from 'lucide-react';
-import { PlanDistributionCard } from '@/features/metrics/components/PlanDistributionCard';
 import { MetricsHeader } from '@/features/metrics/components/MetricsHeader';
 import { MetricsKpiGrid } from '@/features/metrics/components/MetricsKpiGrid';
+
+// Dynamic code-splitting for heavy ECharts modules
+const RevenueChart = dynamic(
+  () => import('@/features/metrics/components/RevenueChart').then((mod) => mod.RevenueChart),
+  {
+    ssr: false,
+    loading: () => (
+      <article className="bg-surface border border-border-primary rounded-xl p-6 h-full flex flex-col shadow-sm">
+        <header className="mb-4">
+          <div className="h-6 w-48 bg-border-primary/40 rounded animate-pulse" />
+          <div className="h-4 w-32 bg-border-primary/20 rounded mt-2 animate-pulse" />
+        </header>
+        <div className="w-full mt-4 min-h-75 flex items-center justify-center bg-surface-hover/30 rounded-lg animate-pulse">
+          <span className="sr-only">Cargando gráfico...</span>
+        </div>
+      </article>
+    ),
+  }
+);
+
+const MembersFlowChart = dynamic(
+  () => import('@/features/metrics/components/MembersFlowChart').then((mod) => mod.MembersFlowChart),
+  {
+    ssr: false,
+    loading: () => (
+      <article className="bg-surface border border-border-primary rounded-xl p-6 h-full flex flex-col shadow-sm">
+        <header className="mb-4">
+          <div className="h-6 w-48 bg-border-primary/40 rounded animate-pulse" />
+          <div className="h-4 w-32 bg-border-primary/20 rounded mt-2 animate-pulse" />
+        </header>
+        <div className="w-full mt-4 min-h-75 flex items-center justify-center bg-surface-hover/30 rounded-lg animate-pulse">
+          <span className="sr-only">Cargando gráfico...</span>
+        </div>
+      </article>
+    ),
+  }
+);
+
+const PlanDistributionCard = dynamic(
+  () => import('@/features/metrics/components/PlanDistributionCard').then((mod) => mod.PlanDistributionCard),
+  {
+    ssr: false,
+    loading: () => (
+      <section className="bg-surface border border-border-primary rounded-lg flex flex-col shadow-sm h-full">
+        <header className="flex items-center gap-3 border-b border-border-primary p-5 shrink-0">
+          <div className="w-9 h-9 bg-border-primary/30 rounded-lg animate-pulse" />
+          <div className="h-5 w-36 bg-border-primary/40 rounded animate-pulse" />
+        </header>
+        <div className="p-6 flex-1 flex items-center justify-center min-h-60 bg-surface-hover/20 animate-pulse">
+          <span className="sr-only">Cargando distribución...</span>
+        </div>
+      </section>
+    ),
+  }
+);
 
 export function MetricsOverviewClient() {
   const { isUser } = useRole();

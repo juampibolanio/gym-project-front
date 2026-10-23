@@ -36,7 +36,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es" suppressHydrationWarning>
-      <body className={`${inter.variable} min-h-screen`}>
+      <body className={`${inter.variable} min-h-screen`} suppressHydrationWarning>
         <TanStackQueryProvider>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <Toaster

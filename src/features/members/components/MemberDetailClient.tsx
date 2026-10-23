@@ -7,8 +7,16 @@ import { useMember } from '@/features/members/hooks/useMembers';
 import { usePlans } from '@/features/plans/hooks/usePlans';
 import { PaymentHistoryTable } from '@/features/payments/components/PaymentHistoryTable';
 import { MemberProfileCard } from '@/features/members/components/MemberProfileCard';
-import { ChangePlanModal } from '@/features/members/components/ChangePlanModal';
-import { RenewPlanModal } from '@/features/members/components/RenewPlanModal';
+import dynamic from 'next/dynamic';
+
+const ChangePlanModal = dynamic(
+  () => import('@/features/members/components/ChangePlanModal').then((mod) => mod.ChangePlanModal),
+  { ssr: false }
+);
+const RenewPlanModal = dynamic(
+  () => import('@/features/members/components/RenewPlanModal').then((mod) => mod.RenewPlanModal),
+  { ssr: false }
+);
 import { STATUS_TRANSLATIONS, STATUS_STYLES } from '@/features/members/constants/member-styles-ui.constants';
 import { MemberDetailClientProps } from '../interfaces/members.interface';
 
