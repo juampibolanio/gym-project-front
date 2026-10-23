@@ -1,10 +1,12 @@
 export interface Plan {
   uuid: string;
+  gymUuid?: string;
   name: string;
   price: number;
   durationDays: number;
-  description?: string;
+  description?: string | null;
   isActive?: boolean;
+  createdAt?: string;
 }
 
 export interface CreatePlanPayload {

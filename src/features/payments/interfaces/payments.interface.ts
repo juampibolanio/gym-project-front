@@ -6,14 +6,20 @@ export type PaymentMethod =
   | 'BANK_TRANSFER'
   | 'OTHER';
 
+export type PaymentCategory = 'MEMBERSHIP' | 'ADMISSION' | 'OTHER';
+
 export interface Payment {
   uuid: string;
+  gymUuid?: string;
+  memberUuid: string;
+  subscriptionUuid?: string | null;
   date: string;
   paymentMethod: PaymentMethod;
+  category?: PaymentCategory;
   amountPaid: number;
-  notes?: string;
+  notes?: string | null;
   isVoided: boolean;
-  memberUuid: string;
+  createdAt?: string;
 }
 
 export interface CreatePaymentPayload {

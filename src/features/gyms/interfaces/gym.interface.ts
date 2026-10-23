@@ -1,9 +1,11 @@
 export interface Gym {
   uuid: string;
   name: string;
-  address: string;
-  phoneNumber: string;
   subdomain: string;
+  address: string;
+  phoneNumber: string | null;
+  isActive?: boolean;
+  createdAt?: string;
 }
 
 export interface CreateGymPayload {

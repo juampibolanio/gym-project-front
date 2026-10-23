@@ -6,16 +6,20 @@ export interface LoginPayload {
   domain: string;
 }
 
+export interface AuthUser {
+  uuid: string;
+  dni: string;
+  name: string;
+  surname: string;
+  email: string;
+  role: Roles;
+  gymUuid: string | null;
+}
+
 export interface AuthResponse {
   access_token: string;
   refresh_token: string;
-  user: {
-    uuid: string;
-    name: string;
-    email: string;
-    role: Roles;
-    gymUuid: string;
-  };
+  user: AuthUser;
 }
 
 export interface RefreshResponse {

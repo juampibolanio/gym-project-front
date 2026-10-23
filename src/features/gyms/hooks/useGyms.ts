@@ -6,9 +6,9 @@ import { UpdateGymPayload } from '../interfaces/gym.interface';
  * Fetches and caches the gym's public/profile data.
  * Optimized with a long stale time since gym details rarely change.
  * 
- * @param term - The identifier for the gym (e.g., subdomain).
+ * @param term - The identifier for the gym (e.g., subdomain or UUID).
  */
-export const useGym = (term?: string) => {
+export const useGym = (term?: string | null) => {
   return useQuery({
     queryKey: ['gym', term],
     queryFn: () => GymsService.getByTerm(term!),
@@ -31,4 +31,4 @@ export const useUpdateGym = () => {
       queryClient.invalidateQueries({ queryKey: ['gym'] });
     },
   });
-}
+};
