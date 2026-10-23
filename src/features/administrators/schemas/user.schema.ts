@@ -5,7 +5,7 @@ export const userSchema = z.object({
     .string()
     .trim()
     .min(7, 'El DNI debe tener al menos 7 caracteres')
-    .max(8, 'El DNI no puede superar los 8 caracteres')
+    .max(9, 'El DNI no puede superar los 9 caracteres')
     .regex(/^\d+$/, 'El DNI solo debe contener números'),
 
   name: z

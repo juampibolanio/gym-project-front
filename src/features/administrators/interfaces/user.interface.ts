@@ -1,8 +1,5 @@
-export enum Roles {
-  'SUPER_ADMIN',
-  'ADMIN',
-  'USER',
-}
+export type Role = 'SUPER_ADMIN' | 'ADMIN' | 'USER';
+export type Roles = Role;
 
 export interface User {
   uuid: string;
@@ -10,9 +7,11 @@ export interface User {
   name: string;
   surname: string;
   email: string;
-  role: Roles;
-  registrationDate: Date;
-  lastEntryDate: Date;
+  role: Role;
+  isActive?: boolean;
+  gymUuid?: string | null;
+  createdAt: string;
+  lastEntryDate?: string | null;
 }
 
 export interface CreateUserPayload {
