@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useRef, useEffect, MouseEvent as ReactMouseEvent } from 'react';
 import Link from 'next/link';
 import { MoreHorizontal, Edit, Eye } from 'lucide-react';
 import { useRole } from '@/features/auth/hooks/useRole';
+import { useFloatingDropdown } from '@/common/hooks/useFloatingDropdown';
 import { DeleteMemberButton } from './DeleteMemberButton';
 
 interface MemberRowActionsProps {
@@ -12,65 +12,17 @@ interface MemberRowActionsProps {
 }
 
 export function MemberRowActions({ uuid, name }: MemberRowActionsProps) {
-  const [showDropdown, setShowDropdown] = useState(false);
-  const [dropdownStyle, setDropdownStyle] = useState<React.CSSProperties>({});
   const { isAdmin } = useRole();
-  
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  const buttonRef = useRef<HTMLButtonElement>(null);
+  const dropdownHeight = isAdmin ? 110 : 70;
 
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node) &&
-        buttonRef.current &&
-        !buttonRef.current.contains(event.target as Node)
-      ) {
-        setShowDropdown(false);
-      }
-    }
-
-    function handleScroll() {
-      if (showDropdown) {
-        setShowDropdown(false);
-      }
-    }
-
-    document.addEventListener('mousedown', handleClickOutside);
-    window.addEventListener('scroll', handleScroll, true);
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      window.removeEventListener('scroll', handleScroll, true);
-    };
-  }, [showDropdown]);
-
-  const toggleDropdown = (e: ReactMouseEvent) => {
-    e.stopPropagation();
-    
-    if (!showDropdown && buttonRef.current) {
-      const rect = buttonRef.current.getBoundingClientRect();
-      const dropdownHeight = isAdmin ? 110 : 70;
-      const spaceBelow = window.innerHeight - rect.bottom;
-
-      let top = rect.bottom + 4;
-      if (spaceBelow < dropdownHeight && rect.top > dropdownHeight) {
-        top = rect.top - dropdownHeight - 4;
-      }
-
-      setDropdownStyle({
-        position: 'fixed',
-        top: `${top}px`,
-        right: `${window.innerWidth - rect.right}px`,
-        width: '160px',
-        zIndex: 9999,
-      });
-      setShowDropdown(true);
-    } else {
-      setShowDropdown(false);
-    }
-  };
+  const {
+    isOpen,
+    setIsOpen,
+    toggleDropdown,
+    dropdownStyle,
+    buttonRef,
+    dropdownRef,
+  } = useFloatingDropdown({ height: dropdownHeight, width: '160px' });
 
   return (
     <div className="relative flex justify-end" onClick={(e) => e.stopPropagation()}>
@@ -80,13 +32,13 @@ export function MemberRowActions({ uuid, name }: MemberRowActionsProps) {
         onClick={toggleDropdown}
         aria-label="Opciones del socio"
         aria-haspopup="menu"
-        aria-expanded={showDropdown}
+        aria-expanded={isOpen}
         className="p-1.5 rounded hover:bg-surface-hover transition-colors cursor-pointer"
       >
         <MoreHorizontal className="text-text-muted hover:text-text-main transition-colors" size={20} aria-hidden="true" />
       </button>
 
-      {showDropdown && (
+      {isOpen && (
         <div
           ref={dropdownRef}
           style={dropdownStyle}
@@ -97,7 +49,7 @@ export function MemberRowActions({ uuid, name }: MemberRowActionsProps) {
             href={`/dashboard/miembros/${uuid}`}
             role="menuitem"
             className="w-full flex items-center gap-2 px-3 py-2 text-xs font-medium text-text-main hover:bg-surface-hover transition-colors"
-            onClick={() => setShowDropdown(false)}
+            onClick={() => setIsOpen(false)}
           >
             <Eye size={14} className="text-brand-main" aria-hidden="true" /> 
             <span>Ver Detalles</span>
@@ -107,7 +59,7 @@ export function MemberRowActions({ uuid, name }: MemberRowActionsProps) {
             href={`/dashboard/miembros/${uuid}/editar`}
             role="menuitem"
             className="w-full flex items-center gap-2 px-3 py-2 text-xs font-medium text-text-main hover:bg-surface-hover transition-colors"
-            onClick={() => setShowDropdown(false)}
+            onClick={() => setIsOpen(false)}
           >
             <Edit size={14} className="text-warning-main" aria-hidden="true" /> 
             <span>Editar</span>
@@ -118,7 +70,7 @@ export function MemberRowActions({ uuid, name }: MemberRowActionsProps) {
               <DeleteMemberButton
                 uuid={uuid}
                 name={name}
-                onDeleted={() => setShowDropdown(false)}
+                onDeleted={() => setIsOpen(false)}
               />
             </div>
           )}

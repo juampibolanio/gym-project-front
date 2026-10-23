@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { DeleteAdminButton } from './DeleteAdminButton';
 import { MoreHorizontal, Edit, ShieldAlert } from 'lucide-react';
-import { useFloatingDropdown } from '../hooks/useFloatingDropdown';
+import { useFloatingDropdown } from '@/common/hooks/useFloatingDropdown';
 import { User } from '../interfaces/user.interface';
 
 export interface AdminRowProps {
