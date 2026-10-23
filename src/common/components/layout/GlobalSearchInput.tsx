@@ -22,15 +22,17 @@ export function GlobalSearchInput() {
 
   const urlQuery = searchParams.get('q') || '';
   const [searchTerm, setSearchTerm] = useState(urlQuery);
-  const [prevUrlQuery, setPrevUrlQuery] = useState(urlQuery);
 
-  if (urlQuery !== prevUrlQuery) {
-    setPrevUrlQuery(urlQuery);
-    setSearchTerm(urlQuery);
-  }
-
+  // Sync input when user navigates browser history (back/forward)
   useEffect(() => {
+    const handlePopState = () => {
+      const currentQ = new URLSearchParams(window.location.search).get('q') || '';
+      setSearchTerm(currentQ);
+    };
+
+    window.addEventListener('popstate', handlePopState);
     return () => {
+      window.removeEventListener('popstate', handlePopState);
       if (timerRef.current) window.clearTimeout(timerRef.current);
     };
   }, []);

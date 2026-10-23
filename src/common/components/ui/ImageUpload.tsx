@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import Image from 'next/image';
 import Cropper, { Area } from 'react-easy-crop';
 import { Camera, User, Trash2 } from 'lucide-react';
@@ -14,9 +14,12 @@ interface ImageUploadProps {
 }
 
 export function ImageUpload({ currentImageUrl, onImageSelect, disabled }: ImageUploadProps) {
-  const [prevImageUrl, setPrevImageUrl] = useState(currentImageUrl);
-  const [preview, setPreview] = useState<string | null>(currentImageUrl || null);
+  const [blobUrl, setBlobUrl] = useState<string | null>(null);
+  const [isRemoved, setIsRemoved] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Derived preview: if explicitly removed, null; else local cropped blobUrl; else currentImageUrl prop
+  const preview = isRemoved ? null : (blobUrl ?? currentImageUrl ?? null);
 
   const [isCropModalOpen, setIsCropModalOpen] = useState(false);
   const [imageSrc, setImageSrc] = useState<string | null>(null);
@@ -25,10 +28,14 @@ export function ImageUpload({ currentImageUrl, onImageSelect, disabled }: ImageU
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
   const [isCropping, setIsCropping] = useState(false);
 
-  if (currentImageUrl !== prevImageUrl) {
-    setPrevImageUrl(currentImageUrl);
-    setPreview(currentImageUrl || null);
-  }
+  // Clean up blob URL on unmount or when a new blob replaces the old one
+  useEffect(() => {
+    return () => {
+      if (blobUrl) {
+        URL.revokeObjectURL(blobUrl);
+      }
+    };
+  }, [blobUrl]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -54,8 +61,12 @@ export function ImageUpload({ currentImageUrl, onImageSelect, disabled }: ImageU
       const croppedFile = await getCroppedImg(imageSrc, croppedAreaPixels);
       
       if (croppedFile) {
+        if (blobUrl) {
+          URL.revokeObjectURL(blobUrl);
+        }
         const objectUrl = URL.createObjectURL(croppedFile);
-        setPreview(objectUrl);
+        setBlobUrl(objectUrl);
+        setIsRemoved(false);
         onImageSelect(croppedFile);
       }
     } catch (error: unknown) {
@@ -69,7 +80,11 @@ export function ImageUpload({ currentImageUrl, onImageSelect, disabled }: ImageU
   };
 
   const handleRemove = () => {
-    setPreview(null);
+    if (blobUrl) {
+      URL.revokeObjectURL(blobUrl);
+      setBlobUrl(null);
+    }
+    setIsRemoved(true);
     onImageSelect(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = '';

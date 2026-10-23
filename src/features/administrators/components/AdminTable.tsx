@@ -1,7 +1,6 @@
 'use client';
 
-import { useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { useAuthStore } from '@/features/auth/store/auth.store';
 import { useUsers } from '../hooks/useUsers';
 import { AdminRow } from './AdminRow';
@@ -12,17 +11,12 @@ const ITEMS_PER_PAGE = 10;
 
 export function AdminTable() {
   const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+
   const q = searchParams.get('q') || undefined;
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const [prevQuery, setPrevQuery] = useState(q);
-
+  const currentPage = Number(searchParams.get('page')) || 1;
   const currentUserUuid = useAuthStore((state) => state.user?.uuid);
-
-  if (q !== prevQuery) {
-    setPrevQuery(q);
-    setCurrentPage(1);
-  }
 
   const { data, isLoading, isError, isFetching } = useUsers(
     currentPage,
@@ -45,12 +39,18 @@ export function AdminTable() {
   const meta = data?.meta;
   const totalPages = meta?.lastPage || 1;
 
+  const updatePage = (newPage: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('page', String(newPage));
+    router.push(`${pathname}?${params.toString()}`, { scroll: false });
+  };
+
   const handlePrevPage = () => {
-    setCurrentPage((p) => Math.max(1, p - 1));
+    updatePage(Math.max(1, currentPage - 1));
   };
 
   const handleNextPage = () => {
-    setCurrentPage((p) => Math.min(totalPages, p + 1));
+    updatePage(Math.min(totalPages, currentPage + 1));
   };
 
   return (

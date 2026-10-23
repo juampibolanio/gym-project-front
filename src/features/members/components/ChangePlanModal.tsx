@@ -22,7 +22,12 @@ interface ChangePlanPayload {
   customStartDate?: string;
 }
 
-export function ChangePlanModal({ 
+export function ChangePlanModal(props: Props) {
+  if (!props.isOpen) return null;
+  return <ChangePlanModalContent {...props} />;
+}
+
+function ChangePlanModalContent({ 
   isOpen, 
   onClose, 
   memberUuid, 
@@ -35,22 +40,11 @@ export function ChangePlanModal({
   const [selectedNewPlanUuid, setSelectedNewPlanUuid] = useState<string>('');
   const [registerPayment, setRegisterPayment] = useState<boolean>(true);
   const [paymentMethod, setPaymentMethod] = useState<string>('CASH');
-  const [activationType, setActivationType] = useState<'IMMEDIATE' | 'SCHEDULED'>('IMMEDIATE');
+  const [activationType, setActivationType] = useState<'IMMEDIATE' | 'SCHEDULED'>(
+    hasActiveSubscription ? 'SCHEDULED' : 'IMMEDIATE'
+  );
   const [isRetroactive, setIsRetroactive] = useState(false);
   const [customStartDate, setCustomStartDate] = useState('');
-
-  const [prevIsOpen, setPrevIsOpen] = useState(isOpen);
-  if (isOpen !== prevIsOpen) {
-    setPrevIsOpen(isOpen);
-    if (isOpen) {
-      setActivationType(hasActiveSubscription ? 'SCHEDULED' : 'IMMEDIATE');
-      setSelectedNewPlanUuid('');
-      setPaymentMethod('CASH');
-      setRegisterPayment(true);
-      setIsRetroactive(false);
-      setCustomStartDate('');
-    }
-  }
 
   const handleClose = () => {
     if (!isPending) onClose();
@@ -169,9 +163,9 @@ export function ChangePlanModal({
           <label className="flex items-center gap-2 cursor-pointer">
             <input 
               type="checkbox" 
-              checked={registerPayment}
-              onChange={(e) => setRegisterPayment(e.target.checked)}
-              disabled={isPending}
+              checked={registerPayment} 
+              onChange={(e) => setRegisterPayment(e.target.checked)} 
+              disabled={isPending} 
               className="accent-brand-main w-4 h-4"
             />
             <span className="text-sm font-bold text-text-main flex items-center gap-2">

@@ -21,7 +21,12 @@ interface RenewPlanPayload {
   customStartDate?: string;
 }
 
-export function RenewPlanModal({ 
+export function RenewPlanModal(props: Props) {
+  if (!props.isOpen) return null;
+  return <RenewPlanModalContent {...props} />;
+}
+
+function RenewPlanModalContent({ 
   isOpen, 
   onClose, 
   member, 
@@ -36,17 +41,6 @@ export function RenewPlanModal({
   const [customStartDate, setCustomStartDate] = useState('');
   
   const { mutate: renewPlan, isPending } = useRenewPlan();
-
-  const [prevIsOpen, setPrevIsOpen] = useState(isOpen);
-  if (isOpen !== prevIsOpen) {
-    setPrevIsOpen(isOpen);
-    if (isOpen) {
-      setRegisterPayment(true);
-      setPaymentMethod('CASH');
-      setIsRetroactive(false);
-      setCustomStartDate('');
-    }
-  }
 
   const handleClose = () => {
     if (isPending) return;
