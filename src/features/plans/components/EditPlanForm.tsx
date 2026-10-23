@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useForm, Resolver } from 'react-hook-form';
+import { useForm, Controller, Resolver } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -15,6 +15,7 @@ import { FormSkeleton } from '@/common/components/ui/skeletons/FormSkeleton';
 import { InputField } from '@/common/components/ui/InputField';
 import { TextareaField } from '@/common/components/ui/TextareaField';
 import { DeletePlanButton } from './DeletePlanButton';
+import { formatCurrencyInput } from '@/common/utils/formatters';
 import { Loader2 } from 'lucide-react';
 
 export function EditPlanForm({ id }: { id: string }) {
@@ -26,6 +27,7 @@ export function EditPlanForm({ id }: { id: string }) {
   const {
     register,
     handleSubmit,
+    control,
     reset,
     formState: { errors },
   } = useForm<PlanFormInput, unknown, PlanFormValues>({
@@ -36,7 +38,7 @@ export function EditPlanForm({ id }: { id: string }) {
     if (currentPlan) {
       reset({
         name: currentPlan.name,
-        price: new Intl.NumberFormat('es-AR').format(currentPlan.price),
+        price: formatCurrencyInput(currentPlan.price),
         durationDays: currentPlan.durationDays,
         description: currentPlan.description || '',
       });
@@ -85,21 +87,25 @@ export function EditPlanForm({ id }: { id: string }) {
             error={errors.name?.message}
           />
 
-          <InputField
-            label="Precio (Sin decimales)"
-            type="text"
-            placeholder="15.000"
-            disabled={isUpdating}
-            registration={register('price', {
-              onChange: (e) => {
-                const rawValue = e.target.value.replace(/[^0-9]/g, '');
-                e.target.value = rawValue
-                  ? new Intl.NumberFormat('es-AR', { maximumFractionDigits: 0 }).format(Number(rawValue))
-                  : '';
-              },
-            })}
-            error={errors.price?.message}
-            icon={<span aria-hidden="true" className="text-text-muted">$</span>}
+          <Controller
+            name="price"
+            control={control}
+            render={({ field }) => (
+              <InputField
+                label="Precio (Sin decimales)"
+                type="text"
+                placeholder="15.000"
+                disabled={isUpdating}
+                value={(field.value as string) ?? ''}
+                onChange={(e) => {
+                  field.onChange(formatCurrencyInput(e.target.value));
+                }}
+                onBlur={field.onBlur}
+                ref={field.ref}
+                error={errors.price?.message}
+                icon={<span aria-hidden="true" className="text-text-muted">$</span>}
+              />
+            )}
           />
         </div>
       </fieldset>

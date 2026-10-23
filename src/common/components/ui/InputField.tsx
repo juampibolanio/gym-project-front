@@ -8,6 +8,7 @@ export interface InputFieldProps extends React.InputHTMLAttributes<HTMLInputElem
   icon?: React.ReactNode;
   rightElement?: React.ReactNode;
   labelRightElement?: React.ReactNode;
+  ref?: React.Ref<HTMLInputElement>;
 }
 
 export function InputField({
@@ -19,6 +20,7 @@ export function InputField({
   labelRightElement,
   className = '',
   id,
+  ref,
   ...props
 }: InputFieldProps) {
   const generatedId = useId();
@@ -46,6 +48,7 @@ export function InputField({
         
         <input
           id={inputId}
+          ref={ref || registration?.ref}
           {...registration}
           {...props}
           aria-invalid={!!error}

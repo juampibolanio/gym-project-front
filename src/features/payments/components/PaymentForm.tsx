@@ -1,6 +1,6 @@
 'use client';
 
-import { useForm, Resolver } from 'react-hook-form';
+import { useForm, Controller, Resolver } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useCreatePayment } from '../hooks/usePayments';
 import {
@@ -12,6 +12,7 @@ import { PaymentFormProps } from '../interfaces/payments.interface';
 import { InputField } from '@/common/components/ui/InputField';
 import { SelectField } from '@/common/components/ui/SelectField';
 import { TextareaField } from '@/common/components/ui/TextareaField';
+import { formatCurrencyInput } from '@/common/utils/formatters';
 import { AlertCircle, Loader2 } from 'lucide-react';
 import { getIsoWithLocalMidday, getTodayLocalString } from '../utils/dates';
 
@@ -28,12 +29,13 @@ export function PaymentForm({
   const {
     register,
     handleSubmit,
+    control,
     reset,
     formState: { errors },
   } = useForm<PaymentFormInput, unknown, PaymentFormValues>({
     resolver: zodResolver(paymentSchema) as unknown as Resolver<PaymentFormInput, unknown, PaymentFormValues>,
     defaultValues: {
-      amount: defaultAmount ? new Intl.NumberFormat('es-AR').format(defaultAmount) : '',
+      amount: defaultAmount ? formatCurrencyInput(defaultAmount) : '',
       method: 'CASH',
       date: getTodayLocalString(),
       notes: '',
@@ -90,21 +92,25 @@ export function PaymentForm({
         />
 
         <div className="grid grid-cols-2 gap-4">
-          <InputField
-            label="Monto a cobrar"
-            type="text"
-            placeholder="0"
-            disabled={isPending}
-            registration={register('amount', {
-              onChange: (e) => {
-                const rawValue = e.target.value.replace(/\D/g, '');
-                e.target.value = rawValue
-                  ? new Intl.NumberFormat('es-AR').format(Number(rawValue))
-                  : '';
-              },
-            })}
-            error={errors.amount?.message}
-            icon={<span aria-hidden="true" className="text-text-muted">$</span>}
+          <Controller
+            name="amount"
+            control={control}
+            render={({ field }) => (
+              <InputField
+                label="Monto a cobrar"
+                type="text"
+                placeholder="0"
+                disabled={isPending}
+                value={(field.value as string) ?? ''}
+                onChange={(e) => {
+                  field.onChange(formatCurrencyInput(e.target.value));
+                }}
+                onBlur={field.onBlur}
+                ref={field.ref}
+                error={errors.amount?.message}
+                icon={<span aria-hidden="true" className="text-text-muted">$</span>}
+              />
+            )}
           />
 
           <SelectField

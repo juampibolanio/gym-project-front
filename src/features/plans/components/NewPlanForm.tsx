@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useForm, Resolver } from 'react-hook-form';
+import { useForm, Controller, Resolver } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useCreatePlan, useUpdatePlan } from '@/features/plans/hooks/usePlans';
 import {
@@ -13,6 +13,7 @@ import {
 } from '@/features/plans/schemas/plan.schema';
 import { InputField } from '@/common/components/ui/InputField';
 import { TextareaField } from '@/common/components/ui/TextareaField';
+import { formatCurrencyInput } from '@/common/utils/formatters';
 import { Loader2, AlertCircle } from 'lucide-react';
 import { Modal } from '@/common/components/ui/Modal';
 import { ApiError } from '@/common/interfaces/api-error.interface';
@@ -38,6 +39,7 @@ export function NewPlanForm() {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm<PlanFormInput, unknown, PlanFormValues>({
     resolver: zodResolver(planSchema) as unknown as Resolver<PlanFormInput, unknown, PlanFormValues>,
@@ -100,21 +102,25 @@ export function NewPlanForm() {
               error={errors.name?.message}
             />
 
-            <InputField
-              label="Precio (Sin decimales)"
-              type="text"
-              placeholder="15.000"
-              disabled={isPending}
-              registration={register('price', {
-                onChange: (e) => {
-                  const rawValue = e.target.value.replace(/[^0-9]/g, '');
-                  e.target.value = rawValue
-                    ? new Intl.NumberFormat('es-AR', { maximumFractionDigits: 0 }).format(Number(rawValue))
-                    : '';
-                },
-              })}
-              error={errors.price?.message}
-              icon={<span aria-hidden="true" className="text-text-muted">$</span>}
+            <Controller
+              name="price"
+              control={control}
+              render={({ field }) => (
+                <InputField
+                  label="Precio (Sin decimales)"
+                  type="text"
+                  placeholder="15.000"
+                  disabled={isPending}
+                  value={(field.value as string) ?? ''}
+                  onChange={(e) => {
+                    field.onChange(formatCurrencyInput(e.target.value));
+                  }}
+                  onBlur={field.onBlur}
+                  ref={field.ref}
+                  error={errors.price?.message}
+                  icon={<span aria-hidden="true" className="text-text-muted">$</span>}
+                />
+              )}
             />
           </div>
         </fieldset>
