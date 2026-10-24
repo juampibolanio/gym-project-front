@@ -3,6 +3,7 @@ import { Modal } from '@/common/components/ui/Modal';
 import { Loader2, Calendar, CreditCard } from 'lucide-react';
 import { useRenewPlan } from '../hooks/useMembers';
 import { Member } from '../interfaces/members.interface';
+import { getIsoWithLocalMidday } from '@/common/utils/dates';
 
 interface Props {
   isOpen: boolean;
@@ -55,8 +56,8 @@ function RenewPlanModalContent({
     };
 
     if (isRetroactive && customStartDate) {
-      const dateObj = new Date(customStartDate + 'T12:00:00');
-      payload.customStartDate = dateObj.toISOString();
+      payload.customStartDate = getIsoWithLocalMidday(customStartDate);
+
     }
 
     renewPlan(

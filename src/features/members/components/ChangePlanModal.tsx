@@ -4,6 +4,7 @@ import { Loader2, Calendar, CreditCard } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useChangePlan } from '../hooks/useMembers';
 import { Plan } from '@/features/plans/interfaces/plan.interface';
+import { getIsoWithLocalMidday } from '@/common/utils/dates';
 
 interface Props {
   isOpen: boolean;
@@ -64,8 +65,8 @@ function ChangePlanModalContent({
     };
 
     if (isRetroactive && customStartDate) {
-      const dateObj = new Date(customStartDate + 'T12:00:00');
-      payload.customStartDate = dateObj.toISOString();
+      payload.customStartDate = getIsoWithLocalMidday(customStartDate);
+
     }
 
     changePlan(
