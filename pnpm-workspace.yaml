@@ -1,0 +1,6 @@
+allowBuilds:
+  sharp: true
+  unrs-resolver: true
+
+overrides:
+  undici: 8.11.2
