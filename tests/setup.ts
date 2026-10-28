@@ -1,11 +1,21 @@
 import '@testing-library/jest-dom/vitest';
 import { cleanup } from '@testing-library/react';
-import { afterEach, vi } from 'vitest';
+import { beforeAll, afterEach, afterAll, vi } from 'vitest';
+import { server } from './mocks/server';
 
-// Automatically cleanup rendered DOM after each test
+// MSW Server lifecycle
+beforeAll(() => {
+  server.listen();
+});
+
 afterEach(() => {
+  server.resetHandlers();
   cleanup();
   vi.clearAllMocks();
+});
+
+afterAll(() => {
+  server.close();
 });
 
 // Polyfill window.matchMedia for next-themes and responsive components
