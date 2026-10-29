@@ -46,5 +46,36 @@ export const handlers = [
       { status: 200 }
     );
   }),
-];
 
+  http.post('*/api/v1/membership-plans', async ({ request }) => {
+    const body = (await request.json()) as Record<string, unknown>;
+    return HttpResponse.json(
+      {
+        uuid: 'new-plan-uuid-1',
+        name: body.name,
+        price: body.price,
+        durationDays: body.durationDays,
+        description: body.description,
+        isActive: true,
+        createdAt: new Date().toISOString(),
+      },
+      { status: 201 }
+    );
+  }),
+
+  http.post('*/api/v1/payments', async ({ request }) => {
+    const body = (await request.json()) as Record<string, unknown>;
+    return HttpResponse.json(
+      {
+        uuid: 'new-payment-uuid-1',
+        memberUuid: body.memberUuid,
+        paymentMethod: body.paymentMethod,
+        amountPaid: body.amountPaid,
+        notes: body.notes,
+        date: body.date,
+        createdAt: new Date().toISOString(),
+      },
+      { status: 201 }
+    );
+  }),
+];
