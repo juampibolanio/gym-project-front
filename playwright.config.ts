@@ -22,7 +22,7 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'pnpm dev',
+    command: 'npx next dev -p 3000 -H 127.0.0.1',
     url: 'http://127.0.0.1:3000',
     reuseExistingServer: true,
     timeout: 120 * 1000,
