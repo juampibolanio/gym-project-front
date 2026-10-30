@@ -10,6 +10,80 @@ export const mockAdminUser = {
   gymUuid: 'gym-uuid-1',
 };
 
+export const mockPlans = [
+  {
+    uuid: 'plan-uuid-1',
+    name: 'Pase Libre Musculación',
+    price: 15000,
+    durationDays: 30,
+    description: 'Acceso total a la sala\nClases grupales incluidas\nVestuarios con duchas',
+    isActive: true,
+  },
+  {
+    uuid: 'plan-uuid-2',
+    name: 'Pase Anual Premium',
+    price: 150000,
+    durationDays: 365,
+    description: 'Acceso ilimitado todo el año\nEvaluación nutricional',
+    isActive: true,
+  },
+];
+
+export const mockMembers = [
+  {
+    uuid: 'member-uuid-1',
+    dni: '38123456',
+    name: 'Juan',
+    surname: 'Pérez',
+    birthDate: '1995-05-15',
+    phoneNumber: '+5491123456789',
+    state: 'ACTIVE',
+    observations: 'Socio regular',
+    profileImageUrl: null,
+    createdAt: '2026-01-01T00:00:00.000Z',
+    subscriptions: [
+      {
+        uuid: 'sub-uuid-1',
+        status: 'ACTIVE',
+        startDate: '2026-01-01T00:00:00.000Z',
+        endDate: '2030-01-01T00:00:00.000Z',
+        plan: {
+          uuid: 'plan-uuid-1',
+          name: 'Pase Libre Musculación',
+          price: 15000,
+          durationDays: 30,
+        },
+      },
+    ],
+  },
+  {
+    uuid: 'member-uuid-2',
+    dni: '40987654',
+    name: 'María',
+    surname: 'Gómez',
+    birthDate: '1998-08-20',
+    phoneNumber: '+5491198765432',
+    state: 'ACTIVE',
+    observations: 'Socia destacada',
+    profileImageUrl: null,
+    createdAt: '2026-02-01T00:00:00.000Z',
+    subscriptions: [
+      {
+        uuid: 'sub-uuid-2',
+        status: 'ACTIVE',
+        startDate: '2026-02-01T00:00:00.000Z',
+        endDate: '2030-01-01T00:00:00.000Z',
+        plan: {
+          uuid: 'plan-uuid-2',
+          name: 'Pase Anual Premium',
+          price: 150000,
+          durationDays: 365,
+        },
+      },
+    ],
+  },
+];
+
 export async function setupMockApiRoutes(page: Page) {
   // Mock login endpoint
   await page.route('**/api/v1/auth/login', async (route) => {
@@ -96,40 +170,61 @@ export async function setupMockApiRoutes(page: Page) {
       status: 200,
       contentType: 'application/json',
       body: JSON.stringify({
-        data: [
-          {
-            uuid: 'plan-uuid-1',
-            name: 'Pase Libre Musculación',
-            price: 15000,
-            durationDays: 30,
-            description: 'Acceso total a la sala',
-            isActive: true,
-          },
-        ],
-        meta: { total: 1, page: 1, limit: 10, totalPages: 1 },
+        data: mockPlans,
+        meta: { total: mockPlans.length, page: 1, limit: 10, totalPages: 1 },
       }),
     });
   });
 
-  // Mock members
-  await page.route('**/api/v1/members**', async (route) => {
+  // Mock members (strictly match /members to avoid matching /membership-plans)
+  await page.route(/\/api\/v1\/members(\?|\/|$)/, async (route) => {
+    const url = new URL(route.request().url());
+    const pathname = url.pathname;
+
+    const segments = pathname.split('/').filter(Boolean);
+    const lastSegment = segments[segments.length - 1];
+
+    if (lastSegment !== 'members') {
+      const found = mockMembers.find((m) => m.uuid === lastSegment);
+      if (found) {
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify(found),
+        });
+        return;
+      }
+    }
+
+    const term = url.searchParams.get('term')?.toLowerCase().trim() || '';
+    let filtered = mockMembers;
+    if (term) {
+      filtered = mockMembers.filter(
+        (m) =>
+          m.name.toLowerCase().includes(term) ||
+          m.surname.toLowerCase().includes(term) ||
+          m.dni.includes(term)
+      );
+    }
+
     await route.fulfill({
       status: 200,
       contentType: 'application/json',
       body: JSON.stringify({
-        data: [
-          {
-            uuid: 'member-uuid-1',
-            dni: '38123456',
-            name: 'Juan',
-            surname: 'Pérez',
-            birthDate: '1995-05-15',
-            phoneNumber: '+5491123456789',
-            status: 'ACTIVE',
-            createdAt: '2026-01-01T00:00:00.000Z',
-          },
-        ],
-        meta: { total: 1, page: 1, limit: 10, totalPages: 1 },
+        data: filtered,
+        meta: { total: filtered.length, page: 1, limit: 10, lastPage: 1 },
+      }),
+    });
+  });
+
+  // Mock payments
+  await page.route('**/api/v1/payments**', async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({
+        data: [],
+        meta: { total: 0, page: 1, limit: 10, lastPage: 1 },
       }),
     });
   });
