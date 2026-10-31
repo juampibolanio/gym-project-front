@@ -1,8 +1,31 @@
+export interface MonthlyRevenueMetric {
+  total: number;
+  trend: number;
+  lastMonthMTD?: number;
+}
+
+export interface ActiveMembersMetric {
+  total: number;
+  newToday: number;
+  newThisMonth: number;
+  newLastMonthMTD?: number;
+  trend: number;
+}
+
+export interface OverdueAccountsMetric {
+  total: number;
+}
+
+/**
+ * Generic metric value kept for backward compatibility with older components.
+ */
 export interface MetricValue {
   total: number;
   trend?: number;
   newToday?: number;
   newThisMonth?: number;
+  lastMonthMTD?: number;
+  newLastMonthMTD?: number;
 }
 
 export interface MemberTrajectoryItem {
@@ -48,9 +71,9 @@ export interface PlanDistributionItem {
 }
 
 export interface MetricsOverview {
-  activeMembers: MetricValue;
-  monthlyRevenue: MetricValue;
-  overdueAccounts: MetricValue;
+  activeMembers: ActiveMembersMetric;
+  monthlyRevenue: MonthlyRevenueMetric;
+  overdueAccounts: OverdueAccountsMetric;
   statusDistribution?: StatusDistribution;
   upcomingRenewals: UpcomingRenewal[];
   upcomingBirthdays: UpcomingBirthday[];

@@ -33,3 +33,25 @@ export const getTrendText = (trend: number, suffix: string): string => {
 
   return `${sign}${formattedTrend}% ${suffix}`;
 };
+
+/**
+ * Generates an informative comparison text for MTD (Month-to-Date) metrics.
+ * 
+ * @param lastMonthMtd - Value accumulated in the previous month up to the current day/time.
+ * @param isCurrency - Whether to format the value as currency (ARS).
+ * @returns Formatted descriptive text or null if not provided.
+ */
+export const getMtdComparisonText = (
+  lastMonthMtd?: number,
+  isCurrency: boolean = false
+): string | null => {
+  if (lastMonthMtd === undefined || lastMonthMtd === null || isNaN(lastMonthMtd)) {
+    return null;
+  }
+
+  const formattedValue = isCurrency
+    ? `$${lastMonthMtd.toLocaleString('es-AR')}`
+    : lastMonthMtd.toLocaleString('es-AR');
+
+  return `Mismo período mes anterior: ${formattedValue}`;
+};
