@@ -1,10 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useTheme } from 'next-themes';
 import ReactECharts from 'echarts-for-react';
 import { EChartsOption } from 'echarts';
-import { PieChart } from 'lucide-react';
+import { PieChart, ArrowUpDown } from 'lucide-react';
 import { PlanDistributionItem } from '../interfaces/metrics.interface';
 
 interface PlanDistributionCardProps {
@@ -31,8 +31,9 @@ const CHART_COLORS = [
 ];
 
 export const PlanDistributionCard = ({ distribution }: PlanDistributionCardProps) => {
-  const { theme } = useTheme();
+  const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const [sortBy, setSortBy] = useState<'count' | 'name'>('count');
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -40,6 +41,16 @@ export const PlanDistributionCard = ({ distribution }: PlanDistributionCardProps
     }, 0);
     return () => clearTimeout(timer);
   }, []);
+
+  const sortedDistribution = useMemo(() => {
+    if (!distribution || distribution.length === 0) return [];
+    return [...distribution].sort((a, b) => {
+      if (sortBy === 'name') {
+        return a.name.localeCompare(b.name);
+      }
+      return b.count - a.count;
+    });
+  }, [distribution, sortBy]);
 
   if (!mounted) {
     return (
@@ -60,7 +71,7 @@ export const PlanDistributionCard = ({ distribution }: PlanDistributionCardProps
     );
   }
 
-  const isDark = theme === 'dark';
+  const isDark = resolvedTheme === 'dark';
   const mainTextColor = isDark ? '#f3f4f6' : '#111827';
   const borderColor = isDark ? '#111827' : '#ffffff';
 
@@ -128,11 +139,27 @@ export const PlanDistributionCard = ({ distribution }: PlanDistributionCardProps
             <p className="text-[11px] text-text-muted mt-0.5">Suscripciones activas</p>
           </div>
         </div>
-        <div 
-          className="text-xs font-bold text-brand-main bg-brand-surface px-2 py-0.5 rounded shadow-sm"
-          title={`${distribution.length} planes activos`}
-        >
-          {distribution.length}
+
+        <div className="flex items-center gap-2">
+          {distribution.length > 1 && (
+            <button
+              type="button"
+              onClick={() => setSortBy(sortBy === 'count' ? 'name' : 'count')}
+              className="flex items-center gap-1 text-[11px] font-semibold text-text-muted hover:text-text-main bg-surface-hover/70 px-2 py-1 rounded border border-border-primary cursor-pointer transition-colors focus:outline-none focus-visible:ring-1 focus-visible:ring-brand-main"
+              title={sortBy === 'count' ? 'Ordenar alfabéticamente' : 'Ordenar por mayor cantidad de alumnos'}
+              aria-label={`Ordenar lista: actualmente por ${sortBy === 'count' ? 'cantidad' : 'nombre'}`}
+            >
+              <ArrowUpDown size={11} aria-hidden="true" />
+              <span>{sortBy === 'count' ? 'Top' : 'A-Z'}</span>
+            </button>
+          )}
+
+          <div 
+            className="text-xs font-bold text-brand-main bg-brand-surface px-2 py-0.5 rounded shadow-sm"
+            title={`${distribution.length} planes activos`}
+          >
+            {distribution.length}
+          </div>
         </div>
       </header>
 
@@ -157,7 +184,7 @@ export const PlanDistributionCard = ({ distribution }: PlanDistributionCardProps
 
           <div className="flex-1 overflow-y-auto min-h-0 max-h-62.5 border-t border-border-primary/50 mt-2">
             <ul className="flex flex-col m-0 p-0 list-none">
-              {distribution.map((plan, index) => {
+              {sortedDistribution.map((plan, index) => {
                 const color = CHART_COLORS[index % CHART_COLORS.length];
                 return (
                   <li 

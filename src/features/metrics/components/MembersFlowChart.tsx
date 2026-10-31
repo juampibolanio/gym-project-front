@@ -1,12 +1,19 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useTheme } from 'next-themes';
 import ReactECharts from 'echarts-for-react';
-import { buildMembersChartOptions } from '../utils/members-chart-options';
+import {
+  buildMembersChartOptions,
+  MembersFlowViewMode,
+} from '../utils/members-chart-options';
 import { MembersFlowHeader } from './MembersFlowHeader';
 import { MembersStatusFooter } from './MembersStatusFooter';
-import { StatusDistribution, MemberTrajectoryItem } from '../interfaces/metrics.interface';
+import {
+  StatusDistribution,
+  MemberTrajectoryItem,
+} from '../interfaces/metrics.interface';
+import { TimeRangeFilter } from './RevenueChart';
 
 let hasAnimated = false;
 
@@ -25,9 +32,12 @@ export function MembersFlowChart({
   statusDistribution,
   periodLabel = '12 meses',
 }: MembersFlowChartProps) {
-  const { theme } = useTheme();
+  const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [shouldAnimate] = useState(!hasAnimated);
+
+  const [viewMode, setViewMode] = useState<MembersFlowViewMode>('flow');
+  const [timeRange, setTimeRange] = useState<TimeRangeFilter>('all');
 
   useEffect(() => {
     hasAnimated = true;
@@ -37,12 +47,30 @@ export function MembersFlowChart({
     return () => clearTimeout(timer);
   }, []);
 
-  const totalNew = data.reduce((acc, curr) => acc + (curr.newMembers || 0), 0);
-  const totalChurn = data.reduce(
-    (acc, curr) => acc + (curr.churnedMembers || 0),
-    0
+  // Filter trajectory data according to selected time range
+  const rangedData = useMemo(() => {
+    if (!data || data.length === 0) return [];
+    if (timeRange === '3m') return data.slice(-3);
+    if (timeRange === '6m') return data.slice(-6);
+    return data;
+  }, [data, timeRange]);
+
+  const totalNew = useMemo(
+    () => rangedData.reduce((acc, curr) => acc + (curr.newMembers || 0), 0),
+    [rangedData]
+  );
+  const totalChurn = useMemo(
+    () => rangedData.reduce((acc, curr) => acc + (curr.churnedMembers || 0), 0),
+    [rangedData]
   );
   const netGrowth = totalNew - totalChurn;
+
+  const effectiveRangeLabel =
+    timeRange === '3m'
+      ? 'Últimos 3 meses'
+      : timeRange === '6m'
+      ? 'Últimos 6 meses'
+      : periodLabel;
 
   if (!mounted) {
     return (
@@ -51,7 +79,11 @@ export function MembersFlowChart({
           totalNew={totalNew}
           totalChurn={totalChurn}
           netGrowth={netGrowth}
-          periodLabel={periodLabel}
+          periodLabel={effectiveRangeLabel}
+          viewMode={viewMode}
+          onViewModeChange={setViewMode}
+          timeRange={timeRange}
+          onTimeRangeChange={setTimeRange}
         />
         <div className="w-full mt-2 min-h-75 flex items-center justify-center bg-surface-hover/30 rounded-lg animate-pulse">
           <span className="sr-only">Cargando gráfico de flujo de miembros...</span>
@@ -63,10 +95,13 @@ export function MembersFlowChart({
     );
   }
 
+  const isDark = resolvedTheme === 'dark';
+
   const option = buildMembersChartOptions({
-    data,
-    isDark: theme === 'dark',
+    data: rangedData,
+    isDark,
     shouldAnimate,
+    viewMode,
   });
 
   const handleLegendSelectChanged = (
@@ -85,7 +120,7 @@ export function MembersFlowChart({
   };
 
   return (
-    <article 
+    <article
       className="bg-surface border border-border-primary rounded-xl p-6 h-full flex flex-col transition-colors shadow-sm"
       aria-label="Gráfico interactivo de flujo de miembros"
     >
@@ -93,13 +128,14 @@ export function MembersFlowChart({
         totalNew={totalNew}
         totalChurn={totalChurn}
         netGrowth={netGrowth}
-        periodLabel={periodLabel}
+        periodLabel={effectiveRangeLabel}
+        viewMode={viewMode}
+        onViewModeChange={setViewMode}
+        timeRange={timeRange}
+        onTimeRangeChange={setTimeRange}
       />
 
-      <div 
-        className="w-full mt-2 flex-1 min-h-75"
-        aria-hidden="true" 
-      >
+      <div className="w-full mt-2 flex-1 min-h-75" aria-hidden="true">
         <ReactECharts
           option={option}
           style={{ height: '100%', minHeight: '300px', width: '100%' }}
