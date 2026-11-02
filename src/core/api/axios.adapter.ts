@@ -20,6 +20,7 @@ export class AxiosAdapter implements HttpAdapter {
   constructor() {
     this.axiosInstance = axios.create({
       baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api/v1',
+      withCredentials: true,
       headers: {
         'Content-Type': 'application/json',
       },
@@ -49,12 +50,7 @@ export class AxiosAdapter implements HttpAdapter {
         if (error.response?.status === 401 && !originalRequest._retry) {
           originalRequest._retry = true;
 
-          const { refreshToken, setTokens, setLogout } = useAuthStore.getState();
-
-          if (!refreshToken) {
-            this.forceLogout(setLogout);
-            return Promise.reject(error);
-          }
+          const { setTokens, setLogout } = useAuthStore.getState();
 
           if (this.isRefreshing) {
             return new Promise<string>((resolve, reject) => {
@@ -70,14 +66,15 @@ export class AxiosAdapter implements HttpAdapter {
           this.isRefreshing = true;
 
           try {
-            const response = await axios.post<{ access_token: string; refresh_token: string }>(
+            const response = await axios.post<{ access_token: string }>(
               `${this.axiosInstance.defaults.baseURL}/auth/refresh`,
-              { refreshToken }
+              {},
+              { withCredentials: true }
             );
 
-            const { access_token, refresh_token } = response.data;
+            const { access_token } = response.data;
 
-            setTokens(access_token, refresh_token);
+            setTokens(access_token);
             this.processQueue(null, access_token);
 
             originalRequest.headers.Authorization = `Bearer ${access_token}`;

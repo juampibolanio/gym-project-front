@@ -37,7 +37,7 @@ const mockRegularUser: AuthUser = {
 
 describe('RoleGuard', () => {
   beforeEach(() => {
-    useAuthStore.setState({ token: null, refreshToken: null, user: null, domain: null });
+    useAuthStore.setState({ token: null, user: null, domain: null });
     vi.clearAllMocks();
   });
 
