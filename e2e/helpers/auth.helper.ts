@@ -94,7 +94,6 @@ export async function setupMockApiRoutes(page: Page) {
         contentType: 'application/json',
         body: JSON.stringify({
           access_token: 'mock-access-token',
-          refresh_token: 'mock-refresh-token',
           user: mockAdminUser,
         }),
       });
@@ -237,7 +236,6 @@ export async function injectAdminSession(page: Page) {
       JSON.stringify({
         state: {
           token: 'mock-access-token',
-          refreshToken: 'mock-refresh-token',
           user: adminUser,
           domain: 'test',
         },

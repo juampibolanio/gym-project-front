@@ -8,7 +8,6 @@ export const handlers = [
       return HttpResponse.json(
         {
           access_token: 'mock-access-token',
-          refresh_token: 'mock-refresh-token',
           user: {
             uuid: 'user-uuid-1',
             dni: '35123456',
@@ -41,7 +40,6 @@ export const handlers = [
     return HttpResponse.json(
       {
         access_token: 'fresh-access-token',
-        refresh_token: 'fresh-refresh-token',
       },
       { status: 200 }
     );
