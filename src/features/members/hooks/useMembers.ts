@@ -32,6 +32,7 @@ export const useCreateMember = () => {
       MembersService.create(payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['members'] });
+      queryClient.invalidateQueries({ queryKey: ['metrics'] });
       toast.success('Miembro creado con éxito');
     },
     onError: (error: unknown) => {
@@ -84,6 +85,7 @@ export const useDeactivateMember = () => {
     onSuccess: (_, id) => {
       queryClient.invalidateQueries({ queryKey: ['member', id] });
       queryClient.invalidateQueries({ queryKey: ['members'] });
+      queryClient.invalidateQueries({ queryKey: ['metrics'] });
       toast.success('Socio desactivado correctamente');
     },
     onError: (error: unknown) => {
@@ -112,6 +114,8 @@ export const useRenewPlan = () => {
     }) => MembersService.renewPlan(id, payload),
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['member', variables.id] });
+      queryClient.invalidateQueries({ queryKey: ['members'] });
+      queryClient.invalidateQueries({ queryKey: ['metrics'] });
       toast.success('¡Plan renovado con éxito!');
     },
     onError: (error: unknown) => {
@@ -146,6 +150,8 @@ export const useChangePlan = () => {
     }) => MembersService.changePlan(id, payload),
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['member', variables.id] });
+      queryClient.invalidateQueries({ queryKey: ['members'] });
+      queryClient.invalidateQueries({ queryKey: ['metrics'] });
       toast.success('¡Plan modificado con éxito!');
     },
     onError: (error: unknown) => {

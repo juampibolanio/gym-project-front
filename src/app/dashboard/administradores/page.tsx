@@ -1,7 +1,9 @@
+import { Suspense } from 'react';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { RoleGuard } from '@/features/auth/components/RoleGuard';
 import { AdminTable } from '@/features/administrators/components/AdminTable';
+import { TableSkeleton } from '@/common/components/ui/skeletons/TableSkeleton';
 import { UserPlus } from 'lucide-react';
 
 export const metadata: Metadata = {
@@ -33,7 +35,9 @@ export default function AdministratorsPage() {
         </header>
 
         <section>
-          <AdminTable />
+          <Suspense fallback={<TableSkeleton />}>
+            <AdminTable />
+          </Suspense>
         </section>
       </main>
     </RoleGuard>
