@@ -12,7 +12,7 @@ import {
 } from '@/features/configuration/schemas/config.schema';
 import { InputField } from '@/common/components/ui/InputField';
 import { GeneralTabSkeleton } from './GeneralTabSkeleton';
-import { ApiError } from '@/common/interfaces/api-error.interface';
+import { getApiErrorMessage } from '@/common/utils/api-error';
 import toast from 'react-hot-toast';
 import { Save, Loader2 } from 'lucide-react';
 
@@ -58,11 +58,9 @@ export function GeneralTab() {
           toast.success('Configuración actualizada con éxito');
         },
         onError: (error: unknown) => {
-          const apiError = error as ApiError;
-          console.error('[GeneralTab] Error al actualizar el gimnasio:', apiError);
-          const message = apiError.response?.data?.message;
+          console.error('[GeneralTab] Error al actualizar el gimnasio:', error);
           toast.error(
-            Array.isArray(message) ? message[0] : (message || 'Ocurrió un error al actualizar los datos.')
+            getApiErrorMessage(error, 'Ocurrió un error al actualizar los datos.')
           );
         },
       }

@@ -5,7 +5,7 @@ import {
   GetMembersParams,
   UpdateMemberPayload,
 } from '../interfaces/members.interface';
-import { ApiError } from '@/common/interfaces/api-error.interface';
+import { getApiErrorMessage } from '@/common/utils/api-error';
 import toast from 'react-hot-toast';
 
 export const useMembers = (params: GetMembersParams = {}) => {
@@ -36,14 +36,7 @@ export const useCreateMember = () => {
       toast.success('Miembro creado con éxito');
     },
     onError: (error: unknown) => {
-      const apiError = error as ApiError;
-      const message = apiError.response?.data?.message;
-      
-      toast.error(
-        Array.isArray(message)
-          ? message[0]
-          : (message || 'Ocurrió un error al crear el miembro')
-      );
+      toast.error(getApiErrorMessage(error, 'Ocurrió un error al crear el miembro'));
     },
   });
 };
@@ -65,14 +58,7 @@ export const useUpdateMember = () => {
       toast.success('Miembro actualizado con éxito');
     },
     onError: (error: unknown) => {
-      const apiError = error as ApiError;
-      const message = apiError.response?.data?.message;
-      
-      toast.error(
-        Array.isArray(message)
-          ? message[0]
-          : (message || 'No se pudo actualizar el miembro')
-      );
+      toast.error(getApiErrorMessage(error, 'No se pudo actualizar el miembro'));
     },
   });
 };
@@ -89,14 +75,7 @@ export const useDeactivateMember = () => {
       toast.success('Socio desactivado correctamente');
     },
     onError: (error: unknown) => {
-      const apiError = error as ApiError;
-      const message = apiError.response?.data?.message;
-      
-      toast.error(
-        Array.isArray(message) 
-          ? message[0] 
-          : (message || 'Error al desactivar el socio')
-      );
+      toast.error(getApiErrorMessage(error, 'Error al desactivar el socio'));
     },
   });
 };
@@ -119,14 +98,7 @@ export const useRenewPlan = () => {
       toast.success('¡Plan renovado con éxito!');
     },
     onError: (error: unknown) => {
-      const apiError = error as ApiError;
-      const message = apiError.response?.data?.message;
-      
-      toast.error(
-        Array.isArray(message) 
-          ? message[0] 
-          : (message || 'Hubo un error al renovar el plan')
-      );
+      toast.error(getApiErrorMessage(error, 'Hubo un error al renovar el plan'));
     },
   });
 };
@@ -155,14 +127,7 @@ export const useChangePlan = () => {
       toast.success('¡Plan modificado con éxito!');
     },
     onError: (error: unknown) => {
-      const apiError = error as ApiError;
-      const message = apiError.response?.data?.message;
-      
-      toast.error(
-        Array.isArray(message) 
-          ? message[0] 
-          : (message || 'Hubo un error al cambiar el plan')
-      );
+      toast.error(getApiErrorMessage(error, 'Hubo un error al cambiar el plan'));
     },
   });
 };

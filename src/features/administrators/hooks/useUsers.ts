@@ -6,7 +6,7 @@ import {
   UpdateUserPayload,
 } from '../interfaces/user.interface';
 import toast from 'react-hot-toast';
-import { ApiError } from '@/common/interfaces/api-error.interface';
+import { getApiErrorMessage } from '@/common/utils/api-error';
 
 export const useUsers = (
   page: number = 1,
@@ -37,12 +37,8 @@ export const useCreateUser = () => {
       queryClient.invalidateQueries({ queryKey: ['users'] });
       toast.success('Usuario creado con éxito');
     },
-    onError: (error: ApiError) => {
-      console.error('[useUsers] Failed to create user:', error);
-      const message = error.response?.data?.message;
-      toast.error(
-        Array.isArray(message) ? message[0] : (message || 'Ocurrió un error al crear el usuario')
-      );
+    onError: (error: unknown) => {
+      toast.error(getApiErrorMessage(error, 'Ocurrió un error al crear el usuario'));
     },
   });
 };
@@ -58,12 +54,8 @@ export const useUpdateUser = () => {
       queryClient.invalidateQueries({ queryKey: ['user', variables.id] });
       toast.success('Usuario actualizado con éxito');
     },
-    onError: (error: ApiError) => {
-      console.error('[useUsers] Failed to update user:', error);
-      const message = error.response?.data?.message;
-      toast.error(
-        Array.isArray(message) ? message[0] : (message || 'No se pudo actualizar el usuario')
-      );
+    onError: (error: unknown) => {
+      toast.error(getApiErrorMessage(error, 'No se pudo actualizar el usuario'));
     },
   });
 };
@@ -78,12 +70,8 @@ export const useDeleteUser = () => {
       queryClient.invalidateQueries({ queryKey: ['users'] });
       toast.success('Usuario eliminado con éxito');
     },
-    onError: (error: ApiError) => {
-      console.error('[useUsers] Failed to delete user:', error);
-      const message = error.response?.data?.message;
-      toast.error(
-        Array.isArray(message) ? message[0] : (message || 'Ocurrió un error al eliminar el usuario')
-      );
+    onError: (error: unknown) => {
+      toast.error(getApiErrorMessage(error, 'Ocurrió un error al eliminar el usuario'));
     },
   });
 };
@@ -100,12 +88,8 @@ export const useChangePassword = () => {
     onSuccess: () => {
       toast.success('Contraseña actualizada con éxito');
     },
-    onError: (error: ApiError) => {
-      console.error('[useUsers] Failed to change password:', error);
-      const message = error.response?.data?.message;
-      toast.error(
-        Array.isArray(message) ? message[0] : (message || 'Error al cambiar la contraseña')
-      );
+    onError: (error: unknown) => {
+      toast.error(getApiErrorMessage(error, 'Error al cambiar la contraseña'));
     },
   });
 };

@@ -5,7 +5,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useResetPassword } from '../hooks/useAuth';
 import { InputField } from '@/common/components/ui/InputField';
-import { ApiError } from '@/common/interfaces/api-error.interface';
+import { getApiErrorMessage } from '@/common/utils/api-error';
 import { toast } from 'react-hot-toast';
 import { Lock, Save, Loader2 } from 'lucide-react';
 import {
@@ -46,13 +46,9 @@ export function ResetPasswordForm() {
           router.push('/login');
         },
         onError: (error: unknown) => {
-          const apiError = error as ApiError;
-          console.error('[ResetPasswordForm] Failed to reset password:', apiError);
-          const message = apiError.response?.data?.message;
+          console.error('[ResetPasswordForm] Failed to reset password:', error);
           toast.error(
-            Array.isArray(message)
-              ? message[0]
-              : (message || 'El enlace es inválido o ha expirado')
+            getApiErrorMessage(error, 'El enlace es inválido o ha expirado')
           );
         },
       }

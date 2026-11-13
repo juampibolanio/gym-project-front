@@ -4,7 +4,7 @@ import {
   CreatePaymentPayload,
   UpdatePaymentPayload,
 } from '../interfaces/payments.interface';
-import { ApiError } from '@/common/interfaces/api-error.interface';
+import { getApiErrorMessage } from '@/common/utils/api-error';
 import toast from 'react-hot-toast';
 
 export const usePayments = (
@@ -33,14 +33,7 @@ export const useCreatePayment = () => {
       toast.success('Pago registrado con éxito');
     },
     onError: (error: unknown) => {
-      const apiError = error as ApiError;
-      const message = apiError.response?.data?.message;
-      
-      toast.error(
-        Array.isArray(message)
-          ? message[0]
-          : (message || 'Ocurrió un error al registrar el pago')
-      );
+      toast.error(getApiErrorMessage(error, 'Ocurrió un error al registrar el pago'));
     },
   });
 };
@@ -62,14 +55,7 @@ export const useUpdatePayment = () => {
       toast.success('Pago actualizado con éxito');
     },
     onError: (error: unknown) => {
-      const apiError = error as ApiError;
-      const message = apiError.response?.data?.message;
-      
-      toast.error(
-        Array.isArray(message)
-          ? message[0]
-          : (message || 'Ocurrió un error al actualizar el pago')
-      );
+      toast.error(getApiErrorMessage(error, 'Ocurrió un error al actualizar el pago'));
     },
   });
 };
@@ -85,14 +71,7 @@ export const useDeletePayment = () => {
       toast.success('Pago anulado con éxito');
     },
     onError: (error: unknown) => {
-      const apiError = error as ApiError;
-      const message = apiError.response?.data?.message;
-      
-      toast.error(
-        Array.isArray(message)
-          ? message[0]
-          : (message || 'Ocurrió un error al anular el pago')
-      );
+      toast.error(getApiErrorMessage(error, 'Ocurrió un error al anular el pago'));
     },
   });
 };

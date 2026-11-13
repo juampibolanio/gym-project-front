@@ -5,6 +5,7 @@ import {
   UpdatePlanPayload,
 } from '../interfaces/plan.interface';
 import { ApiError } from '@/common/interfaces/api-error.interface';
+import { getApiErrorMessage } from '@/common/utils/api-error';
 import toast from 'react-hot-toast';
 
 interface PlanApiError extends ApiError {
@@ -21,7 +22,6 @@ export const usePlans = (page: number = 1, limit: number = 10) => {
   return useQuery({
     queryKey: ['plans', { page, limit }],
     queryFn: () => PlansService.getAll(page, limit),
-    staleTime: 1000 * 10,
   });
 };
 
@@ -44,16 +44,10 @@ export const useCreatePlan = () => {
     },
     onError: (error: unknown) => {
       const apiError = error as PlanApiError;
-      
       const isInactive = apiError.response?.data?.isInactive;
-      const message = apiError.response?.data?.message;
       
       if (!isInactive) {
-        toast.error(
-          Array.isArray(message)
-            ? message[0]
-            : (message || 'Ocurrió un error al crear el plan')
-        );
+        toast.error(getApiErrorMessage(error, 'Ocurrió un error al crear el plan'));
       }
     },
   });
@@ -72,13 +66,7 @@ export const useUpdatePlan = () => {
       toast.success('Plan actualizado con éxito');
     },
     onError: (error: unknown) => {
-      const apiError = error as ApiError;
-      const message = apiError.response?.data?.message;
-      toast.error(
-        Array.isArray(message)
-          ? message[0]
-          : (message || 'No se pudo actualizar el plan')
-      );
+      toast.error(getApiErrorMessage(error, 'No se pudo actualizar el plan'));
     },
   });
 };
@@ -94,13 +82,7 @@ export const useDeletePlan = () => {
       toast.success('Plan eliminado con éxito');
     },
     onError: (error: unknown) => {
-      const apiError = error as ApiError;
-      const message = apiError.response?.data?.message;
-      toast.error(
-        Array.isArray(message)
-          ? message[0]
-          : (message || 'Ocurrió un error al eliminar el plan')
-      );
+      toast.error(getApiErrorMessage(error, 'Ocurrió un error al eliminar el plan'));
     },
   });
 };

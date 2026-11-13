@@ -10,7 +10,7 @@ import {
   forgotPasswordSchema,
 } from '../schemas/forgot-password.schema';
 import { getSubdomain } from '@/common/utils/extract-subdomain';
-import { ApiError } from '@/common/interfaces/api-error.interface';
+import { getApiErrorMessage } from '@/common/utils/api-error';
 import { toast } from 'react-hot-toast';
 import { Mail, Send, Loader2 } from 'lucide-react';
 
@@ -44,13 +44,9 @@ export function ForgotPasswordForm() {
           setIsSubmitted(true);
         },
         onError: (error: unknown) => {
-          const apiError = error as ApiError;
-          console.error('[ForgotPasswordForm] Failed to send recovery email:', apiError);
-          const message = apiError.response?.data?.message;
+          console.error('[ForgotPasswordForm] Failed to send recovery email:', error);
           toast.error(
-            Array.isArray(message) 
-              ? message[0] 
-              : (message || 'Ocurrió un error al intentar enviar el correo.')
+            getApiErrorMessage(error, 'Ocurrió un error al intentar enviar el correo.')
           );
         },
       }

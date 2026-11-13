@@ -5,7 +5,7 @@ import { useDeactivateMember } from '@/features/members/hooks/useMembers';
 import { Modal } from '@/common/components/ui/Modal';
 import { Loader2, UserMinus, UserX } from 'lucide-react';
 import { useQueryClient } from '@tanstack/react-query';
-import { ApiError } from '@/common/interfaces/api-error.interface';
+import { getApiErrorMessage } from '@/common/utils/api-error';
 import toast from 'react-hot-toast';
 import { DeleteMemberButtonProps } from '../interfaces/members.interface';
 
@@ -33,13 +33,8 @@ export function DeleteMemberButton({
         queryClient.invalidateQueries({ queryKey: ['member', uuid] });
       },
       onError: (error: unknown) => {
-        const apiError = error as ApiError;
-        const message = apiError.response?.data?.message;
-        
         toast.error(
-          Array.isArray(message)
-            ? message[0]
-            : (message || 'Error al dar de baja al socio')
+          getApiErrorMessage(error, 'Error al dar de baja al socio')
         );
       }
     });

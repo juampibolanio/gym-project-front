@@ -2,7 +2,7 @@ import { useRouter } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
 import { useAuthStore } from '../store/auth.store';
 import { AuthResponse } from '../interfaces/auth.interface';
-import { ApiError } from '@/common/interfaces/api-error.interface';
+import { getApiErrorMessage } from '@/common/utils/api-error';
 import toast from 'react-hot-toast';
 import { AuthService } from '../services/auth.service';
 
@@ -17,11 +17,10 @@ export const useLogin = () => {
       toast.success(`¡Bienvenido, ${data.user.name}!`);
       router.push('/dashboard');
     },
-    onError: (error: ApiError) => {
+    onError: (error: unknown) => {
       console.error('[useAuth] Login failed:', error);
-      const message = error?.response?.data?.message;
       toast.error(
-        Array.isArray(message) ? message[0] : (message || 'Error al iniciar sesión')
+        getApiErrorMessage(error, 'Error al iniciar sesión')
       );
     },
   });

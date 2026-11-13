@@ -10,7 +10,7 @@ import {
   SecurityFormValues,
 } from '@/features/configuration/schemas/config.schema';
 import { InputField } from '@/common/components/ui/InputField';
-import { ApiError } from '@/common/interfaces/api-error.interface';
+import { getApiErrorMessage } from '@/common/utils/api-error';
 import { Save, Eye, EyeOff, Loader2 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 
@@ -52,11 +52,9 @@ export function SecurityTab() {
           reset();
         },
         onError: (error: unknown) => {
-          const apiError = error as ApiError;
-          console.error('[SecurityTab] Failed to update password:', apiError);
-          const message = apiError.response?.data?.message;
+          console.error('[SecurityTab] Failed to update password:', error);
           toast.error(
-            Array.isArray(message) ? message[0] : (message || 'Ocurrió un error al actualizar la contraseña')
+            getApiErrorMessage(error, 'Ocurrió un error al actualizar la contraseña')
           );
         },
       }
