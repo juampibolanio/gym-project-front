@@ -73,3 +73,42 @@ vi.mock('next/navigation', () => ({
   useSearchParams: () => new URLSearchParams(),
 }));
 
+// Mock window.location navigation to prevent JSDOM navigation warnings
+let currentHref = 'http://localhost:3000';
+const originalLocation = window.location;
+Object.defineProperty(window, 'location', {
+  configurable: true,
+  writable: true,
+  value: {
+    ...originalLocation,
+    get href() {
+      return currentHref;
+    },
+    set href(value: string) {
+      currentHref = value;
+    },
+    assign: vi.fn((val: string) => {
+      currentHref = val;
+    }),
+    replace: vi.fn((val: string) => {
+      currentHref = val;
+    }),
+    reload: vi.fn(),
+    origin: 'http://localhost:3000',
+    pathname: '/',
+    search: '',
+    hash: '',
+  },
+});
+
+// Prevent JSDOM unhandled navigation errors when clicking anchor links in tests
+window.addEventListener(
+  'click',
+  (e) => {
+    const target = (e.target as HTMLElement | null)?.closest?.('a');
+    if (target) {
+      e.preventDefault();
+    }
+  },
+  true
+);

@@ -28,17 +28,19 @@ export const createImage = (url: string): Promise<HTMLImageElement> => {
 };
 
 /**
- * Crops an image based on the provided pixel coordinates and returns a File object.
+ * Crops an image based on the provided pixel coordinates and returns a compressed File object.
  *
  * @param imageSrc - The source URL or base64 string of the image.
  * @param pixelCrop - The coordinates and dimensions of the crop box.
  * @param fileName - The output filename (default: 'profile-cropped.jpeg').
+ * @param quality - Compression quality between 0 and 1 for JPEG output (default: 0.85).
  * @returns A Promise resolving to the cropped File, or null if the process fails.
  */
 export const getCroppedImg = async (
   imageSrc: string,
   pixelCrop: PixelCrop,
-  fileName: string = 'profile-cropped.jpeg'
+  fileName: string = 'profile-cropped.jpeg',
+  quality: number = 0.85
 ): Promise<File | null> => {
   try {
     const image = await createImage(imageSrc);
@@ -66,16 +68,20 @@ export const getCroppedImg = async (
     );
 
     return new Promise((resolve) => {
-      canvas.toBlob((blob: Blob | null) => {
-        if (!blob) {
-          console.error('[CropImage] Canvas output is empty; could not create Blob');
-          resolve(null);
-          return;
-        }
+      canvas.toBlob(
+        (blob: Blob | null) => {
+          if (!blob) {
+            console.error('[CropImage] Canvas output is empty; could not create Blob');
+            resolve(null);
+            return;
+          }
 
-        const file = new File([blob], fileName, { type: 'image/jpeg' });
-        resolve(file);
-      }, 'image/jpeg');
+          const file = new File([blob], fileName, { type: 'image/jpeg' });
+          resolve(file);
+        },
+        'image/jpeg',
+        quality
+      );
     });
   } catch (error: unknown) {
     console.error('[CropImage] Unexpected error during image cropping:', error);
