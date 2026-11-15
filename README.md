@@ -15,7 +15,7 @@
   <img src="https://img.shields.io/badge/Tailwind_CSS-4.x-38B2AC?logo=tailwindcss&logoColor=white" alt="Tailwind CSS 4" />
   <img src="https://img.shields.io/badge/TanStack_Query-5.x-FF4154?logo=react-query&logoColor=white" alt="TanStack Query" />
   <img src="https://img.shields.io/badge/Zustand-5.x-4338CA?logo=zustand&logoColor=white" alt="Zustand" />
-  <img src="https://img.shields.io/badge/Tests-141%20Passing-brightgreen?logo=vitest&logoColor=white" alt="Tests 141 Passing" />
+  <img src="https://img.shields.io/badge/Tests-155%20Passing-brightgreen?logo=vitest&logoColor=white" alt="Tests 155 Passing" />
   <img src="https://img.shields.io/badge/Playwright-E2E-45ba4b?logo=playwright&logoColor=white" alt="Playwright E2E" />
 </p>
 
@@ -49,7 +49,7 @@
 - **Seguridad HTTP:** Cabeceras de seguridad activas en servidor (`X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy`, `Permissions-Policy`, `Strict-Transport-Security`).
 - **Rendimiento y Optimización de Bundles:** Carga perezosa dinámica (`next/dynamic`) para componentes gráficos pesados, eliminación estricta de fugas de memoria en listeners y descarte seguro de URLs blob.
 - **Accesibilidad (WCAG 2.1 AA):** Modales equipados con trampa de foco nativa (_focus trap_), navegación por teclado (`Tab`, `Shift+Tab`, `Escape`), contraste calibrado en modo claro y oscuro (`next-themes`).
-- **Pirámide de Pruebas Completa:** Batería de **141 pruebas automatizadas** en verde (125 pruebas unitarias/integración con Vitest + MSW v2 y 16 pruebas End-to-End con Playwright Chromium).
+- **Pirámide de Pruebas Completa:** Batería de **155 pruebas automatizadas** en verde (139 pruebas unitarias/integración con Vitest + MSW v2 y 16 pruebas End-to-End con Playwright Chromium).
 
 ---
 
@@ -172,18 +172,18 @@ La aplicación quedará disponible en **`http://localhost:3000`** (o `http://loc
 
 ## Estrategia y Batería de Pruebas
 
-El proyecto cuenta con una pirámide de pruebas automatizada compuesta por **141 pruebas en verde**:
+El proyecto cuenta con una pirámide de pruebas automatizada compuesta por **155 pruebas en verde**:
 
 ```
 --------------------------------------------------------------------------------
 Categoría                           Herramienta                Tests  Resultado
 --------------------------------------------------------------------------------
-Unitarias Zod, Utils & Adaptadores  Vitest                     57     100% Passed
+Unitarias Zod, Utils & Adaptadores  Vitest                     71     100% Passed
 Hooks & Estado Global               Vitest + Zustand           17     100% Passed
 Integración Componentes & Charts    Vitest + RTL + MSW v2      51     100% Passed
 End-to-End (E2E)                    Playwright (Chromium)      16     100% Passed
 --------------------------------------------------------------------------------
-TOTAL                                                          141    100% Green
+TOTAL                                                          155    100% Green
 --------------------------------------------------------------------------------
 ```
 
@@ -213,9 +213,10 @@ pnpm test:e2e:ui
 
 El proyecto cuenta con un flujo automatizado de integración continua en **GitHub Actions** (`.github/workflows/ci.yml`) que valida cada Pull Request y Push a las ramas `dev` y `main`:
 
-1. **Lint & Typecheck:** Ejecuta `pnpm run lint` y `tsc --noEmit`.
-2. **Unit & Integration Tests:** Ejecuta la suite de 125 pruebas de Vitest.
-3. **Production Build:** Genera la compilación de producción con Turbopack para certificar que no existen fallos de bundle o empaquetado.
+1. **Lint & Typecheck:** Ejecuta `pnpm run lint` y `pnpm run typecheck` (`tsc --noEmit`).
+2. **Unit & Integration Tests:** Ejecuta la suite completa de 139 pruebas de Vitest.
+3. **Production Build:** Genera la compilación de producción para certificar el empaquetado y optimización de bundles.
+4. **End-to-End Tests:** Compila y ejecuta la batería de 16 pruebas E2E con Playwright en Chromium.
 
 ---
 
@@ -227,8 +228,9 @@ El proyecto cuenta con un flujo automatizado de integración continua en **GitHu
 | `pnpm build`       | Compila la aplicación y genera la versión optimizada de producción.       |
 | `pnpm start`       | Inicia el servidor Node.js en modo producción.                            |
 | `pnpm lint`        | Ejecuta ESLint para auditar la calidad del código.                        |
+| `pnpm typecheck`   | Ejecuta la verificación estricta de tipos de TypeScript (`tsc --noEmit`).  |
 | `pnpm format`      | Formatea el código con Prettier según las reglas del proyecto.            |
-| `pnpm test`        | Ejecuta la batería de 125 pruebas unitarias y de integración con Vitest.  |
+| `pnpm test`        | Ejecuta la batería de 139 pruebas unitarias y de integración con Vitest.  |
 | `pnpm test:watch`  | Ejecuta Vitest en modo interactivo y escucha cambios en archivos.         |
 | `pnpm test:e2e`    | Ejecuta la batería de 16 pruebas End-to-End en Chromium.                  |
 | `pnpm test:e2e:ui` | Abre la interfaz gráfica de Playwright para depurar flujos visuales.      |
@@ -241,7 +243,7 @@ Para validar o generar la compilación de producción:
 
 ```bash
 # 1. Comprobar tipos TypeScript
-pnpm tsc --noEmit
+pnpm run typecheck
 
 # 2. Generar el build optimizado
 pnpm build
