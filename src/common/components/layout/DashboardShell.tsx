@@ -117,8 +117,8 @@ export function DashboardShell({
 
           <div className="flex flex-col mt-auto mb-6 space-y-1">
             <SidebarNews 
-              version="v1.8.2" 
-              message="Nuevo botón de renovación de membresía en la sección de Miembros. Ahora puedes renovar membresías de manera más rápida y sencilla. Correcciones menores" 
+              version="v1.9.0" 
+              message="Mayor seguridad en el inicio de sesión, nuevos gráficos de ingresos y balance de socios en tiempo real, carga más ágil de fotos de perfil y avisos más claros en todo el sistema." 
             />
 
             <button
