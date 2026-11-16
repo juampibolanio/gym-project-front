@@ -3,14 +3,16 @@
 import { useState } from 'react';
 import { GeneralTab } from './GeneralTab';
 import { SecurityTab } from './SecurityTab';
-import { Building, Lock } from 'lucide-react';
+import { LegalTab } from './LegalTab';
+import { Building, Lock, ShieldCheck } from 'lucide-react';
 
 export function ConfigurationTabs() {
-  const [activeTab, setActiveTab] = useState<'general' | 'seguridad'>('general');
+  const [activeTab, setActiveTab] = useState<'general' | 'seguridad' | 'legal'>('general');
 
   const tabs = [
     { id: 'general', name: 'General', icon: Building },
     { id: 'seguridad', name: 'Seguridad', icon: Lock },
+    { id: 'legal', name: 'Legal y Privacidad', icon: ShieldCheck },
   ] as const;
 
   return (
@@ -23,7 +25,7 @@ export function ConfigurationTabs() {
           return (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id as 'general' | 'seguridad')}
+              onClick={() => setActiveTab(tab.id as 'general' | 'seguridad' | 'legal')}
               aria-current={isActive ? 'page' : undefined}
               className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 cursor-pointer ${
                 isActive
@@ -44,6 +46,7 @@ export function ConfigurationTabs() {
       >
         {activeTab === 'general' && <GeneralTab />}
         {activeTab === 'seguridad' && <SecurityTab />}
+        {activeTab === 'legal' && <LegalTab />}
       </div>
     </div>
   );
