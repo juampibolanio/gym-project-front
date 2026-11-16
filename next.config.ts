@@ -32,6 +32,15 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: '/recuperacion',
+        destination: '/recuperar-contrasenia/recuperacion',
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {

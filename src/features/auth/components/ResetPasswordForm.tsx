@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -7,13 +8,15 @@ import { useResetPassword } from '../hooks/useAuth';
 import { InputField } from '@/common/components/ui/InputField';
 import { getApiErrorMessage } from '@/common/utils/api-error';
 import { toast } from 'react-hot-toast';
-import { Lock, Save, Loader2 } from 'lucide-react';
+import { Lock, Save, Loader2, Eye, EyeOff } from 'lucide-react';
 import {
   resetPasswordSchema,
   ResetPasswordValues,
 } from '../schemas/reset-password.schema';
 
 export function ResetPasswordForm() {
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const searchParams = useSearchParams();
   const router = useRouter();
   const token = searchParams.get('token');
@@ -75,23 +78,43 @@ export function ResetPasswordForm() {
     >
       <InputField
         label="NUEVA CONTRASEÑA"
-        type="password"
+        type={showPassword ? 'text' : 'password'}
         placeholder="••••••••"
         disabled={isPending}
         registration={register('newPassword')}
         error={errors.newPassword?.message}
         icon={<Lock aria-hidden="true" className="text-text-muted transition-colors" size={16} />}
+        rightElement={
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="text-text-muted hover:text-text-main transition-colors p-1"
+            aria-label={showPassword ? 'Ocultar contraseña' : 'Ver contraseña'}
+          >
+            {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+          </button>
+        }
         className="gap-2! [&_label]:text-[10px] [&_label]:font-bold [&_label]:tracking-wider [&_label]:uppercase [&_input]:bg-sidebar"
       />
 
       <InputField
         label="CONFIRMAR CONTRASEÑA"
-        type="password"
+        type={showConfirmPassword ? 'text' : 'password'}
         placeholder="••••••••"
         disabled={isPending}
         registration={register('confirmPassword')}
         error={errors.confirmPassword?.message}
         icon={<Lock aria-hidden="true" className="text-text-muted transition-colors" size={16} />}
+        rightElement={
+          <button
+            type="button"
+            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+            className="text-text-muted hover:text-text-main transition-colors p-1"
+            aria-label={showConfirmPassword ? 'Ocultar contraseña' : 'Ver contraseña'}
+          >
+            {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+          </button>
+        }
         className="gap-2! [&_label]:text-[10px] [&_label]:font-bold [&_label]:tracking-wider [&_label]:uppercase [&_input]:bg-sidebar"
       />
 

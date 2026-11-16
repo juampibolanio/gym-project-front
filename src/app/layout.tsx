@@ -12,7 +12,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_APP_URL || 'https://gymsystem-pro.vercel.app'
+    process.env.NEXT_PUBLIC_APP_URL || 'https://chacugym.com'
   ),
   title: {
     template: '%s | ChacuGym',
